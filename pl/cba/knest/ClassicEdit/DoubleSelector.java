@@ -67,7 +67,7 @@ public class DoubleSelector implements Selector{
 		case 0:
 			return ChatColor.YELLOW+"Click two blocks to determinate the edges";
 		case 1:
-			return ChatColor.YELLOW+"Creating "+c.getName()+" of "+c.getFilling().parse();
+			return ChatColor.YELLOW+"Creating "+c.getName()+" of "+c.getFilling();
 		}
 		return null;
 	}

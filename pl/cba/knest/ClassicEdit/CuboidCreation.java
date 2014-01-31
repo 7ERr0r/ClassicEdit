@@ -3,28 +3,48 @@ package pl.cba.knest.ClassicEdit;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 
 public class CuboidCreation extends SimpleCreation{
-	int x;
-	int y;
-	int z;
-	int maxx;
-	int maxy;
-	int maxz;
-	int minx;
-	int miny;
-	int minz;
 	
-	public CuboidCreation(String nick) {
+	
+	public CuboidCreation(String nick){
 		super(nick);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
-		for(int i = 0; i<100; i++){
+		Player p = null;
+		PlayerInventory inv = null;
+		int amount = 0;
+		int items = 0;
+		if(dropmode){
+			p = Bukkit.getPlayer(nick);
+			inv = p.getInventory();
+			if(f.getMaterial()!=Material.AIR){
+				amount = getAmount(f.getMaterial(), f.getData(), inv);
+				items = amount;
+			}
+		}
+		for(int i = 0; i<pertick; i++){
 			Block b = w.getBlockAt(x,y,z);
+			if(dropmode){
+				if(f.getMaterial()!=Material.AIR){
+					amount--;
+					if(amount <= 0){
+						p.sendMessage("Za malo surowcow");
+						Bukkit.getScheduler().cancelTask(taskid); break;
+					}
+				}
+				for(ItemStack drop : b.getDrops()){
+					inv.addItem(drop);
+				}
+
+			}
 			b.setType(f.getMaterial());
 			b.setData(f.getData());
 			x++;
@@ -33,12 +53,12 @@ public class CuboidCreation extends SimpleCreation{
 				if(y>maxy){ 
 					y = miny; z++;
 					if(z>maxz){
-						Bukkit.getScheduler().cancelTask(taskid); return;
+						Bukkit.getScheduler().cancelTask(taskid); break;
 					}
 				}
 			}
 		}
-		
+		if(dropmode) setAmount(f.getMaterial(), f.getData(), inv, items-amount);
 	}
 
 	
@@ -47,23 +67,7 @@ public class CuboidCreation extends SimpleCreation{
 		return "cuboid";
 	}
 
-	@Override
-	public void start(){
-		
-		maxx = Math.max(l1.getBlockX(), l2.getBlockX());
-		maxy = Math.max(l1.getBlockY(), l2.getBlockY());
-		maxz = Math.max(l1.getBlockZ(), l2.getBlockZ());
-		minx = Math.min(l1.getBlockX(), l2.getBlockX());
-		miny = Math.min(l1.getBlockY(), l2.getBlockY());
-		minz = Math.min(l1.getBlockZ(), l2.getBlockZ());
-		x = minx;
-		y = miny;
-		z = minz;
-		if(f == null){
-			f = new Filling(Material.AIR, (byte) 0);
-		}
-		shedule();
-	}
+
 
 
 }

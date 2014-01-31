@@ -1,5 +1,8 @@
 package pl.cba.knest.ClassicEdit;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,14 +15,15 @@ public class Executor implements CommandExecutor{
 		if(s instanceof Player){
 			Player p = (Player) s;
 			// TODO: Parsing flags and addictional cmd args
-			execute(p, args);
+			List<String> arg = Arrays.asList(args);
+			execute(p, arg);
 		}else{
 			s.sendMessage("Only player may call this");
 		}
 		return true;
 	}
 
-	public void execute(Player p, String[] args) {
+	public void execute(Player p, List<String> args) {
 		p.sendMessage("nothing");
 	}
 	

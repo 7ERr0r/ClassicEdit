@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 public class Manager {
 	private HashMap<Player, Selector> scs;
+	private HashMap<Player, Creation> creas;
 	public Manager(){
 		this.scs = new HashMap<Player, Selector>();
 	}
@@ -21,5 +22,8 @@ public class Manager {
 	}
 	public void removeSelector(Player p){
 		scs.remove(p);
+	}
+	public void addCreation(Player p, Creation c){
+		creas.put(p, c);
 	}
 }

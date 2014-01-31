@@ -10,7 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ClassicEdit extends JavaPlugin{
 	public static ClassicEdit plugin;
-	
+	public static int pertick;
+	public static int droppertick;
 	private Manager cm;
 	
 	private HashMap<PluginCommand, CommandExecutor> excs;
@@ -20,6 +21,10 @@ public class ClassicEdit extends JavaPlugin{
 	}
 	
 	public void onEnable(){
+		
+		pertick = 50;
+		droppertick = 2;
+		
 		excs = new HashMap<PluginCommand, CommandExecutor>();
 		excs.put(getCommand("cuboid"), new CuboidExecutor());
 		Bukkit.getPluginManager().registerEvents(new ClickListener(), this);
@@ -43,4 +48,5 @@ public class ClassicEdit extends JavaPlugin{
 	public void log(String str){
 		getLogger().info(str);
 	}
+	
 }

@@ -27,6 +27,7 @@ public class ClassicEdit extends JavaPlugin{
 		
 		excs = new HashMap<PluginCommand, CommandExecutor>();
 		excs.put(getCommand("cuboid"), new CuboidExecutor());
+		excs.put(getCommand("pause"), new PauseExecutor());
 		Bukkit.getPluginManager().registerEvents(new ClickListener(), this);
 		for(Entry<PluginCommand, CommandExecutor> e : excs.entrySet()){
 			e.getKey().setExecutor(e.getValue());

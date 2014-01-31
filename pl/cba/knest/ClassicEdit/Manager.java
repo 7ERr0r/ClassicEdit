@@ -2,13 +2,15 @@ package pl.cba.knest.ClassicEdit;
 
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Manager {
 	private HashMap<Player, Selector> scs;
-	private HashMap<Player, Creation> creas;
+	private HashMap<String, Creation> creas;
 	public Manager(){
 		this.scs = new HashMap<Player, Selector>();
+		this.creas = new HashMap<String, Creation>();
 	}
 	
 	public void setSelector(Player p, Selector s){
@@ -23,7 +25,26 @@ public class Manager {
 	public void removeSelector(Player p){
 		scs.remove(p);
 	}
-	public void addCreation(Player p, Creation c){
-		creas.put(p, c);
+	public void runCreation(Player p, Creation c){
+		creas.put(p.getName().toLowerCase(), c);
+		c.setTaskid(Bukkit.getScheduler().scheduleSyncRepeatingTask(ClassicEdit.plugin, c, 1L, 1L));
+		c.start();
+	}
+	public void pauseCreation(Creation c){
+		Bukkit.getScheduler().cancelTask(c.getTaskid());
+		c.setTaskid(0);
+	}
+	public void unpauseCreation(Creation c){
+		c.setTaskid(Bukkit.getScheduler().scheduleSyncRepeatingTask(ClassicEdit.plugin, c, 1L, 1L));
+	}
+	public void removeCreation(Creation c){
+		Bukkit.getScheduler().cancelTask(c.getTaskid());
+		creas.remove(c.getPlayerName());
+	}
+	public boolean isCuboiding(Player p){
+		return creas.containsKey(p.getName().toLowerCase());
+	}
+	public Creation getCreation(Player p){
+		return creas.get(p.getName().toLowerCase());
 	}
 }

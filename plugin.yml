@@ -8,6 +8,9 @@ commands:
     description: Creates a cuboid.
     usage: /cuboid <block>
     aliases: [cube, z]
+  pause:
+    description: Pauses cuboids.
+    aliases: [p]
   spheroid:
     description: Creates a spheroid.
     usage: /spheroid <block>

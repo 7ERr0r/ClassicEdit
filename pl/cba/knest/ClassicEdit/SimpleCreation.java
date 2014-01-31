@@ -1,6 +1,5 @@
 package pl.cba.knest.ClassicEdit;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -31,11 +30,11 @@ public class SimpleCreation extends Creation{
 	
 	int pertick = 1;
 	public SimpleCreation(String nick){
-		this.nick = nick;
+		this.nick = nick.toLowerCase();
 	}
 	@Override
 	public void run() {
-		Bukkit.getScheduler().cancelTask(taskid);
+		ClassicEdit.getCuboidManager().removeCreation(this);
 	}
 
 	@Override
@@ -59,9 +58,6 @@ public class SimpleCreation extends Creation{
 	public void setFilling(Filling f){
 		this.f = f;
 	}
-	void shedule(){
-		taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(ClassicEdit.plugin, this, 1L, 1L);
-	}
 	@Override
 	public void start(){
 		maxx = Math.max(l1.getBlockX(), l2.getBlockX());
@@ -74,7 +70,6 @@ public class SimpleCreation extends Creation{
 		y = miny;
 		z = minz;
 		pertick = dropmode?ClassicEdit.droppertick:ClassicEdit.pertick;
-		shedule();
 	}
 	public Filling getFilling(){
 		return f;
@@ -106,5 +101,11 @@ public class SimpleCreation extends Creation{
 			}
 		}
 		
+	}
+	public int getTaskid(){
+		return taskid;
+	}
+	public void setTaskid(int taskid){
+		this.taskid = taskid;
 	}
 }

@@ -10,8 +10,11 @@ public class CuboidExecutor extends Executor{
 
 	public void execute(Player p, List<String> args){
 		Filling f = null;
-		
-		
+		Creation ac = ClassicEdit.getCuboidManager().getCreation(p);
+		if(ac!=null){
+			p.sendMessage(ChatColor.RED+"You have an active "+ac.getName()+" running");
+			return;
+		}
 		boolean dropmode = p.getGameMode()!=GameMode.CREATIVE;// && !p.hasPermission("ClassicEdit.nodrop");
 		if(args.size()==1){
 			try{

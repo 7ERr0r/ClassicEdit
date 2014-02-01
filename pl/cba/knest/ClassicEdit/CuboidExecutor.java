@@ -9,13 +9,17 @@ import org.bukkit.entity.Player;
 public class CuboidExecutor extends Executor{
 
 	public void execute(Player p, List<String> args){
+		if(!p.hasPermission("ClassicEdit.create.cuboid")){
+			p.sendMessage(ChatColor.RED+"You do not have permission to do this");
+			return;
+		}
 		Filling f = null;
 		Creation ac = ClassicEdit.getCuboidManager().getCreation(p);
 		if(ac!=null){
 			p.sendMessage(ChatColor.RED+"You have an active "+ac.getName()+" running");
 			return;
 		}
-		boolean dropmode = p.getGameMode()!=GameMode.CREATIVE;// && !p.hasPermission("ClassicEdit.nodrop");
+		boolean dropmode = p.getGameMode()!=GameMode.CREATIVE && !p.hasPermission("ClassicEdit.nodrop");
 		if(args.size()==1){
 			try{
 				f = Filling.parse(args.get(0));

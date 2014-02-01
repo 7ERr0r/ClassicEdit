@@ -7,6 +7,10 @@ import org.bukkit.entity.Player;
 
 public class PauseExecutor extends Executor{
 	public void execute(Player p, List<String> args){
+		if(!p.hasPermission("ClassicEdit.pause")){
+			p.sendMessage(ChatColor.RED+"You do not have permission to do this");
+			return;
+		}
 		Creation c = ClassicEdit.getCuboidManager().getCreation(p);
 		if(args.contains("stop")){
 			ClassicEdit.getCuboidManager().removeCreation(c);

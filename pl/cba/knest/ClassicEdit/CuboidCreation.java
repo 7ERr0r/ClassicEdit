@@ -26,16 +26,19 @@ public class CuboidCreation extends SimpleCreation{
 		boolean place = true;
 		//boolean brek = true;
 		if(dropmode){
-
-			if(b.getType()!=Material.AIR){
-				BlockBreakEvent be = new BlockBreakEvent(b, p);
-				ClassicEdit.callEventWithoutNCP(be);
-				if(!be.isCancelled()){
-					for(ItemStack drop : b.getDrops()){
-						p.getInventory().addItem(drop);
+			if(b.isLiquid() || b.getType()==Material.BEDROCK || b.getType()==Material.ENDER_PORTAL || b.getType()==Material.ENDER_PORTAL_FRAME){
+				place = false;
+			}else{
+				if(b.getType()!=Material.AIR){
+					BlockBreakEvent be = new BlockBreakEvent(b, p);
+					ClassicEdit.callEventWithoutNCP(be);
+					if(!be.isCancelled()){
+						for(ItemStack drop : b.getDrops()){
+							p.getInventory().addItem(drop);
+						}
+					}else{
+						//brek = false;
 					}
-				}else{
-					//brek = false;
 				}
 			}
 			if(f.getMaterial()!=Material.AIR){

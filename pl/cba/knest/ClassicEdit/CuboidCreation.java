@@ -1,6 +1,7 @@
 package pl.cba.knest.ClassicEdit;
 
 
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
@@ -26,16 +27,26 @@ public class CuboidCreation extends SimpleCreation{
 		boolean place = true;
 		//boolean brek = true;
 		if(dropmode){
-			if(b.isLiquid() || b.getType()==Material.BEDROCK || b.getType()==Material.ENDER_PORTAL || b.getType()==Material.ENDER_PORTAL_FRAME){
+			
+			
+			
+			if(b.getType()==Material.BEDROCK || b.getType()==Material.ENDER_PORTAL || b.getType()==Material.ENDER_PORTAL_FRAME){
 				place = false;
 			}else{
 				if(b.getType()!=Material.AIR){
+					
+
+					
 					BlockBreakEvent be = new BlockBreakEvent(b, p);
 					ClassicEdit.callEventWithoutNCP(be);
 					if(!be.isCancelled()){
 						for(ItemStack drop : b.getDrops()){
-							p.getInventory().addItem(drop);
+							HashMap<Integer, ItemStack> out = p.getInventory().addItem(drop);
+							for(ItemStack is : out.values()){
+								w.dropItemNaturally(b.getLocation(), is);
+							}
 						}
+						
 					}else{
 						//brek = false;
 					}

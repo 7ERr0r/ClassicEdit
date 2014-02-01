@@ -5,7 +5,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public abstract class Creation extends BukkitRunnable{
 	public abstract String getName();
 	public abstract String getPlayerName();
-	public abstract void start();
+	public abstract boolean start();
 	public abstract int getTaskid();
 	public abstract void setTaskid(int taskid);
 }

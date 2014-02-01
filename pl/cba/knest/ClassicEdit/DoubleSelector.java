@@ -56,9 +56,10 @@ public class DoubleSelector implements Selector{
 			}
 			
 			c.setPoints(l1, l2);
-			ClassicEdit.getCuboidManager().runCreation(p, c);
 			ClassicEdit.getCuboidManager().removeSelector(p);
-			p.sendMessage(getMessage((byte) 1));
+			if(ClassicEdit.getCuboidManager().runCreation(p, c)){
+				p.sendMessage(getMessage((byte) 1));
+			}
 		}
 	}
 	@Override

@@ -29,7 +29,7 @@ public class CuboidCreation extends SimpleCreation{
 
 			if(b.getType()!=Material.AIR){
 				BlockBreakEvent be = new BlockBreakEvent(b, p);
-				Bukkit.getPluginManager().callEvent(be);
+				ClassicEdit.callEventWithoutNCP(be);
 				if(!be.isCancelled()){
 					for(ItemStack drop : b.getDrops()){
 						p.getInventory().addItem(drop);
@@ -42,7 +42,7 @@ public class CuboidCreation extends SimpleCreation{
 				ItemStack is = new ItemStack(f.getMaterial(), amount.get()>64?64:amount.get(), f.getData());
 				
 				BlockPlaceEvent bp = new BlockPlaceEvent(b, b.getState(), b.getRelative(BlockFace.DOWN), is, p, true);
-				Bukkit.getPluginManager().callEvent(bp);
+				ClassicEdit.callEventWithoutNCP(bp);
 				if(!bp.isCancelled()){
 					if(amount.decrementAndGet() < 0){
 	

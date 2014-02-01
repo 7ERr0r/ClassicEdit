@@ -1,5 +1,7 @@
 package pl.cba.knest.ClassicEdit;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -59,17 +61,26 @@ public class SimpleCreation extends Creation{
 		this.f = f;
 	}
 	@Override
-	public void start(){
+	public boolean start(){
 		maxx = Math.max(l1.getBlockX(), l2.getBlockX());
 		maxy = Math.max(l1.getBlockY(), l2.getBlockY());
 		maxz = Math.max(l1.getBlockZ(), l2.getBlockZ());
 		minx = Math.min(l1.getBlockX(), l2.getBlockX());
 		miny = Math.min(l1.getBlockY(), l2.getBlockY());
 		minz = Math.min(l1.getBlockZ(), l2.getBlockZ());
+		int width = maxx-minx;
+		int height = maxy-miny;
+		int length = maxz-minz;
+		long blocks = width*height*length;
+		if((dropmode && blocks>1024) || (!dropmode && blocks>64000)){
+			Bukkit.getPlayer(nick).sendMessage(ChatColor.RED+"Too many blocks to place");
+			return false;
+		}
 		x = minx;
 		y = miny;
 		z = minz;
 		pertick = dropmode?ClassicEdit.droppertick:ClassicEdit.pertick;
+		return true;
 	}
 	public Filling getFilling(){
 		return f;

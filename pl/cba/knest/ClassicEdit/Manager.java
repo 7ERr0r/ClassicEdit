@@ -25,10 +25,14 @@ public class Manager {
 	public void removeSelector(Player p){
 		scs.remove(p);
 	}
-	public void runCreation(Player p, Creation c){
-		creas.put(p.getName().toLowerCase(), c);
-		c.setTaskid(Bukkit.getScheduler().scheduleSyncRepeatingTask(ClassicEdit.plugin, c, 1L, 1L));
-		c.start();
+	public boolean runCreation(Player p, Creation c){
+
+		if(c.start()){
+			creas.put(p.getName().toLowerCase(), c);
+			c.setTaskid(Bukkit.getScheduler().scheduleSyncRepeatingTask(ClassicEdit.plugin, c, 1L, 1L));
+			return true;
+		}
+		return false;
 	}
 	public void pauseCreation(Creation c){
 		Bukkit.getScheduler().cancelTask(c.getTaskid());

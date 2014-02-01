@@ -1,6 +1,6 @@
 name: ClassicEdit
 main: pl.cba.knest.ClassicEdit.ClassicEdit
-version: 0.5
+version: 0.6
 description: 
              ClassicEdit adds Minecraft-classic commands based on McLawl engine.
 commands:

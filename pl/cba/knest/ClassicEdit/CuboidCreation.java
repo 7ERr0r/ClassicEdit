@@ -7,7 +7,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -20,22 +23,45 @@ public class CuboidCreation extends SimpleCreation{
 	@SuppressWarnings("deprecation")
 	public boolean place(AtomicInteger amount, Player p){
 		Block b = w.getBlockAt(x,y,z);
+		boolean place = true;
+		//boolean brek = true;
 		if(dropmode){
-			if(f.getMaterial()!=Material.AIR){
-				if(amount.decrementAndGet() < 0){
 
-					p.sendMessage(ChatColor.RED+"You do not have requied materials ("+f+")");
-					p.sendMessage(ChatColor.YELLOW+"Supply them and type /pause");
-					ClassicEdit.getCuboidManager().pauseCreation(this); return false;
+			if(b.getType()!=Material.AIR){
+				BlockBreakEvent be = new BlockBreakEvent(b, p);
+				Bukkit.getPluginManager().callEvent(be);
+				if(!be.isCancelled()){
+					for(ItemStack drop : b.getDrops()){
+						p.getInventory().addItem(drop);
+					}
+				}else{
+					//brek = false;
 				}
 			}
-			for(ItemStack drop : b.getDrops()){
-				p.getInventory().addItem(drop);
+			if(f.getMaterial()!=Material.AIR){
+				ItemStack is = new ItemStack(f.getMaterial(), amount.get()>64?64:amount.get(), f.getData());
+				
+				BlockPlaceEvent bp = new BlockPlaceEvent(b, b.getState(), b.getRelative(BlockFace.DOWN), is, p, true);
+				Bukkit.getPluginManager().callEvent(bp);
+				if(!bp.isCancelled()){
+					if(amount.decrementAndGet() < 0){
+	
+						p.sendMessage(ChatColor.RED+"You do not have requied materials ("+f+")");
+						p.sendMessage(ChatColor.YELLOW+"Supply them and type /pause");
+						ClassicEdit.getCuboidManager().pauseCreation(this); return false;
+					}
+				}else{
+					place = false;
+				}
 			}
 
 		}
-		b.setType(f.getMaterial());
-		b.setData(f.getData());
+		
+		if(place){
+			b.setType(f.getMaterial());
+			b.setData(f.getData());
+		}
+
 		return true;
 	}
 

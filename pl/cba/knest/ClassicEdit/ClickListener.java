@@ -1,6 +1,7 @@
 package pl.cba.knest.ClassicEdit;
 
 
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,7 +18,11 @@ public class ClickListener implements Listener{
 		//p.sendMessage("a");
 		if(ClassicEdit.getCuboidManager().isSelecting(p)){
 			Selector sel = ClassicEdit.getCuboidManager().getSelector(p);
-			sel.select(e.getClickedBlock());
+			Block b = e.getClickedBlock();
+			if(a == Action.RIGHT_CLICK_BLOCK){
+				b = b.getRelative(e.getBlockFace());
+			}
+			sel.select(b);
 			e.setCancelled(true);
 		}
 	}

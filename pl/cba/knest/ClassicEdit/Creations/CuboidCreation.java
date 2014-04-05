@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit;
+package pl.cba.knest.ClassicEdit.Creations;
 
 
 import java.util.HashMap;
@@ -14,17 +14,21 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
+import pl.cba.knest.ClassicEdit.ClassicEdit;
 
-public class CuboidCreation extends SimpleCreation{
+
+public class CuboidCreation extends TwoPointCreation{
 	
-	
+	public boolean dashed = false;
 	public CuboidCreation(String nick){
 		super(nick);
 	}
 	@SuppressWarnings("deprecation")
 	public boolean place(AtomicInteger amount, Player p){
 		Block b = w.getBlockAt(x,y,z);
+		if(b.getType()==f.getMaterial() && b.getData()==f.getData()) return true;
 		boolean place = true;
+		
 		//boolean brek = true;
 		if(dropmode){
 			
@@ -46,14 +50,20 @@ public class CuboidCreation extends SimpleCreation{
 								w.dropItemNaturally(b.getLocation(), is);
 							}
 						}
-						
+						//b.setType(Material.AIR);
 					}else{
-						//brek = false;
+						if(getFilling().getMaterial()==Material.AIR){
+							place = false;
+							if(b.getType()==Material.AIR){
+								ppt++;
+								placed++;
+							}
+						}
 					}
 				}
 			}
-			if(f.getMaterial()!=Material.AIR){
-				ItemStack is = new ItemStack(f.getMaterial(), amount.get()>64?64:amount.get(), f.getData());
+			if(getFilling().getMaterial()!=Material.AIR){
+				ItemStack is = new ItemStack(getFilling().getMaterial(), amount.get()>64?64:amount.get(), getFilling().getData());
 				
 				BlockPlaceEvent bp = new BlockPlaceEvent(b, b.getState(), b.getRelative(BlockFace.DOWN), is, p, true);
 				ClassicEdit.callEventWithoutNCP(bp);
@@ -61,7 +71,7 @@ public class CuboidCreation extends SimpleCreation{
 					if(amount.decrementAndGet() < 0){
 	
 						p.sendMessage(ChatColor.RED+"You do not have requied materials ("+f+")");
-						p.sendMessage(ChatColor.YELLOW+"Supply them and type /pause");
+						p.sendMessage(ChatColor.YELLOW+"Supply them and type /p or /p stop");
 						ClassicEdit.getCuboidManager().pauseCreation(this); return false;
 					}
 				}else{
@@ -74,11 +84,19 @@ public class CuboidCreation extends SimpleCreation{
 		if(place){
 			b.setType(f.getMaterial());
 			b.setData(f.getData());
+			placed++;
+			ppt++;
 		}
 
 		return true;
 	}
-
+	public boolean isInside(){
+		return isDashed();
+	}
+	public boolean isDashed(){
+		if(dashed) return (x+y+z)%2==0;
+		return true;
+	}
 	@Override
 	public void run() {
 		Player p = null;
@@ -95,19 +113,19 @@ public class CuboidCreation extends SimpleCreation{
 				items = amount.get();
 			}
 		}
-		for(int i = 0; i<pertick; i++){
-			if(!place(amount, p)) break;
+		ppt = 0;
+		for(int i = 0; i<1024; i++){
 			
-			x++;
-			if(x>maxx){ 
-				x = minx; y++; 
-				if(y>maxy){ 
-					y = miny; z++;
-					if(z>maxz){
-						ClassicEdit.getCuboidManager().removeCreation(this); break;
-					}
+			if(isInside()){
+				if(!place(amount, p)){
+					break;
 				}
 			}
+			if(!next()){
+				end();
+				break;
+			}
+			if(ppt>=pertick) break;
 		}
 		if(dropmode) setAmount(f.getMaterial(), f.getData(), p.getInventory(), items-amount.get());
 	}
@@ -116,6 +134,9 @@ public class CuboidCreation extends SimpleCreation{
 	@Override
 	public String getName() {
 		return "cuboid";
+	}
+	public void setDashed(boolean dashed){
+		this.dashed = dashed;
 	}
 
 

@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit;
+package pl.cba.knest.ClassicEdit.Selectors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -7,13 +7,19 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class DoubleSelector implements Selector{
+import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.Creation;
+import pl.cba.knest.ClassicEdit.Filling;
+import pl.cba.knest.ClassicEdit.Selector;
+import pl.cba.knest.ClassicEdit.Creations.TwoPointCreation;
+
+public class TwoPointSelector implements Selector{
 	private Player p;
-	private SimpleCreation c;
+	private TwoPointCreation c;
 	private boolean first = true;
 	private Location l1;
 	private Location l2;
-	public DoubleSelector(Player p, SimpleCreation c){
+	public TwoPointSelector(Player p, TwoPointCreation c){
 		this.p = p;
 		this.c = c;
 	}
@@ -30,7 +36,7 @@ public class DoubleSelector implements Selector{
 		return c;
 	}
 
-	public void setC(SimpleCreation c) {
+	public void setC(TwoPointCreation c) {
 		this.c = c;
 	}
 	public void select(Block b){
@@ -41,6 +47,7 @@ public class DoubleSelector implements Selector{
 			l2 = b.getLocation();
 			
 			if(c.getFilling() == null){
+				
 				if(p != null){
 					ItemStack is = p.getItemInHand();
 					if(!p.isOnline()){

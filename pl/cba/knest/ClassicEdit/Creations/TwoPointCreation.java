@@ -1,19 +1,26 @@
-package pl.cba.knest.ClassicEdit;
+package pl.cba.knest.ClassicEdit.Creations;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class SimpleCreation extends Creation{
+import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.Creation;
+import pl.cba.knest.ClassicEdit.Filling;
+
+public class TwoPointCreation extends Creation{
+	boolean started = false;
+	
 	String nick;
 	Location l1;
 	Location l2;
 	World w;
-	Filling f;
+	Filling f = new Filling(Material.AIR, (byte) 0);
 	
 	int taskid;
 	
@@ -30,8 +37,17 @@ public class SimpleCreation extends Creation{
 	int miny;
 	int minz;
 	
+	int width;
+	int length;
+	int height;
+	
 	int pertick = 1;
-	public SimpleCreation(String nick){
+	
+	int placed = 0;
+	int ppt = 0;
+	
+	boolean up = true;
+	public TwoPointCreation(String nick){
 		this.nick = nick.toLowerCase();
 	}
 	@Override
@@ -49,16 +65,17 @@ public class SimpleCreation extends Creation{
 		return nick;
 	}
 	public void setDropmode(boolean dropmode){
-		this.dropmode = dropmode;
+		if(!started) this.dropmode = dropmode;
 	}
 
 	public void setPoints(Location l1, Location l2){
+		if(started) return;
 		this.l1 = l1;
 		this.w = l1.getWorld();
 		this.l2 = l2;
 	}
 	public void setFilling(Filling f){
-		this.f = f;
+		if(!started) this.f = f;
 	}
 	@Override
 	public boolean start(){
@@ -68,18 +85,20 @@ public class SimpleCreation extends Creation{
 		minx = Math.min(l1.getBlockX(), l2.getBlockX());
 		miny = Math.min(l1.getBlockY(), l2.getBlockY());
 		minz = Math.min(l1.getBlockZ(), l2.getBlockZ());
-		int width = maxx-minx;
-		int height = maxy-miny;
-		int length = maxz-minz;
+		width = maxx-minx+1;
+		height = maxy-miny+1;
+		length = maxz-minz+1;
 		long blocks = width*height*length;
-		if((dropmode && blocks>1024) || (!dropmode && blocks>64000)){
+		if((dropmode && blocks>20000) || (!dropmode && blocks>2000000)){
 			Bukkit.getPlayer(nick).sendMessage(ChatColor.RED+"Too many blocks to place");
 			return false;
 		}
+		up = f.getMaterial()!=Material.AIR;
 		x = minx;
-		y = miny;
+		y = up?miny:maxy;
 		z = minz;
 		pertick = dropmode?ClassicEdit.droppertick:ClassicEdit.pertick;
+		started = true;
 		return true;
 	}
 	public Filling getFilling(){
@@ -103,7 +122,7 @@ public class SimpleCreation extends Creation{
 			if(is.getType()==m && is.getDurability()==d){
 				if(is.getAmount()<=ile){
 					ile -= is.getAmount();
-					System.out.print("d"+ile);
+					//System.out.print("d"+ile);
 					inv.setItem(i, null);
 				}else{
 					is.setAmount(is.getAmount()-ile);
@@ -118,5 +137,25 @@ public class SimpleCreation extends Creation{
 	}
 	public void setTaskid(int taskid){
 		this.taskid = taskid;
+	}
+	public boolean next(){
+		x++;
+		if(x>maxx){ 
+			x = minx; if(up) y++; else y--; 
+			if((up && y>maxy) || (!up && y<miny)){ 
+				if(up) y = miny; else y = maxy; 
+				z++;
+				if(z>maxz){
+					ClassicEdit.getCuboidManager().removeCreation(this); return false;
+				}
+			}
+		}
+		return true;
+	}
+	public void end(){
+		Player p = Bukkit.getPlayer(nick);
+		if(p!=null){
+			p.sendMessage(ChatColor.YELLOW+"Created "+placed+" block"+(placed==1?"":"s")+" of "+getFilling().toString());
+		}
 	}
 }

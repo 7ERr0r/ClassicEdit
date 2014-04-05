@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+
 public class Manager {
 	private HashMap<Player, Selector> scs;
 	private HashMap<String, Creation> creas;

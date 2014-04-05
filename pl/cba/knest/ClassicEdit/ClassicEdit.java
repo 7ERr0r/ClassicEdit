@@ -1,18 +1,25 @@
 package pl.cba.knest.ClassicEdit;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.AuthorNagException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import pl.cba.knest.ClassicEdit.Executors.CuboidExecutor;
+import pl.cba.knest.ClassicEdit.Executors.Executor;
+import pl.cba.knest.ClassicEdit.Executors.PauseExecutor;
+import pl.cba.knest.ClassicEdit.Executors.SpheroidExecutor;
+
 
 import fr.neatmonster.nocheatplus.NoCheatPlus;
 
@@ -22,7 +29,7 @@ public class ClassicEdit extends JavaPlugin{
 	public static int droppertick;
 	private Manager cm;
 	
-	private HashMap<PluginCommand, CommandExecutor> excs;
+	
 
 	public ClassicEdit(){
 		plugin = this;
@@ -30,16 +37,11 @@ public class ClassicEdit extends JavaPlugin{
 	
 	public void onEnable(){
 		
-		pertick = 50;
-		droppertick = 2;
+		pertick = 100;
+		droppertick = 1;
 		
-		excs = new HashMap<PluginCommand, CommandExecutor>();
-		excs.put(getCommand("cuboid"), new CuboidExecutor());
-		excs.put(getCommand("pause"), new PauseExecutor());
 		Bukkit.getPluginManager().registerEvents(new ClickListener(), this);
-		for(Entry<PluginCommand, CommandExecutor> e : excs.entrySet()){
-			e.getKey().setExecutor(e.getValue());
-		}
+
 		cm = new Manager();
 		log("Enabled !");
 		
@@ -47,7 +49,50 @@ public class ClassicEdit extends JavaPlugin{
 	public void onDisable(){
 		
 	}
-	
+	@Override
+	public boolean onCommand(CommandSender s, Command cmd, String label, String[] args) {
+
+		ArrayList<String> params = new ArrayList<String>();
+		String flags = "";
+		params.add(label);
+		for(String arg : args){
+			if(arg.startsWith("-")){
+				char[] chars = arg.toCharArray();
+				for(int i = 1; i<chars.length; i++){
+					flags += chars[i];
+				}
+			}else{
+				params.add(arg);
+			}
+		}
+		try{
+			try{
+				execute(s, params, flags);
+			} catch (ExecutorException e) {
+				e.send(s);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			s.sendMessage(ChatColor.RED+"[ClassicEdit] An internal error occurred while attempting to perform this command");
+		}
+
+		return true;
+	}
+	private void execute(CommandSender s, List<String> params, String flags) throws ExecutorException {
+		Command cmd = getCommand(params.remove(0));
+		String name = cmd.getName();
+		Executor e = null;
+		if(name.equals("cuboid")){
+			e = new CuboidExecutor();
+		}else if(name.equals("spheroid")){
+			e = new SpheroidExecutor();
+		}else if(name.equals("pause")){
+			e = new PauseExecutor();
+		}
+		if(e == null) throw new ExecutorException(ChatColor.RED+"Bad command");
+		e.init(s, params, flags);
+		e.execute();
+	}
 	public Manager getManager(){
 		return cm;
 	}
@@ -69,7 +114,7 @@ public class ClassicEdit extends JavaPlugin{
 						continue;
 					}
 				} catch (Error e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 					continue;
 				}
 

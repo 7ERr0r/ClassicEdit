@@ -12,7 +12,7 @@ import pl.cba.knest.ClassicEdit.ExecutorException;
 public class PauseExecutor extends PlayerCmdExecutor {
 	public void execute() throws ExecutorException{
 		super.execute();
-		if(!p.hasPermission("ClassicEdit.pause")){
+		if(!p.hasPermission("ClassicEdit.pause") && !p.isOp()){
 			p.sendMessage(ChatColor.RED+"You do not have permission to do this");
 			return;
 		}

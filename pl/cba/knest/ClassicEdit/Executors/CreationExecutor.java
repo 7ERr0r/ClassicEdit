@@ -12,10 +12,9 @@ public class CreationExecutor extends PlayerCmdExecutor{
 
 	Filling f = null;
 	public void execute() throws ExecutorException{
+		
 		super.execute();
-		if(!p.hasPermission("ClassicEdit.create") && !p.isOp()){
-			throw new ExecutorException(ChatColor.RED+"You do not have permission to do this");
-		}
+		
 		Creation active = ClassicEdit.getCuboidManager().getCreation(p);
 		if(active!=null){
 			throw new ExecutorException(ChatColor.RED+"You have an active "+active.getName()+" running, "+ChatColor.GREEN+"Type /p stop to remove it");

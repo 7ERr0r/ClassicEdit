@@ -13,12 +13,13 @@ public class CuboidExecutor extends TwoPointExecutor{
 		return new CuboidCreation(nick);
 	}
 	public void execute() throws ExecutorException{
+		perms("ClassicEdit.create.cuboid");
 		super.execute();
 		
 		CuboidCreation c = getCreation(p.getName());
 		c.setFilling(f);
 		c.setDashed(flags.contains("d"));
-
+		c.setDropmode(dropmode);
 		Selector sel = new TwoPointSelector(p, c);
 		ClassicEdit.getCuboidManager().setSelector(p, sel);
 		sel.start();

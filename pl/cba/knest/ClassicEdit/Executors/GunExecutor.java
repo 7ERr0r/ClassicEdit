@@ -15,6 +15,7 @@ public class GunExecutor extends CreationExecutor {
 
 	
 	public void execute() throws ExecutorException{
+		perms("ClassicEdit.create.gun");
 		super.execute();
 		
 		//p.sendMessage("(gun)");

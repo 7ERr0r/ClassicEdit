@@ -66,7 +66,7 @@ public class TwoPointSelector implements Selector{
 			c.setPoints(l1, l2);
 			ClassicEdit.getCuboidManager().removeSelector(p);
 			if(ClassicEdit.getCuboidManager().runCreation(p, c)){
-				//info();
+				info();
 			}
 		}
 		return false;
@@ -80,7 +80,7 @@ public class TwoPointSelector implements Selector{
 
 	@Override
 	public void end() {
-		info();
+		//info();
 	}
 
 	@Override

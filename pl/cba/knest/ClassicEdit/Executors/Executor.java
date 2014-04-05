@@ -2,6 +2,7 @@ package pl.cba.knest.ClassicEdit.Executors;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import pl.cba.knest.ClassicEdit.ExecutorException;
@@ -13,6 +14,11 @@ public class Executor{
 	String flags;
 	public Executor(){
 
+	}
+	public void perms(String perm) throws ExecutorException{
+		if(!s.hasPermission(perm) && !s.isOp()){
+			throw new ExecutorException(ChatColor.RED+"You do not have permission to do this");
+		}
 	}
 	public void init(CommandSender s, List<String> params, String flags){
 		this.s = s;

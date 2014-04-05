@@ -74,11 +74,13 @@ public class GunCreation extends InfiniteCreation{
 	public void click(Location l){
 		Vector v = l.getDirection();
 		//v.multiply(1.4);
-		l.add(0.5, 1, 0.5);
+		l.add(0, 1, 0);
 		l.add(v);
 		l.add(v);
 		Bolt bo = new Bolt(l, v);
+		
 		bolts.add(bo);
+		bo.tick();
 	}
 	@Override
 	public void run(){

@@ -10,10 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
-import pl.cba.knest.ClassicEdit.Creation;
-import pl.cba.knest.ClassicEdit.Filling;
 
-public abstract class TwoPointCreation extends Creation{
+public abstract class TwoPointCreation extends FilledCreation{
 	public TwoPointCreation(String nick) {
 		super(nick);
 	}
@@ -22,7 +20,7 @@ public abstract class TwoPointCreation extends Creation{
 	Location l1;
 	Location l2;
 	World w;
-	Filling f = new Filling(Material.AIR, (byte) 0);
+
 	
 	
 	
@@ -71,9 +69,7 @@ public abstract class TwoPointCreation extends Creation{
 		this.w = l1.getWorld();
 		this.l2 = l2;
 	}
-	public void setFilling(Filling f){
-		if(!started) this.f = f;
-	}
+
 	@Override
 	public boolean start(){
 		maxx = Math.max(l1.getBlockX(), l2.getBlockX());
@@ -98,9 +94,7 @@ public abstract class TwoPointCreation extends Creation{
 		started = true;
 		return true;
 	}
-	public Filling getFilling(){
-		return f;
-	}
+
 	int getAmount(Material m, short d, PlayerInventory inv){
 		int ile = 0;
 		for(ItemStack is : inv.getContents()){

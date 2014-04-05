@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
@@ -39,7 +40,8 @@ public class TwoPointSelector implements Selector{
 	public void setC(TwoPointCreation c) {
 		this.c = c;
 	}
-	public void select(Block b){
+	@Override
+	public boolean selectBlock(Block b){
 		if(first){
 			l1 = b.getLocation();
 			first = false;
@@ -50,10 +52,9 @@ public class TwoPointSelector implements Selector{
 				
 				if(p != null){
 					ItemStack is = p.getItemInHand();
-					if(!p.isOnline()){
-						ClassicEdit.getCuboidManager().removeSelector(p);
-						return;
-					}
+					
+					ClassicEdit.getCuboidManager().removeSelector(p);
+					
 					if(is != null && is.getType().isBlock()){
 						c.setFilling(new Filling(is.getType(), (byte) is.getDurability()));
 					}else{
@@ -65,19 +66,29 @@ public class TwoPointSelector implements Selector{
 			c.setPoints(l1, l2);
 			ClassicEdit.getCuboidManager().removeSelector(p);
 			if(ClassicEdit.getCuboidManager().runCreation(p, c)){
-				p.sendMessage(getMessage((byte) 1));
+				//info();
 			}
 		}
+		return false;
 	}
+	public void start(){
+		p.sendMessage(ChatColor.YELLOW+"Click two blocks to determinate the edges");
+	}
+	public void info(){
+		p.sendMessage(ChatColor.YELLOW+"Creating "+c.getName()+" of "+c.getFilling());
+	}
+
 	@Override
-	public String getMessage(byte m) {
-		switch(m){
-		case 0:
-			return ChatColor.YELLOW+"Click two blocks to determinate the edges";
-		case 1:
-			return ChatColor.YELLOW+"Creating "+c.getName()+" of "+c.getFilling();
-		}
-		return null;
+	public void end() {
+		info();
 	}
+
+	@Override
+	public boolean selectAir(Player p, Action a) {
+		return true;
+	}
+
+		
+	
 
 }

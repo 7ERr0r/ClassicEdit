@@ -14,16 +14,27 @@ public class ClickListener implements Listener{
 		Player p = e.getPlayer();
 		Action a = e.getAction();
 		
-		if(a != Action.LEFT_CLICK_BLOCK && a != Action.RIGHT_CLICK_BLOCK) return;
-		//p.sendMessage("a");
-		if(ClassicEdit.getCuboidManager().isSelecting(p)){
-			Selector sel = ClassicEdit.getCuboidManager().getSelector(p);
-			Block b = e.getClickedBlock();
-			if(a == Action.RIGHT_CLICK_BLOCK){
-				b = b.getRelative(e.getBlockFace());
+		if(a == Action.LEFT_CLICK_BLOCK || a == Action.RIGHT_CLICK_BLOCK){
+			if(ClassicEdit.getCuboidManager().isSelecting(p)){
+				Selector sel = ClassicEdit.getCuboidManager().getSelector(p);
+				Block b = e.getClickedBlock();
+				if(a == Action.RIGHT_CLICK_BLOCK){
+					b = b.getRelative(e.getBlockFace());
+				}
+				if(!sel.selectBlock(b)){
+					e.setCancelled(true);
+				}
 			}
-			sel.select(b);
-			e.setCancelled(true);
+		}else{
+			if(a == Action.LEFT_CLICK_AIR || a == Action.RIGHT_CLICK_AIR){
+				if(ClassicEdit.getCuboidManager().isSelecting(p)){
+					Selector sel = ClassicEdit.getCuboidManager().getSelector(p);
+					
+					if(!sel.selectAir(p, a)){
+						e.setCancelled(true);
+					}
+				}
+			}
 		}
 	}
 }

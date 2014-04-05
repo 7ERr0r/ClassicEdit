@@ -14,16 +14,14 @@ public class CuboidExecutor extends TwoPointExecutor{
 	}
 	public void execute() throws ExecutorException{
 		super.execute();
+		
 		CuboidCreation c = getCreation(p.getName());
-		
 		c.setFilling(f);
-		
 		c.setDashed(flags.contains("d"));
 
 		Selector sel = new TwoPointSelector(p, c);
-		
-		p.sendMessage(sel.getMessage((byte) 0));
 		ClassicEdit.getCuboidManager().setSelector(p, sel);
+		sel.start();
 	}
 
 

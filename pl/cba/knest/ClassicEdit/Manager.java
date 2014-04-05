@@ -15,6 +15,7 @@ public class Manager {
 	}
 	
 	public void setSelector(Player p, Selector s){
+		removeSelector(p);
 		scs.put(p, s);
 	}
 	public Selector getSelector(Player p){
@@ -24,7 +25,10 @@ public class Manager {
 		return scs.containsKey(p);
 	}
 	public void removeSelector(Player p){
-		scs.remove(p);
+		if(isSelecting(p)){
+			scs.get(p).end();
+			scs.remove(p);
+		}
 	}
 	public boolean runCreation(Player p, Creation c){
 
@@ -46,7 +50,7 @@ public class Manager {
 		Bukkit.getScheduler().cancelTask(c.getTaskid());
 		creas.remove(c.getPlayerName());
 	}
-	public boolean isCuboiding(Player p){
+	public boolean isRunning(Player p){
 		return creas.containsKey(p.getName().toLowerCase());
 	}
 	public Creation getCreation(Player p){

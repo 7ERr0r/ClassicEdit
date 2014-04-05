@@ -36,16 +36,21 @@ public class GunCreation extends InfiniteCreation{
 			Block b = w.getBlockAt(l);
 			
 			if(b == null) return false;
-			if(b.getType()!=Material.AIR) end = ticks+len;
-			if(end>ticks+len){
-				l.add(v);
-				if(!last.contains(b)){
-					fake(b, f.getMaterial(), f.getData());
-					last.add(b);
+			if(ticks<end-len){
+				if(b.getType()!=Material.AIR){
+					end = ticks+len;
+				}else{
+					if(end>ticks){
+						l.add(v);
+						if(!last.contains(b)){
+							fake(b, f.getMaterial(), f.getData());
+							last.add(b);
+						}
+					}
 				}
 			}
-			if(ticks>2 && last.size()>len) fake(last.poll(), Material.AIR, (byte) 0);
-			if(ticks>end+len) return false;
+			if(ticks>end-len || last.size()>len) fake(last.poll(), Material.AIR, (byte) 0);
+			if(ticks>end) return false;
 			ticks++;
 			return true;
 		}
@@ -69,6 +74,8 @@ public class GunCreation extends InfiniteCreation{
 	public void click(Location l){
 		Vector v = l.getDirection();
 		//v.multiply(1.4);
+		l.add(0.5, 1, 0.5);
+		l.add(v);
 		l.add(v);
 		Bolt bo = new Bolt(l, v);
 		bolts.add(bo);
@@ -77,7 +84,7 @@ public class GunCreation extends InfiniteCreation{
 	public void run(){
 		ArrayList<Bolt> toremove = new ArrayList<Bolt>();
 		for(Bolt b : bolts){
-			if(!b.tick() || !b.tick()){
+			if(!b.tick()){
 				toremove.add(b);
 				b.kill();
 			}

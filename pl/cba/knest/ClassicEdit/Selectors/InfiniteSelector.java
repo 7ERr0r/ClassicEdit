@@ -62,7 +62,11 @@ public class InfiniteSelector implements Selector{
 			if(!ClassicEdit.getCuboidManager().isRunning(p)){
 				ClassicEdit.getCuboidManager().runCreation(p, c);
 			}
-			c.click(p.getLocation());
+			if(c.getFilling() == null || c.getFilling().getMaterial()==Material.AIR){
+				p.sendMessage(ChatColor.RED+"Material cannot be air");
+			}else{
+				c.click(p.getLocation());
+			}
 		}
 		return false;
 	}

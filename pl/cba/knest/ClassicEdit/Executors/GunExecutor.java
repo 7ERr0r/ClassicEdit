@@ -1,6 +1,7 @@
 package pl.cba.knest.ClassicEdit.Executors;
 
 
+
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Selector;
@@ -15,7 +16,8 @@ public class GunExecutor extends CreationExecutor {
 	
 	public void execute() throws ExecutorException{
 		super.execute();
-		p.sendMessage("(gun)");
+		
+		//p.sendMessage("(gun)");
 		InfiniteCreation c = new GunCreation(p.getName());
 		Selector s = new InfiniteSelector(p, c);
 		

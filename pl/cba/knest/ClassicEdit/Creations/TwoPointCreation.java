@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -157,5 +158,10 @@ public class TwoPointCreation extends Creation{
 		if(p!=null){
 			p.sendMessage(ChatColor.YELLOW+"Created "+placed+" block"+(placed==1?"":"s")+" of "+getFilling().toString());
 		}
+	}
+	@Override
+	public void onBlockPhysics(BlockPhysicsEvent e) {
+		
+		
 	}
 }

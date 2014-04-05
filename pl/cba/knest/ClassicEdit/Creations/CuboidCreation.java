@@ -90,10 +90,10 @@ public class CuboidCreation extends TwoPointCreation{
 
 		return true;
 	}
-	public boolean isInside(){
-		return isDashed();
+	public boolean isPlaced(int x, int y, int z){
+		return isDashed(x,y,z);
 	}
-	public boolean isDashed(){
+	public boolean isDashed(int x, int y, int z){
 		if(dashed) return (x+y+z)%2==0;
 		return true;
 	}
@@ -116,7 +116,7 @@ public class CuboidCreation extends TwoPointCreation{
 		ppt = 0;
 		for(int i = 0; i<1024; i++){
 			
-			if(isInside()){
+			if(isPlaced(x,y,z)){
 				if(!place(amount, p)){
 					break;
 				}

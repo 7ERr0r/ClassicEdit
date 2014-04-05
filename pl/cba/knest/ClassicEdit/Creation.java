@@ -7,7 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class Creation extends BukkitRunnable{
 	protected String nick;
-	
+	int taskid;
 	
 	public Creation(String nick) {
 		this.nick = nick.toLowerCase();
@@ -21,11 +21,14 @@ public abstract class Creation extends BukkitRunnable{
 		Player p = Bukkit.getPlayer(nick);
 		if(p!=null) p.sendMessage(msg);
 	}
-	
+	public int getTaskid(){
+		return taskid;
+	}
+	public void setTaskid(int taskid){
+		this.taskid = taskid;
+	}
 	public abstract String getName();
 	public abstract boolean start();
-	public abstract int getTaskid();
-	public abstract void setTaskid(int taskid);
 	
-	public abstract void onBlockPhysics(BlockPhysicsEvent e);
+	public void onBlockPhysics(BlockPhysicsEvent e){}
 }

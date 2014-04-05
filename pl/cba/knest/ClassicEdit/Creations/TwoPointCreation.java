@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -14,7 +13,7 @@ import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
 
-public class TwoPointCreation extends Creation{
+public abstract class TwoPointCreation extends Creation{
 	public TwoPointCreation(String nick) {
 		super(nick);
 	}
@@ -25,7 +24,7 @@ public class TwoPointCreation extends Creation{
 	World w;
 	Filling f = new Filling(Material.AIR, (byte) 0);
 	
-	int taskid;
+	
 	
 	boolean dropmode = false;
 	
@@ -130,12 +129,7 @@ public class TwoPointCreation extends Creation{
 		}
 		
 	}
-	public int getTaskid(){
-		return taskid;
-	}
-	public void setTaskid(int taskid){
-		this.taskid = taskid;
-	}
+
 	public boolean next(){
 		x++;
 		if(x>maxx){ 
@@ -156,9 +150,5 @@ public class TwoPointCreation extends Creation{
 			p.sendMessage(ChatColor.YELLOW+"Created "+placed+" block"+(placed==1?"":"s")+" of "+getFilling().toString());
 		}
 	}
-	@Override
-	public void onBlockPhysics(BlockPhysicsEvent e) {
-		
-		
-	}
+
 }

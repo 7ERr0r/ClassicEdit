@@ -15,9 +15,11 @@ import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
 
 public class TwoPointCreation extends Creation{
+	public TwoPointCreation(String nick) {
+		super(nick);
+	}
 	boolean started = false;
 	
-	String nick;
 	Location l1;
 	Location l2;
 	World w;
@@ -48,9 +50,7 @@ public class TwoPointCreation extends Creation{
 	int ppt = 0;
 	
 	boolean up = true;
-	public TwoPointCreation(String nick){
-		this.nick = nick.toLowerCase();
-	}
+
 	@Override
 	public void run() {
 		ClassicEdit.getCuboidManager().removeCreation(this);
@@ -61,10 +61,7 @@ public class TwoPointCreation extends Creation{
 		return "2-point structure";
 	}
 
-	@Override
-	public String getPlayerName() {
-		return nick;
-	}
+
 	public void setDropmode(boolean dropmode){
 		if(!started) this.dropmode = dropmode;
 	}

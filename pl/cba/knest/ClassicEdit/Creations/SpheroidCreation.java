@@ -3,6 +3,7 @@ package pl.cba.knest.ClassicEdit.Creations;
 
 
 public class SpheroidCreation extends CuboidCreation{
+
 	public SpheroidCreation(String nick) {
 		super(nick);
 	}

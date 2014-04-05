@@ -19,10 +19,11 @@ import pl.cba.knest.ClassicEdit.ClassicEdit;
 
 public class CuboidCreation extends TwoPointCreation{
 	
-	public boolean dashed = false;
-	public CuboidCreation(String nick){
+	public CuboidCreation(String nick) {
 		super(nick);
 	}
+	public boolean dashed = false;
+
 	@SuppressWarnings("deprecation")
 	public boolean place(AtomicInteger amount, Player p){
 		Block b = w.getBlockAt(x,y,z);

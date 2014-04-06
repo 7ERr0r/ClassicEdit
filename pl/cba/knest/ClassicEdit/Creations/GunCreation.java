@@ -23,7 +23,7 @@ public class GunCreation extends InfiniteCreation{
 		private Vector v;
 		private int ticks = 0;
 		private Queue<Block> last = new LinkedList<Block>();
-		private final int len = 7;
+		private final int len = 10;
 		private int end = 200;
 		public Bolt(Location l, Vector v){
 			this.l = l;

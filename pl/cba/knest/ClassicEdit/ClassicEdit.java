@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import pl.cba.knest.ClassicEdit.Executors.CuboidExecutor;
 import pl.cba.knest.ClassicEdit.Executors.Executor;
 import pl.cba.knest.ClassicEdit.Executors.GunExecutor;
+import pl.cba.knest.ClassicEdit.Executors.LineExecutor;
 import pl.cba.knest.ClassicEdit.Executors.PauseExecutor;
 import pl.cba.knest.ClassicEdit.Executors.SpheroidExecutor;
 
@@ -87,6 +88,8 @@ public class ClassicEdit extends JavaPlugin{
 			e = new CuboidExecutor();
 		}else if(name.equals("spheroid")){
 			e = new SpheroidExecutor();
+		}else if(name.equals("line")){
+			e = new LineExecutor();
 		}else if(name.equals("pause")){
 			e = new PauseExecutor();
 		}else if(name.equals("gun")){

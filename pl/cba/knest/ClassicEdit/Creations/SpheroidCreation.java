@@ -7,8 +7,8 @@ public class SpheroidCreation extends CuboidCreation{
 	public SpheroidCreation(String nick) {
 		super(nick);
 	}
-	public boolean isPlaced(int x,int y,int z){
-		if(!super.isPlaced(x, y, z)) return false;
+	public boolean canPlace(int x,int y,int z){
+		if(!super.canPlace(x, y, z)) return false;
 		int rx = x-minx;
 		int ry = y-miny;
 		int rz = z-minz;

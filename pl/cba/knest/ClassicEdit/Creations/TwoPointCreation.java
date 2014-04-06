@@ -1,17 +1,25 @@
 package pl.cba.knest.ClassicEdit.Creations;
 
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 
 public abstract class TwoPointCreation extends FilledCreation{
+	
 	public TwoPointCreation(String nick) {
 		super(nick);
 	}
@@ -27,9 +35,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 	boolean dropmode = false;
 	
 	
-	int x;
-	int y;
-	int z;
+
 	int maxx;
 	int maxy;
 	int maxz;
@@ -37,20 +43,54 @@ public abstract class TwoPointCreation extends FilledCreation{
 	int miny;
 	int minz;
 	
+	int x;
+	int y;
+	int z;
+	
 	int width;
 	int length;
 	int height;
 	
 	int pertick = 1;
 	
-	int placed = 0;
-	int ppt = 0;
+
 	
 	boolean up = true;
-
+	public boolean canPlace(int x, int y, int z){
+		return true;
+	}
 	@Override
 	public void run() {
-		ClassicEdit.getCuboidManager().removeCreation(this);
+		Player p = null;
+		AtomicInteger amount = new AtomicInteger(0);
+		
+		int items = 0;
+		if(dropmode){
+			p = Bukkit.getPlayer(nick);
+			if(p==null){
+				ClassicEdit.getCuboidManager().pauseCreation(this); return;
+			}
+			if(f.getMaterial()!=Material.AIR){
+				amount.set(getAmount(f.getMaterial(), f.getData(), p.getInventory()));
+				items = amount.get();
+			}
+		}
+		ppt = 0;
+		for(int i = 0; i<1024; i++){
+			
+			if(canPlace(x,y,z)){
+				if(!place(amount, p)){
+					break;
+				}
+			}
+			if(!next()){
+				stop();
+				end();
+				break;
+			}
+			if(ppt>=pertick) break;
+		}
+		if(dropmode) setAmount(f.getMaterial(), f.getData(), p.getInventory(), items-amount.get());
 	}
 
 	@Override
@@ -70,6 +110,72 @@ public abstract class TwoPointCreation extends FilledCreation{
 		this.l2 = l2;
 	}
 
+	
+	
+	
+	@SuppressWarnings("deprecation")
+	public boolean place(AtomicInteger amount, Player p){
+		Block b = w.getBlockAt(x,y,z);
+		if(b.getType()==f.getMaterial() && b.getData()==f.getData()) return true;
+		boolean place = true;
+		
+		if(dropmode){
+			if(b.getType()==Material.BEDROCK || b.getType()==Material.ENDER_PORTAL || b.getType()==Material.ENDER_PORTAL_FRAME){
+				return true;
+			}else{
+				if(b.getType()!=Material.AIR){
+					BlockBreakEvent be = new BlockBreakEvent(b, p);
+					ClassicEdit.callEventWithoutNCP(be);
+					if(!be.isCancelled()){
+						for(ItemStack drop : b.getDrops()){
+							HashMap<Integer, ItemStack> out = p.getInventory().addItem(drop);
+							for(ItemStack is : out.values()){
+								w.dropItemNaturally(b.getLocation(), is);
+							}
+						}
+					}else{
+						if(getFilling().getMaterial()==Material.AIR){
+							place = false;
+							if(b.getType()==Material.AIR){
+								ppt++;
+								placed++;
+							}
+						}
+					}
+				}
+			}
+			if(getFilling().getMaterial()!=Material.AIR){
+				ItemStack is = new ItemStack(getFilling().getMaterial(), amount.get()>64?64:amount.get(), getFilling().getData());
+				
+				BlockPlaceEvent bp = new BlockPlaceEvent(b, b.getState(), b.getRelative(BlockFace.DOWN), is, p, true);
+				ClassicEdit.callEventWithoutNCP(bp);
+				if(!bp.isCancelled()){
+					if(amount.decrementAndGet() < 0){
+						p.sendMessage(ChatColor.RED+"You do not have required materials ("+f+")");
+						p.sendMessage(ChatColor.YELLOW+"Supply them and type /p or /p stop");
+						pause(); 
+						return false;
+					}
+				}else{
+					place = false;
+				}
+			}
+		}
+		
+		if(place){
+			b.setType(f.getMaterial());
+			b.setData(f.getData());
+			placed++;
+			ppt++;
+		}
+
+		return true;
+	}
+	
+	
+	
+	
+	
 	@Override
 	public boolean start(){
 		maxx = Math.max(l1.getBlockX(), l2.getBlockX());
@@ -81,15 +187,9 @@ public abstract class TwoPointCreation extends FilledCreation{
 		width = maxx-minx+1;
 		height = maxy-miny+1;
 		length = maxz-minz+1;
-		long blocks = width*height*length;
-		if((dropmode && blocks>20000) || (!dropmode && blocks>2000000)){
-			Bukkit.getPlayer(nick).sendMessage(ChatColor.RED+"Too many blocks to place");
-			return false;
-		}
+
 		up = f.getMaterial()!=Material.AIR;
-		x = minx;
-		y = up?miny:maxy;
-		z = minz;
+
 		pertick = dropmode?ClassicEdit.droppertick:ClassicEdit.pertick;
 		started = true;
 		return true;
@@ -112,8 +212,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 			if(is==null) continue;
 			if(is.getType()==m && is.getDurability()==d){
 				if(is.getAmount()<=ile){
-					ile -= is.getAmount();
-					//System.out.print("d"+ile);
+					ile -= is.getAmount();;
 					inv.setItem(i, null);
 				}else{
 					is.setAmount(is.getAmount()-ile);
@@ -124,20 +223,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 		
 	}
 
-	public boolean next(){
-		x++;
-		if(x>maxx){ 
-			x = minx; if(up) y++; else y--; 
-			if((up && y>maxy) || (!up && y<miny)){ 
-				if(up) y = miny; else y = maxy; 
-				z++;
-				if(z>maxz){
-					ClassicEdit.getCuboidManager().removeCreation(this); return false;
-				}
-			}
-		}
-		return true;
-	}
+	public abstract boolean next();
 	public void end(){
 		Player p = Bukkit.getPlayer(nick);
 		if(p!=null){

@@ -27,8 +27,14 @@ public abstract class Creation extends BukkitRunnable{
 	public void setTaskid(int taskid){
 		this.taskid = taskid;
 	}
+
 	public abstract String getName();
 	public abstract boolean start();
-	
+	public void stop(){
+		ClassicEdit.getCuboidManager().removeCreation(this);
+	}
+	public void pause(){
+		ClassicEdit.getCuboidManager().pauseCreation(this);
+	}
 	public void onBlockPhysics(BlockPhysicsEvent e){}
 }

@@ -18,12 +18,12 @@ public class LineCreation extends TwoPointCreation{
 	public LineCreation(String nick) {
 		super(nick);
 	}
-	public boolean start(){
+	public void start(){
 		super.start();
 		dist = l1.distance(l2);
 		if((dropmode && dist>2000) || (!dropmode && dist>200000)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
-			return false;
+			stop();
 		}
 		
 		dx = l1.getBlockX();
@@ -37,7 +37,6 @@ public class LineCreation extends TwoPointCreation{
 		sx = ((double)vx)/dist;
 		sy = ((double)vy)/dist;
 		sz = ((double)vz)/dist;
-		return true;
 	}
 	
 	@Override

@@ -30,28 +30,29 @@ public class Manager {
 			scs.remove(p);
 		}
 	}
-	public boolean runCreation(Player p, Creation c){
-
-		if(c.start()){
-			creas.put(p.getName().toLowerCase(), c);
-			c.setTaskid(Bukkit.getScheduler().scheduleSyncRepeatingTask(ClassicEdit.plugin, c, 1L, 1L));
-			return true;
-		}
-		return false;
+	public void runCreation(String nick, Creation c){
+		creas.put(nick, c);
+		run(c);
+	}
+	public void run(Creation c){
+		c.setTaskid(Bukkit.getScheduler().scheduleSyncRepeatingTask(ClassicEdit.plugin, c, 1L, 1L));
 	}
 	public void pauseCreation(Creation c){
 		Bukkit.getScheduler().cancelTask(c.getTaskid());
 		c.setTaskid(0);
 	}
 	public void unpauseCreation(Creation c){
-		c.setTaskid(Bukkit.getScheduler().scheduleSyncRepeatingTask(ClassicEdit.plugin, c, 1L, 1L));
+		run(c);
 	}
 	public void removeCreation(Creation c){
 		Bukkit.getScheduler().cancelTask(c.getTaskid());
 		creas.remove(c.getPlayerName());
 	}
 	public boolean isRunning(Player p){
-		return creas.containsKey(p.getName().toLowerCase());
+		return isRunning(p.getName().toLowerCase());
+	}
+	public boolean isRunning(String nick){
+		return creas.containsKey(nick);
 	}
 	public Creation getCreation(Player p){
 		return creas.get(p.getName().toLowerCase());

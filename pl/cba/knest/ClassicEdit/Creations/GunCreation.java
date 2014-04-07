@@ -7,6 +7,7 @@ import java.util.Queue;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -18,6 +19,8 @@ import org.bukkit.util.Vector;
 
 public class GunCreation extends InfiniteCreation{
 	private List<Bolt> bolts = new ArrayList<Bolt>();
+	private boolean explode = false;
+	private boolean laser = false;
 	private class Bolt{
 		private Location l;
 		private Vector v;
@@ -25,12 +28,19 @@ public class GunCreation extends InfiniteCreation{
 		private Queue<Block> last = new LinkedList<Block>();
 		private final int len = 10;
 		private int end = 200;
-		public Bolt(Location l, Vector v){
+		private GunCreation gun;
+		public Bolt(GunCreation gun, Location l, Vector v){
+			this.gun = gun;
 			this.l = l;
 			this.v = v;
 			
 		}
-		
+		public void colide(){
+			if(gun.explode){
+				World w = l.getWorld();
+				w.createExplosion(l.clone().add(0, 0.5, 0), 4.0f);
+			}
+		}
 		public boolean tick(){
 			World w = l.getWorld();
 			Block b = w.getBlockAt(l);
@@ -39,6 +49,7 @@ public class GunCreation extends InfiniteCreation{
 			if(ticks<end-len){
 				if(b.getType()!=Material.AIR){
 					end = ticks+len;
+					colide();
 				}else{
 					if(end>ticks){
 						l.add(v);
@@ -77,7 +88,7 @@ public class GunCreation extends InfiniteCreation{
 		l.add(0, 1, 0);
 		l.add(v);
 		l.add(v);
-		Bolt bo = new Bolt(l, v);
+		Bolt bo = new Bolt(this, l, v);
 		
 		bolts.add(bo);
 		bo.tick();
@@ -86,7 +97,7 @@ public class GunCreation extends InfiniteCreation{
 	public void run(){
 		ArrayList<Bolt> toremove = new ArrayList<Bolt>();
 		for(Bolt b : bolts){
-			if(!b.tick()){
+			if(!(b.tick() && (!laser || b.tick()))){//tick 2 times if its laser
 				toremove.add(b);
 				b.kill();
 			}
@@ -101,16 +112,36 @@ public class GunCreation extends InfiniteCreation{
 	}
 
 	@Override
-	public boolean start(){
-		//msgPlayer(ChatColor.GREEN+"Gun active");
-		return true;
+	public void start(){
+		super.start();
+		msgPlayer(ChatColor.YELLOW+"Gun enabled");
 	}
 
+	@Override
+	public void stop(){
+		super.stop();
+		for(Bolt b : bolts){
+			b.kill();
+		}
+		msgPlayer(ChatColor.YELLOW+"Gun disabled");
 
+	}
 
 	@Override
 	public void onBlockPhysics(BlockPhysicsEvent e){
 		
+	}
+	public boolean isExplode() {
+		return explode;
+	}
+	public void setExplode(boolean explode) {
+		this.explode = explode;
+	}
+	public boolean isLaser() {
+		return laser;
+	}
+	public void setLaser(boolean laser) {
+		this.laser = laser;
 	}
 
 

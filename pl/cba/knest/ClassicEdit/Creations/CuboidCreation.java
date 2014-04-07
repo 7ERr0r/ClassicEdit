@@ -25,17 +25,16 @@ public class CuboidCreation extends TwoPointCreation{
 	}
 	
 	@Override
-	public boolean start(){
+	public void start(){
 		super.start();
 		long blocks = width*height*length;
 		if((dropmode && blocks>20000) || (!dropmode && blocks>2000000)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
-			return false;
+			stop();
 		}
 		x = minx;
 		y = up?miny:maxy;
 		z = minz;
-		return true;
 	}
 	@Override
 	public boolean next(){

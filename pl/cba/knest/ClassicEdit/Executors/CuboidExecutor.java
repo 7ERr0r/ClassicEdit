@@ -15,6 +15,7 @@ public class CuboidExecutor extends TwoPointExecutor{
 	public void execute() throws ExecutorException{
 		perms("ClassicEdit.create.cuboid");
 		super.execute();
+		checkActive();
 		
 		CuboidCreation c = getCreation(p.getName());
 		c.setFilling(f);

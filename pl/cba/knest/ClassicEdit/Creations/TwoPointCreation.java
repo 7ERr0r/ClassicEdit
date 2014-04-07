@@ -177,7 +177,8 @@ public abstract class TwoPointCreation extends FilledCreation{
 	
 	
 	@Override
-	public boolean start(){
+	public void start(){
+		super.start();
 		maxx = Math.max(l1.getBlockX(), l2.getBlockX());
 		maxy = Math.max(l1.getBlockY(), l2.getBlockY());
 		maxz = Math.max(l1.getBlockZ(), l2.getBlockZ());
@@ -192,7 +193,6 @@ public abstract class TwoPointCreation extends FilledCreation{
 
 		pertick = dropmode?ClassicEdit.droppertick:ClassicEdit.pertick;
 		started = true;
-		return true;
 	}
 
 	int getAmount(Material m, short d, PlayerInventory inv){

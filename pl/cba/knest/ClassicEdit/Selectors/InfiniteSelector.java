@@ -38,13 +38,14 @@ public class InfiniteSelector implements Selector{
 		this.c = c;
 	}
 	public void start(){
-		p.sendMessage(ChatColor.YELLOW+"Gun enabled");
+		p.sendMessage(ChatColor.YELLOW+"Click air to determiante direction");
+		c.start();
 	}
 
 
 	@Override
 	public void end() {
-		p.sendMessage(ChatColor.YELLOW+"Gun disabled");
+		//p.sendMessage(ChatColor.YELLOW+"Gun disabled");
 	}
 
 	@Override
@@ -60,7 +61,7 @@ public class InfiniteSelector implements Selector{
 				c.setFilling(new Filling(Material.AIR, (byte) 0));
 			}
 			if(!ClassicEdit.getCuboidManager().isRunning(p)){
-				ClassicEdit.getCuboidManager().runCreation(p, c);
+				c.start();
 			}
 			if(c.getFilling() == null || c.getFilling().getMaterial()==Material.AIR){
 				p.sendMessage(ChatColor.RED+"Material cannot be air");

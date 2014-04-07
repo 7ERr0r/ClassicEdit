@@ -15,6 +15,7 @@ public class LineExecutor extends TwoPointExecutor{
 	public void execute() throws ExecutorException{
 		perms("ClassicEdit.create.line");
 		super.execute();
+		checkActive();
 		
 		LineCreation c = getCreation(p.getName());
 		c.setFilling(f);

@@ -29,12 +29,20 @@ public abstract class Creation extends BukkitRunnable{
 	}
 
 	public abstract String getName();
-	public abstract boolean start();
+	public void start(){
+		ClassicEdit.getCuboidManager().runCreation(nick, this);
+	}
 	public void stop(){
 		ClassicEdit.getCuboidManager().removeCreation(this);
 	}
+	public boolean isRunning(){
+		return ClassicEdit.getCuboidManager().isRunning(nick);
+	}
 	public void pause(){
 		ClassicEdit.getCuboidManager().pauseCreation(this);
+	}
+	public void unpause(){
+		ClassicEdit.getCuboidManager().unpauseCreation(this);
 	}
 	public void onBlockPhysics(BlockPhysicsEvent e){}
 }

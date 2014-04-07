@@ -15,10 +15,7 @@ public class CreationExecutor extends PlayerCmdExecutor{
 		
 		super.execute();
 		
-		Creation active = ClassicEdit.getCuboidManager().getCreation(p);
-		if(active!=null){
-			throw new ExecutorException(ChatColor.RED+"You have an active "+active.getName()+" running, "+ChatColor.GREEN+"Type /p stop to remove it");
-		}
+		
 		
 		
 		if(params.size()==1){
@@ -33,6 +30,12 @@ public class CreationExecutor extends PlayerCmdExecutor{
 		}
 		
 		
+	}
+	public void checkActive() throws ExecutorException{
+		Creation active = ClassicEdit.getCuboidManager().getCreation(p);
+		if(active!=null){
+			throw new ExecutorException(ChatColor.RED+"You have an active "+active.getName()+" running, "+ChatColor.GREEN+"Type /p stop to remove it");
+		}
 	}
 
 }

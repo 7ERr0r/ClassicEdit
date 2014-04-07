@@ -22,14 +22,15 @@ public class PauseExecutor extends PlayerCmdExecutor {
 			return;
 		}
 		if(params.contains("stop")){
-			ClassicEdit.getCuboidManager().removeCreation(c);
+			c.stop();
 			p.sendMessage(ChatColor.YELLOW+"Stopped "+c.getName());
+			ClassicEdit.getCuboidManager().removeSelector(p);
 		}else{
 			if(c!=null){
 				if(c.getTaskid()==0){
-					ClassicEdit.getCuboidManager().unpauseCreation(c);
+					c.unpause();
 				}else{
-					ClassicEdit.getCuboidManager().pauseCreation(c);
+					c.pause();
 				}
 				
 			}

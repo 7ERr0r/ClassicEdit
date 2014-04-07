@@ -35,7 +35,7 @@ public class GunExecutor extends CreationExecutor {
 		
 		ClassicEdit.getCuboidManager().setSelector(p, s);
 		
-		c.setExplode(flags.contains("e"));
+		c.setExplode(flags.contains("e") && perms("ClassicEdit.create.gun.explode"));
 		c.setLaser(flags.contains("l"));
 		s.start();
 	}

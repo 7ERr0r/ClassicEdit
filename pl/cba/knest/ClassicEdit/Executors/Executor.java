@@ -15,10 +15,11 @@ public class Executor{
 	public Executor(){
 
 	}
-	public void perms(String perm) throws ExecutorException{
+	public boolean perms(String perm) throws ExecutorException{
 		if(!s.hasPermission(perm) && !s.isOp()){
 			throw new ExecutorException(ChatColor.RED+"You do not have permission to do this");
 		}
+		return true;
 	}
 	public void init(CommandSender s, List<String> params, String flags){
 		this.s = s;

@@ -22,17 +22,18 @@ public class GunCreation extends InfiniteCreation{
 	private boolean explode = false;
 	private boolean laser = false;
 	private class Bolt{
-		private Location l;
-		private Vector v;
+		private final Location l;
+		private final Vector v;
 		private int ticks = 0;
 		private Queue<Block> last = new LinkedList<Block>();
-		private final int len = 10;
+		private final int len;
 		private int end = 200;
-		private GunCreation gun;
-		public Bolt(GunCreation gun, Location l, Vector v){
+		private final GunCreation gun;
+		public Bolt(GunCreation gun, Location l, Vector v, int len){
 			this.gun = gun;
 			this.l = l;
 			this.v = v;
+			this.len = len;
 			
 		}
 		public void colide(){
@@ -88,7 +89,7 @@ public class GunCreation extends InfiniteCreation{
 		l.add(0, 1, 0);
 		l.add(v);
 		l.add(v);
-		Bolt bo = new Bolt(this, l, v);
+		Bolt bo = new Bolt(this, l, v, laser?40:10);
 		
 		bolts.add(bo);
 		bo.tick();
@@ -97,7 +98,7 @@ public class GunCreation extends InfiniteCreation{
 	public void run(){
 		ArrayList<Bolt> toremove = new ArrayList<Bolt>();
 		for(Bolt b : bolts){
-			if(!(b.tick() && (!laser || b.tick()))){//tick 2 times if its laser
+			if(!(b.tick() && (!laser || (b.tick() && b.tick() && b.tick())))){//tick 4 times if its laser
 				toremove.add(b);
 				b.kill();
 			}

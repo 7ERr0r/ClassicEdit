@@ -7,27 +7,38 @@ import org.bukkit.entity.Player;
 
 
 public class Manager {
-	private HashMap<Player, Selector> scs;
+	private HashMap<String, Selector> scs;
 	private HashMap<String, Creation> creas;
 	public Manager(){
-		this.scs = new HashMap<Player, Selector>();
+		this.scs = new HashMap<String, Selector>();
 		this.creas = new HashMap<String, Creation>();
 	}
-	
 	public void setSelector(Player p, Selector s){
-		removeSelector(p);
-		scs.put(p, s);
+		setSelector(p.getName().toLowerCase(), s);
+	}
+	public void setSelector(String nick, Selector s){
+		removeSelector(nick);
+		scs.put(nick, s);
 	}
 	public Selector getSelector(Player p){
-		return scs.get(p);
+		return getSelector(p.getName().toLowerCase());
+	}
+	public Selector getSelector(String nick){
+		return scs.get(nick);
+	}
+	public boolean isSelecting(String nick){
+		return scs.containsKey(nick);
 	}
 	public boolean isSelecting(Player p){
-		return scs.containsKey(p);
+		return isSelecting(p.getName().toLowerCase());
 	}
 	public void removeSelector(Player p){
-		if(isSelecting(p)){
-			scs.get(p).end();
-			scs.remove(p);
+		removeSelector(p.getName().toLowerCase());
+	}
+	public void removeSelector(String nick){
+		if(isSelecting(nick)){
+			scs.get(nick).end();
+			scs.remove(nick);
 		}
 	}
 	public void runCreation(String nick, Creation c){

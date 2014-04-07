@@ -13,10 +13,10 @@ public class ClickListener implements Listener{
 	public void onPlayerInteract(PlayerInteractEvent e){
 		Player p = e.getPlayer();
 		Action a = e.getAction();
-		
+		String nick = p.getName().toLowerCase();
 		if(a == Action.LEFT_CLICK_BLOCK || a == Action.RIGHT_CLICK_BLOCK){
-			if(ClassicEdit.getCuboidManager().isSelecting(p)){
-				Selector sel = ClassicEdit.getCuboidManager().getSelector(p);
+			if(ClassicEdit.getCuboidManager().isSelecting(nick)){
+				Selector sel = ClassicEdit.getCuboidManager().getSelector(nick);
 				Block b = e.getClickedBlock();
 				if(a == Action.RIGHT_CLICK_BLOCK){
 					b = b.getRelative(e.getBlockFace());
@@ -27,8 +27,8 @@ public class ClickListener implements Listener{
 			}
 		}else{
 			if(a == Action.LEFT_CLICK_AIR || a == Action.RIGHT_CLICK_AIR){
-				if(ClassicEdit.getCuboidManager().isSelecting(p)){
-					Selector sel = ClassicEdit.getCuboidManager().getSelector(p);
+				if(ClassicEdit.getCuboidManager().isSelecting(nick)){
+					Selector sel = ClassicEdit.getCuboidManager().getSelector(nick);
 					
 					if(!sel.selectAir(p, a)){
 						e.setCancelled(true);

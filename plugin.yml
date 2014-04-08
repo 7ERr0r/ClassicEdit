@@ -22,7 +22,6 @@ commands:
   gun:
     description: Activates gun.
     usage: /gun <block>
-    aliases: [g]
   paste:
     description: Pastes a paste.
     usage: /paste

@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.Queue;
 
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.util.Vector;
 
@@ -36,10 +39,12 @@ public class GunCreation extends InfiniteCreation{
 			this.len = len;
 			
 		}
-		public void colide(){
+		public void colide(Block b){
 			if(gun.explode){
-				World w = l.getWorld();
-				w.createExplosion(l.clone().add(0, 0.5, 0), 4.0f);
+				Location ex = b.getLocation();
+				World w = ex.getWorld();
+				TNTPrimed e = (TNTPrimed) w.spawnEntity(ex, EntityType.PRIMED_TNT);
+				e.setFuseTicks(1);
 			}
 		}
 		public boolean tick(){
@@ -50,7 +55,7 @@ public class GunCreation extends InfiniteCreation{
 			if(ticks<end-len){
 				if(b.getType()!=Material.AIR){
 					end = ticks+len;
-					colide();
+					colide(b);
 				}else{
 					if(end>ticks){
 						l.add(v);

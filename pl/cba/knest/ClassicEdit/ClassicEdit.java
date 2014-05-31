@@ -1,5 +1,6 @@
 package pl.cba.knest.ClassicEdit;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -14,11 +15,13 @@ import org.bukkit.plugin.AuthorNagException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 import pl.cba.knest.ClassicEdit.Executors.CuboidExecutor;
 import pl.cba.knest.ClassicEdit.Executors.Executor;
 import pl.cba.knest.ClassicEdit.Executors.GunExecutor;
 import pl.cba.knest.ClassicEdit.Executors.LineExecutor;
+import pl.cba.knest.ClassicEdit.Executors.MazeExecutor;
 import pl.cba.knest.ClassicEdit.Executors.PauseExecutor;
 import pl.cba.knest.ClassicEdit.Executors.SpheroidExecutor;
 
@@ -29,6 +32,7 @@ public class ClassicEdit extends JavaPlugin{
 	public static ClassicEdit plugin;
 	public static int pertick;
 	public static int droppertick;
+	
 	private Manager cm;
 	
 	
@@ -38,13 +42,24 @@ public class ClassicEdit extends JavaPlugin{
 	}
 	
 	public void onEnable(){
-		
+
 		pertick = 100;
 		droppertick = 1;
 		
 		Bukkit.getPluginManager().registerEvents(new ClickListener(), this);
 
+		
+		
 		cm = new Manager();
+		
+		
+		try {
+			Metrics m = new Metrics(this);
+			m.start();
+		} catch (IOException e){
+			
+		}
+		
 		log("Enabled !");
 		
 	}
@@ -90,6 +105,8 @@ public class ClassicEdit extends JavaPlugin{
 			e = new SpheroidExecutor();
 		}else if(name.equals("line")){
 			e = new LineExecutor();
+		}else if(name.equals("maze")){
+			e = new MazeExecutor();
 		}else if(name.equals("pause")){
 			e = new PauseExecutor();
 		}else if(name.equals("gun")){

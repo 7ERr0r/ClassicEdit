@@ -53,11 +53,19 @@ public abstract class TwoPointCreation extends FilledCreation{
 	
 	int pertick = 1;
 	
-
+	boolean loop = false;
 	
 	boolean up = true;
 	public boolean canPlace(int x, int y, int z){
 		return true;
+	}
+	
+	
+	public boolean isLoop(){
+		return loop;
+	}
+	public void setLoop(boolean loop){
+		this.loop = loop;
 	}
 	@Override
 	public void run() {
@@ -84,9 +92,24 @@ public abstract class TwoPointCreation extends FilledCreation{
 				}
 			}
 			if(!next()){
-				stop();
-				end();
-				break;
+				sum += placed;
+				if(loop){
+					if(placed>0){
+						placed = 0;
+						init();
+						msgPlayer(ChatColor.YELLOW+"Checking... next lap");
+					}else{
+						pause();
+						placed = 0;
+						init();
+						msgPlayer(ChatColor.YELLOW+"No more blocks to place, paused.");
+						break;
+					}
+				}else{
+					stop();
+					end();
+					break;
+				}
 			}
 			if(ppt>=pertick) break;
 		}
@@ -116,6 +139,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 	@SuppressWarnings("deprecation")
 	public boolean place(AtomicInteger amount, Player p){
 		Block b = w.getBlockAt(x,y,z);
+		//msgPlayer("trying to place at "+x+" "+y+" "+z);
 		if(b.getType()==f.getMaterial() && b.getData()==f.getData()) return true;
 		boolean place = true;
 		
@@ -133,12 +157,18 @@ public abstract class TwoPointCreation extends FilledCreation{
 								w.dropItemNaturally(b.getLocation(), is);
 							}
 						}
+						b.setType(Material.AIR);
 					}else{
 						if(getFilling().getMaterial()==Material.AIR){
 							place = false;
 							if(b.getType()==Material.AIR){
 								ppt++;
 								placed++;
+							}else{
+								p.sendMessage(ChatColor.YELLOW+"Event cancelled");
+								p.sendMessage(ChatColor.YELLOW+"Type /p to unpause or /p stop");
+								pause(); 
+								return false;
 							}
 						}
 					}
@@ -177,8 +207,8 @@ public abstract class TwoPointCreation extends FilledCreation{
 	
 	
 	@Override
-	public void start(){
-		super.start();
+	public void init(){
+		
 		maxx = Math.max(l1.getBlockX(), l2.getBlockX());
 		maxy = Math.max(l1.getBlockY(), l2.getBlockY());
 		maxz = Math.max(l1.getBlockZ(), l2.getBlockZ());
@@ -199,18 +229,45 @@ public abstract class TwoPointCreation extends FilledCreation{
 		int ile = 0;
 		for(ItemStack is : inv.getContents()){
 			if(is==null) continue;
-			if(is.getType()==m && (!m.isBlock() || is.getDurability()==d)){
+			if(isVariant(is, m, d)){
 				ile += is.getAmount();
 			}
 		}
 		return ile;
+	}
+	boolean isVariant(ItemStack is, Material m, short d){
+		if(!is.getType().equals(m)) return false;
+		if(!m.isBlock()) return true;
+		switch(m){
+		case RAILS:
+		case HOPPER:
+		case FURNACE:
+		case PUMPKIN:
+		case WOOD_STAIRS:
+		case BIRCH_WOOD_STAIRS:
+		case SPRUCE_WOOD_STAIRS:
+		case JUNGLE_WOOD_STAIRS:
+		case ACACIA_STAIRS:
+		case DARK_OAK_STAIRS:
+		case STEP:
+		case WOOD_STEP:
+		case SANDSTONE_STAIRS:
+		case BRICK_STAIRS:
+		case COBBLESTONE_STAIRS:
+			return true;
+		case LOG:
+		case LOG_2:
+			return (is.getDurability() & 3)==(d & 3);
+		default:
+			return d==is.getDurability();
+		}
 	}
 	void setAmount(Material m, short d, PlayerInventory inv, int ile){
 		
 		for(int i = 0; i<inv.getSize(); i++){
 			ItemStack is = inv.getItem(i);
 			if(is==null) continue;
-			if(is.getType()==m && is.getDurability()==d){
+			if(isVariant(is, m, d)){
 				if(is.getAmount()<=ile){
 					ile -= is.getAmount();;
 					inv.setItem(i, null);
@@ -227,7 +284,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 	public void end(){
 		Player p = Bukkit.getPlayer(nick);
 		if(p!=null){
-			p.sendMessage(ChatColor.YELLOW+"Created "+placed+" block"+(placed==1?"":"s")+" of "+getFilling().toString());
+			p.sendMessage(ChatColor.YELLOW+"Created "+sum+" block"+(sum==1?"":"s")+" of "+getFilling().toString());
 		}
 	}
 

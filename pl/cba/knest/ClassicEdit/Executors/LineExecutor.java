@@ -20,6 +20,7 @@ public class LineExecutor extends TwoPointExecutor{
 		LineCreation c = getCreation(p.getName());
 		c.setFilling(f);
 		//c.setDashed(flags.contains("d"));
+		c.setLoop(flags.contains("l"));
 		c.setDropmode(dropmode);
 		Selector sel = new TwoPointSelector(p, c);
 		ClassicEdit.getCuboidManager().setSelector(p, sel);

@@ -22,7 +22,7 @@ public class Filling {
 		this.data = data;
 	}
 	public String toString(){
-		return m+(data==0?"":":"+data);
+		return m.toString().toLowerCase()+(data==0?"":":"+data);
 	}
 	public static Filling parse(String str){
 		String[] s = str.split(":");

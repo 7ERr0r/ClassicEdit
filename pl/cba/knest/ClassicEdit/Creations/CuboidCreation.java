@@ -25,8 +25,8 @@ public class CuboidCreation extends TwoPointCreation{
 	}
 	
 	@Override
-	public void start(){
-		super.start();
+	public void init(){
+		super.init();
 		long blocks = width*height*length;
 		if((dropmode && blocks>20000) || (!dropmode && blocks>2000000)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");

@@ -10,7 +10,9 @@ public abstract class InfiniteCreation extends FilledCreation{
 	}
 
 	public abstract void click(Location location);
-
+	public void init(){
+		
+	}
 
 
 }

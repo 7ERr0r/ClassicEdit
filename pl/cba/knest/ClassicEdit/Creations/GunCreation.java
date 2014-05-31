@@ -118,8 +118,8 @@ public class GunCreation extends InfiniteCreation{
 	}
 
 	@Override
-	public void start(){
-		super.start();
+	public void init(){
+		super.init();
 		msgPlayer(ChatColor.YELLOW+"Gun enabled");
 	}
 

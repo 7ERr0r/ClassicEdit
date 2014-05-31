@@ -31,7 +31,9 @@ public abstract class Creation extends BukkitRunnable{
 	public abstract String getName();
 	public void start(){
 		ClassicEdit.getCuboidManager().runCreation(nick, this);
+		init();
 	}
+	public abstract void init();
 	public void stop(){
 		ClassicEdit.getCuboidManager().removeCreation(this);
 	}

@@ -21,20 +21,18 @@ public class PauseExecutor extends PlayerCmdExecutor {
 			p.sendMessage(ChatColor.RED+"You don't have any cuboid running");
 			return;
 		}
-		if(params.contains("stop")){
-			c.stop();
-			p.sendMessage(ChatColor.YELLOW+"Stopped "+c.getName());
-			ClassicEdit.getCuboidManager().removeSelector(p);
-		}else{
-			if(c!=null){
-				if(c.getTaskid()==0){
-					c.unpause();
-				}else{
-					c.pause();
-				}
-				
+
+		if(c!=null){
+			if(c.getTaskid()==0){
+				p.sendMessage(ChatColor.YELLOW+"Unpaused "+c.getName());
+				c.unpause();
+			}else{
+				p.sendMessage(ChatColor.YELLOW+"Paused "+c.getName());
+				c.pause();
 			}
+				
 		}
+		
 	}
 
 }

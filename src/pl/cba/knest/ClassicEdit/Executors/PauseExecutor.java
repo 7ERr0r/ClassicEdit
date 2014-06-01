@@ -13,21 +13,19 @@ public class PauseExecutor extends PlayerCmdExecutor {
 	public void execute() throws ExecutorException{
 		super.execute();
 		if(!p.hasPermission("ClassicEdit.pause") && !p.isOp()){
-			p.sendMessage(ChatColor.RED+"You do not have permission to do this");
-			return;
+			throw new ExecutorException(ChatColor.RED+"You do not have permission to do this");
 		}
 		Creation c = ClassicEdit.getCuboidManager().getCreation(p);
 		if(c == null){
-			p.sendMessage(ChatColor.RED+"You don't have any cuboid running");
-			return;
+			throw new ExecutorException(ChatColor.RED+"You don't have any cuboid running");
 		}
 
 		if(c!=null){
-			if(c.getTaskid()==0){
-				p.sendMessage(ChatColor.YELLOW+"Unpaused "+c.getName());
+			if(c.isPause()){
+				msgPlayer(ChatColor.YELLOW+"Unpaused "+c.getName());
 				c.unpause();
 			}else{
-				p.sendMessage(ChatColor.YELLOW+"Paused "+c.getName());
+				msgPlayer(ChatColor.YELLOW+"Paused "+c.getName());
 				c.pause();
 			}
 				

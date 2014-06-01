@@ -76,7 +76,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 		if(dropmode){
 			p = Bukkit.getPlayer(nick);
 			if(p==null){
-				ClassicEdit.getCuboidManager().pauseCreation(this); return;
+				pause(); return;
 			}
 			if(f.getMaterial()!=Material.AIR){
 				amount.set(getAmount(f.getMaterial(), f.getData(), p.getInventory()));
@@ -84,7 +84,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 			}
 		}
 		ppt = 0;
-		for(int i = 0; i<1024; i++){
+		for(int i = 0; i<512; i++){
 			
 			if(canPlace(x,y,z)){
 				if(!place(amount, p)){
@@ -107,7 +107,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 					}
 				}else{
 					stop();
-					end();
+					msgEnd();
 					break;
 				}
 			}
@@ -165,8 +165,8 @@ public abstract class TwoPointCreation extends FilledCreation{
 								ppt++;
 								placed++;
 							}else{
-								p.sendMessage(ChatColor.YELLOW+"Event cancelled");
-								p.sendMessage(ChatColor.YELLOW+"Type /p to unpause or /p stop");
+								msgPlayer(ChatColor.YELLOW+"Event cancelled");
+								msgPlayer(ChatColor.YELLOW+"Type /p to unpause or /p stop");
 								pause(); 
 								return false;
 							}
@@ -181,8 +181,8 @@ public abstract class TwoPointCreation extends FilledCreation{
 				ClassicEdit.callEventWithoutNCP(bp);
 				if(!bp.isCancelled()){
 					if(amount.decrementAndGet() < 0){
-						p.sendMessage(ChatColor.RED+"You do not have required materials ("+f+")");
-						p.sendMessage(ChatColor.YELLOW+"Supply them and type /p or /p stop");
+						msgPlayer(ChatColor.RED+"You do not have required materials ("+f+")");
+						msgPlayer(ChatColor.YELLOW+"Supply them and type /p or /p stop");
 						pause(); 
 						return false;
 					}
@@ -281,11 +281,14 @@ public abstract class TwoPointCreation extends FilledCreation{
 	}
 
 	public abstract boolean next();
-	public void end(){
-		Player p = Bukkit.getPlayer(nick);
-		if(p!=null){
-			p.sendMessage(ChatColor.YELLOW+"Created "+sum+" block"+(sum==1?"":"s")+" of "+getFilling().toString());
-		}
+
+
+
+	public boolean isRunning() {
+		return ClassicEdit.getCuboidManager().getCreation(nick)==this;
 	}
+
+
+
 
 }

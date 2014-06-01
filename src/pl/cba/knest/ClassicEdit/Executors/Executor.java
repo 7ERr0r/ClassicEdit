@@ -15,6 +15,11 @@ public class Executor{
 	public Executor(){
 
 	}
+	
+	public static void msg(CommandSender s, String msg){
+		s.sendMessage(ChatColor.GREEN+"CE: "+msg);
+	}
+	
 	public boolean perms(String perm) throws ExecutorException{
 		if(!s.hasPermission(perm) && !s.isOp()){
 			throw new ExecutorException(ChatColor.RED+"You do not have permission to do this");

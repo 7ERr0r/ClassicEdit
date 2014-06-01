@@ -14,14 +14,14 @@ import pl.cba.knest.ClassicEdit.Filling;
 import pl.cba.knest.ClassicEdit.Selector;
 import pl.cba.knest.ClassicEdit.Creations.TwoPointCreation;
 
-public class TwoPointSelector implements Selector{
-	private Player p;
+public class TwoPointSelector extends Selector{
+	
 	private TwoPointCreation c;
 	private boolean first = true;
 	private Location l1;
 	private Location l2;
 	public TwoPointSelector(Player p, TwoPointCreation c){
-		this.p = p;
+		super(p);
 		this.c = c;
 	}
 
@@ -40,6 +40,7 @@ public class TwoPointSelector implements Selector{
 	public void setC(TwoPointCreation c) {
 		this.c = c;
 	}
+
 	@Override
 	public boolean selectBlock(Block b){
 		if(first){
@@ -73,10 +74,10 @@ public class TwoPointSelector implements Selector{
 		return false;
 	}
 	public void start(){
-		p.sendMessage(ChatColor.YELLOW+"Click two blocks to determinate the edges");
+		msgPlayer(ChatColor.YELLOW+"Click two blocks to determinate the edges");
 	}
 	public void info(){
-		p.sendMessage(ChatColor.YELLOW+"Creating "+c.getName()+" of "+c.getFilling());
+		//msgPlayer(ChatColor.YELLOW+"Creating "+c.getName()+" of "+c.getFilling());
 	}
 
 	@Override

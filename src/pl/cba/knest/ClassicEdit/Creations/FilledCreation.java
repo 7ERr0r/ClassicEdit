@@ -1,5 +1,6 @@
 package pl.cba.knest.ClassicEdit.Creations;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 import pl.cba.knest.ClassicEdit.Creation;
@@ -12,6 +13,17 @@ public abstract class FilledCreation extends Creation{
 	int sum = 0;
 	int ppt = 0;
 	
+	
+	public String getFullName(){
+		return getName()+" of "+getFilling();
+	}
+	public void msgStart(){
+		msgPlayer(ChatColor.YELLOW+"Creating "+getFullName());
+	}
+	
+	public void msgEnd(){
+			msgPlayer(ChatColor.YELLOW+"Created "+sum+" block"+(sum==1?"":"s")+" of "+getFilling().toString());
+	}
 	public FilledCreation(String nick) {
 		super(nick);
 	}

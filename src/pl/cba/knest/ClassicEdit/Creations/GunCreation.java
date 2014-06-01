@@ -8,7 +8,6 @@ import java.util.Queue;
 
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -120,7 +119,7 @@ public class GunCreation extends InfiniteCreation{
 	@Override
 	public void init(){
 		super.init();
-		msgPlayer(ChatColor.YELLOW+"Gun enabled");
+		//msgPlayer(ChatColor.YELLOW+"Gun enabled");
 	}
 
 	@Override
@@ -129,7 +128,7 @@ public class GunCreation extends InfiniteCreation{
 		for(Bolt b : bolts){
 			b.kill();
 		}
-		msgPlayer(ChatColor.YELLOW+"Gun disabled");
+		//msgPlayer(ChatColor.YELLOW+"Gun disabled");
 
 	}
 

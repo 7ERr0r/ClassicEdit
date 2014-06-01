@@ -2,6 +2,8 @@ package pl.cba.knest.ClassicEdit;
 
 import org.bukkit.command.CommandSender;
 
+import pl.cba.knest.ClassicEdit.Executors.Executor;
+
 public class ExecutorException extends Exception{
 
 	private static final long serialVersionUID = 3190039844166241981L;
@@ -16,6 +18,6 @@ public class ExecutorException extends Exception{
 		return msg;
 	}
 	public void send(CommandSender s){
-		if(msg!=null) s.sendMessage(msg);
+		if(msg!=null) Executor.msg(s, msg);
 	}
 }

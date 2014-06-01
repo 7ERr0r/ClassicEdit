@@ -42,15 +42,12 @@ public class ClassicEdit extends JavaPlugin{
 	}
 	
 	public void onEnable(){
-
 		pertick = 100;
 		droppertick = 1;
-		
 		Bukkit.getPluginManager().registerEvents(new ClickListener(), this);
 
-		
-		
 		cm = new Manager();
+		cm.runTaskTimer(this, 10L, 1L);
 		
 		
 		try {
@@ -59,6 +56,8 @@ public class ClassicEdit extends JavaPlugin{
 		} catch (IOException e){
 			
 		}
+		
+		
 		
 		log("Enabled !");
 		
@@ -115,6 +114,7 @@ public class ClassicEdit extends JavaPlugin{
 		if(e == null) throw new ExecutorException(ChatColor.RED+"Bad command");
 		e.init(s, params, flags);
 		e.execute();
+		
 	}
 	public Manager getManager(){
 		return cm;

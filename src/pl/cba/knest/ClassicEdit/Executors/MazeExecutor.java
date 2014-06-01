@@ -5,23 +5,21 @@ package pl.cba.knest.ClassicEdit.Executors;
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Selector;
-import pl.cba.knest.ClassicEdit.Creations.LineCreation;
+import pl.cba.knest.ClassicEdit.Creations.MazeCreation;
 import pl.cba.knest.ClassicEdit.Selectors.TwoPointSelector;
 
-public class LineExecutor extends TwoPointExecutor{
-	public LineCreation getCreation(String nick){
-		return new LineCreation(nick);
+public class MazeExecutor extends TwoPointExecutor{
+	public MazeCreation getCreation(String nick){
+		return new MazeCreation(nick);
 	}
 	public void execute() throws ExecutorException{
-		perms("ClassicEdit.create.line");
+		perms("ClassicEdit.create.maze");
 		super.execute();
-		checkActive();
 		
-		LineCreation c = getCreation(p.getName());
+		MazeCreation c = getCreation(p.getName());
 		c.setFilling(f);
-		//c.setDashed(flags.contains("d"));
-		c.setLoop(flags.contains("l"));
 		c.setDropmode(dropmode);
+		c.setLoop(flags.contains("l"));
 		Selector sel = new TwoPointSelector(p, c);
 		ClassicEdit.getCuboidManager().setSelector(p, sel);
 		sel.start();

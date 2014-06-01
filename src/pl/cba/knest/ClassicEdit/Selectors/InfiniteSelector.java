@@ -7,18 +7,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 
-import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
 import pl.cba.knest.ClassicEdit.Selector;
 import pl.cba.knest.ClassicEdit.Creations.InfiniteCreation;
 
-public class InfiniteSelector implements Selector{
-	private Player p;
+public class InfiniteSelector extends Selector{
 	private InfiniteCreation c;
 
 	public InfiniteSelector(Player p, InfiniteCreation c){
-		this.p = p;
+		super(p);
 		this.c = c;
 	}
 
@@ -38,7 +36,7 @@ public class InfiniteSelector implements Selector{
 		this.c = c;
 	}
 	public void start(){
-		p.sendMessage(ChatColor.YELLOW+"Click air to determiante direction");
+		msgPlayer(ChatColor.YELLOW+"Click air to determiante direction");
 		c.start();
 	}
 
@@ -60,11 +58,8 @@ public class InfiniteSelector implements Selector{
 			}else{
 				c.setFilling(new Filling(Material.AIR, (byte) 0));
 			}
-			if(!ClassicEdit.getCuboidManager().isRunning(p)){
-				c.start();
-			}
 			if(c.getFilling() == null || c.getFilling().getMaterial()==Material.AIR){
-				p.sendMessage(ChatColor.RED+"Material cannot be air");
+				msgPlayer(ChatColor.RED+"Material cannot be air");
 			}else{
 				c.click(p.getLocation());
 			}

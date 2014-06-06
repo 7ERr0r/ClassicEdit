@@ -17,7 +17,7 @@ public class CuboidCreation extends TwoPointCreation{
 
 	@Override
 	public boolean canPlace(int x, int y, int z){
-		return isDashed(x,y,z);
+		return isDashed(x,y,z) && super.canPlace(x,y,z);
 	}
 	public boolean isDashed(int x, int y, int z){
 		if(dashed) return (x+y+z)%2==0;

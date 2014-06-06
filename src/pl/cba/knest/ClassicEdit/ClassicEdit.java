@@ -42,7 +42,7 @@ public class ClassicEdit extends JavaPlugin{
 	}
 	
 	public void onEnable(){
-		pertick = 100;
+		pertick = 256;
 		droppertick = 1;
 		Bukkit.getPluginManager().registerEvents(new ClickListener(), this);
 
@@ -138,7 +138,6 @@ public class ClassicEdit extends JavaPlugin{
 					}
 				} catch (Error e) {
 					//e.printStackTrace();
-					continue;
 				}
 
 				if (registration.getPlugin().isEnabled()) {

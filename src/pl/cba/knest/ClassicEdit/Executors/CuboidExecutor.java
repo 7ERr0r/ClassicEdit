@@ -21,6 +21,7 @@ public class CuboidExecutor extends TwoPointExecutor{
 		c.setDashed(flags.contains("d"));
 		c.setLoop(flags.contains("l"));
 		c.setDropmode(dropmode);
+		c.setMask(mask);
 		Selector sel = new TwoPointSelector(p, c);
 		ClassicEdit.getCuboidManager().setSelector(p, sel);
 		sel.start();

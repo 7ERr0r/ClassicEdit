@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.Mask;
 
 public abstract class TwoPointCreation extends FilledCreation{
 	
@@ -56,7 +58,14 @@ public abstract class TwoPointCreation extends FilledCreation{
 	boolean loop = false;
 	
 	boolean up = true;
+	
+	Mask mask;
+	
 	public boolean canPlace(int x, int y, int z){
+		if(mask!=null){
+			Block b = w.getBlockAt(x,y,z);
+			if(!mask.contains(b.getType())) return false;
+		}
 		return true;
 	}
 	
@@ -66,6 +75,9 @@ public abstract class TwoPointCreation extends FilledCreation{
 	}
 	public void setLoop(boolean loop){
 		this.loop = loop;
+	}
+	public void setMask(Mask mask){
+		this.mask = mask;
 	}
 	@Override
 	public void run() {
@@ -84,7 +96,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 			}
 		}
 		ppt = 0;
-		for(int i = 0; i<512; i++){
+		for(int i = 0; i<2048; i++){
 			
 			if(canPlace(x,y,z)){
 				if(!place(amount, p)){
@@ -107,7 +119,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 					}
 				}else{
 					stop();
-					msgEnd();
+					//msgEnd();
 					break;
 				}
 			}
@@ -134,46 +146,51 @@ public abstract class TwoPointCreation extends FilledCreation{
 	}
 
 	
-	
+	public void cancelled(){
+		msgPlayer(ChatColor.YELLOW+"Event cancelled");
+		msgPlayer(ChatColor.YELLOW+"Type /p to unpause or /p stop");
+		pause(); 
+	}
 	
 	@SuppressWarnings("deprecation")
 	public boolean place(AtomicInteger amount, Player p){
 		Block b = w.getBlockAt(x,y,z);
+		Material t = b.getType();
 		//msgPlayer("trying to place at "+x+" "+y+" "+z);
-		if(b.getType()==f.getMaterial() && b.getData()==f.getData()) return true;
+		if(t==f.getMaterial() && b.getData()==f.getData()) return true;
 		boolean place = true;
 		
 		if(dropmode){
-			if(b.getType()==Material.BEDROCK || b.getType()==Material.ENDER_PORTAL || b.getType()==Material.ENDER_PORTAL_FRAME){
+			if(t==Material.BEDROCK || t==Material.ENDER_PORTAL || t==Material.ENDER_PORTAL_FRAME)
 				return true;
-			}else{
-				if(b.getType()!=Material.AIR){
-					BlockBreakEvent be = new BlockBreakEvent(b, p);
-					ClassicEdit.callEventWithoutNCP(be);
-					if(!be.isCancelled()){
-						for(ItemStack drop : b.getDrops()){
-							HashMap<Integer, ItemStack> out = p.getInventory().addItem(drop);
-							for(ItemStack is : out.values()){
-								w.dropItemNaturally(b.getLocation(), is);
-							}
+			
+			if(t!=Material.AIR){
+				BlockBreakEvent be = new BlockBreakEvent(b, p);
+				//msgPlayer("Event");
+				ClassicEdit.callEventWithoutNCP(be);
+				if(!be.isCancelled()){
+					for(ItemStack drop : b.getDrops()){
+						HashMap<Integer, ItemStack> out = p.getInventory().addItem(drop);
+						for(ItemStack is : out.values()){
+							w.dropItemNaturally(b.getLocation(), is);
 						}
-						b.setType(Material.AIR);
-					}else{
-						if(getFilling().getMaterial()==Material.AIR){
-							place = false;
-							if(b.getType()==Material.AIR){
-								ppt++;
-								placed++;
-							}else{
-								msgPlayer(ChatColor.YELLOW+"Event cancelled");
-								msgPlayer(ChatColor.YELLOW+"Type /p to unpause or /p stop");
-								pause(); 
-								return false;
-							}
+					}
+					b.setType(Material.AIR);
+				}else{
+					if(getFilling().getMaterial()==Material.AIR){
+						place = false;
+						if(b.getType()==Material.AIR){
+							p.playEffect(b.getLocation(), Effect.STEP_SOUND, t);
+							ppt++;
+							placed++;
+						}else{
+							cancelled();
+							return false;
 						}
 					}
 				}
 			}
+			
 			if(getFilling().getMaterial()!=Material.AIR){
 				ItemStack is = new ItemStack(getFilling().getMaterial(), amount.get()>64?64:amount.get(), getFilling().getData());
 				
@@ -187,16 +204,24 @@ public abstract class TwoPointCreation extends FilledCreation{
 						return false;
 					}
 				}else{
-					place = false;
+					cancelled();
+					return false;
 				}
 			}
 		}
 		
 		if(place){
+			if(dropmode){
+				w.playEffect(b.getLocation(), Effect.STEP_SOUND, t);
+				//if(f.getMaterial()!=Material.AIR){
+				//	w.playEffect(b.getLocation(), Effect., t);
+				//}
+			}
 			b.setType(f.getMaterial());
 			b.setData(f.getData());
 			placed++;
 			ppt++;
+
 		}
 
 		return true;

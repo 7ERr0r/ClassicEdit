@@ -6,22 +6,28 @@ import org.bukkit.ChatColor;
 
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Filling;
+import pl.cba.knest.ClassicEdit.Mask;
 
 public class CreationExecutor extends PlayerCmdExecutor{
 
 	Filling f = null;
+	Mask mask = null;
 	public void execute() throws ExecutorException{
 		
 		super.execute();
 		
+
+		if(flags.contains("m")){
+			if(params.size()==0) throw new ExecutorException(ChatColor.RED+"Not enough arguments for mask (-m)");
+			mask = new Mask(params.remove(0));
+		}
 		
 		
-		
-		if(params.size()==1){
+		if(params.size()>=1){
 			try{
-				f = Filling.parse(params.get(0));
+				f = Filling.parse(params.remove(0));
 			}catch(Exception e){
-				throw new ExecutorException(ChatColor.RED+"Bad block name");
+				
 			}
 		}
 		if(f != null && f.getMaterial() == null){

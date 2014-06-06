@@ -56,7 +56,7 @@ public class TwoPointSelector extends Selector{
 					
 					ClassicEdit.getCuboidManager().removeSelector(p);
 					
-					if(is != null && is.getType().isBlock()){
+					if(is != null && is.getType().isBlock() && is.getType()!=Material.AIR){
 						c.setFilling(new Filling(is.getType(), (byte) is.getDurability()));
 					}else{
 						c.setFilling(new Filling(Material.AIR, (byte) 0));

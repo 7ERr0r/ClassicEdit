@@ -22,11 +22,20 @@ public class PlayerCmdExecutor extends Executor{
 	public void execute() throws ExecutorException {
 		super.execute();
 		p = getIfPlayer(s);
+		if(params.contains("next") || params.contains("n")){
+			Creation c = ClassicEdit.getCuboidManager().getCreation(p);
+			if(c == null) throw new ExecutorException(ChatColor.YELLOW+"You don't have any cuboid running");
+			c.stop();
+			//ClassicEdit.getCuboidManager().removeSelector(p);
+			throw new ExecutorException(ChatColor.YELLOW+"Finished "+c.getName());
+		}
 		if(params.contains("stop") || params.contains("s")){
 			Creation c = ClassicEdit.getCuboidManager().getCreation(p);
+			if(c == null) throw new ExecutorException(ChatColor.YELLOW+"You don't have any cuboid running");
 			c.stop();
+			ClassicEdit.getCuboidManager().stopCreations(p);
 			ClassicEdit.getCuboidManager().removeSelector(p);
-			throw new ExecutorException(ChatColor.YELLOW+"Stopped "+c.getName());
+			throw new ExecutorException(ChatColor.YELLOW+"Stopped all creations");
 		}
 	}
 	private Player getIfPlayer(CommandSender s) throws ExecutorException{

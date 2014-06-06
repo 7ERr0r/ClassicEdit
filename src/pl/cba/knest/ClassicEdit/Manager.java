@@ -58,20 +58,20 @@ public class Manager extends BukkitRunnable {
 	public void addCreation(String nick, Creation c){
 		put(nick,c);
 		if(getCreation(nick)==c){
-			c.msgPlayer(ChatColor.YELLOW+"Started "+c.getName());
+			c.msgStart();
 		}else{
-			c.msgPlayer(ChatColor.YELLOW+"Queued "+c.getName());
+			c.msgPlayer(ChatColor.YELLOW+"Queued "+c.getFullName());
 		}
 	}
 
 	public void removeCreation(Creation c){
 		Queue<Creation> q = creas.get(c.getPlayerName().toLowerCase());
 		if(q.remove(c)){
-			c.msgPlayer(ChatColor.YELLOW+"Removed "+c.getName());
+			c.msgEnd();
 		}
 		Creation nc = q.peek();
 		if(nc!=null){
-			c.msgPlayer(ChatColor.YELLOW+"Started next "+nc.getName());
+			c.msgPlayer(ChatColor.YELLOW+"Started next "+nc.getFullName());
 		}
 		
 	}
@@ -90,6 +90,9 @@ public class Manager extends BukkitRunnable {
 			if(c == null) continue;
 			if(!c.isPause()) c.run();
 		}
+	}
+	public void stopCreations(Player p) {
+		stopCreations(p.getName());
 	}
 	public void stopCreations(String nick) {
 		Queue<Creation> q = creas.get(nick.toLowerCase());

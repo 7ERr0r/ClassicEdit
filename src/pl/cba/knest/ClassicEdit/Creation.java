@@ -23,6 +23,9 @@ public abstract class Creation implements Runnable {
 	}
 
 	public abstract String getName();
+	public String getFullName(){
+		return getName();
+	}
 	public void start(){
 		ClassicEdit.getCuboidManager().addCreation(nick, this);
 		init();
@@ -45,5 +48,14 @@ public abstract class Creation implements Runnable {
 	public boolean isPause(){
 		return pause;
 	}
+	
+	public void msgStart(){
+		msgPlayer(ChatColor.YELLOW+"Creating "+getName());
+	}
+	
+	public void msgEnd(){
+		msgPlayer(ChatColor.YELLOW+"Stopped "+getName());
+	}
+	
 	public void onBlockPhysics(BlockPhysicsEvent e){}
 }

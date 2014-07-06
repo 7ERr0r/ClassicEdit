@@ -20,7 +20,6 @@ public class MazeExecutor extends TwoPointExecutor{
 		c.setFilling(f);
 		c.setDropmode(dropmode);
 		c.setLoop(flags.contains("l"));
-		c.setBr(flags.contains("b"));
 		Selector sel = new TwoPointSelector(p, c);
 		ClassicEdit.getCuboidManager().setSelector(p, sel);
 		sel.start();

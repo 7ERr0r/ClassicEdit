@@ -32,3 +32,6 @@ commands:
   load:
     description: Loads a schematic from /ClassicEdit/
     usage: /load <file>
+  block:
+    description: Sets the filling.
+    aliases: [b]

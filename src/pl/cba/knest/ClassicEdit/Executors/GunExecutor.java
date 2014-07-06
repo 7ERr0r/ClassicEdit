@@ -2,6 +2,8 @@ package pl.cba.knest.ClassicEdit.Executors;
 
 
 
+import java.util.Iterator;
+
 import org.bukkit.ChatColor;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
@@ -13,11 +15,11 @@ import pl.cba.knest.ClassicEdit.Selectors.InfiniteSelector;
 
 public class GunExecutor extends CreationExecutor {
 
-	
+	boolean explode = false;
+	boolean laser = false;
 
 	
 	public void execute() throws ExecutorException{
-		perms("ClassicEdit.create.gun");
 		super.execute();
 		Creation active = ClassicEdit.getCuboidManager().getCreation(p);
 		if(active!=null){
@@ -35,8 +37,23 @@ public class GunExecutor extends CreationExecutor {
 		
 		ClassicEdit.getCuboidManager().setSelector(p, s);
 		
-		c.setExplode(flags.contains("e") && perms("ClassicEdit.create.gun.explode"));
-		c.setLaser(flags.contains("l"));
+		c.setExplode(explode);
+		c.setLaser(laser);
 		s.start();
+	}
+	@Override
+	void flag(char c, Iterator<String> i) throws ExecutorException {
+		switch(c){
+		case 'e':
+			if(!(p.isOp() || p.hasPermission("ClassicEdit.fun.gun.explode"))){
+				throw new ExecutorException(ChatColor.RED+"You don't have permission to use explode flag");
+			}
+			explode = true;
+		return;
+		case 'l':
+			laser = true;
+		return;
+		}
+		super.flag(c, i);
 	}
 }

@@ -14,7 +14,6 @@ public class SpheroidExecutor extends CuboidExecutor{
 	}
 
 	public void execute() throws ExecutorException{
-		perms("ClassicEdit.create.spheroid");
 		super.execute();
 	}
 }

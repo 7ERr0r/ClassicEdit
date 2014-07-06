@@ -20,19 +20,21 @@ public class LineCreation extends TwoPointCreation{
 	}
 	public void init(){
 		super.init();
-		dist = l1.distance(l2);
-		if((dropmode && dist>2000) || (!dropmode && dist>200000)){
-			msgPlayer(ChatColor.RED+"Too many blocks to place");
-			stop();
-		}
-		
-		dx = l1.getBlockX();
-		dy = l1.getBlockY();
-		dz = l1.getBlockZ();
+		dx = l1.getBlockX()+0.5;
+		dy = l1.getBlockY()+0.5;
+		dz = l1.getBlockZ()+0.5;
 		
 		int vx = l2.getBlockX()-l1.getBlockX();
 		int vy = l2.getBlockY()-l1.getBlockY();
 		int vz = l2.getBlockZ()-l1.getBlockZ();
+		
+		dist = Math.max(width, height);
+		dist = Math.max(dist, length);
+		msgPlayer(dist+"");
+		if((dropmode && dist>2000) || (!dropmode && dist>200000)){
+			msgPlayer(ChatColor.RED+"Too many blocks to place");
+			stop();
+		}
 		
 		sx = ((double)vx)/dist;
 		sy = ((double)vy)/dist;
@@ -43,13 +45,12 @@ public class LineCreation extends TwoPointCreation{
 	public boolean next(){
 		
 		if(i++ > dist) return false;
-		dx+=sx;
-		dy+=sy;
-		dz+=sz;
-		
 		x = (int) dx;
 		y = (int) dy;
 		z = (int) dz;
+		dx+=sx;
+		dy+=sy;
+		dz+=sz;
 		return true;
 		
 	}

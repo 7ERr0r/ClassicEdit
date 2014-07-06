@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.AuthorNagException;
@@ -17,6 +18,7 @@ import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
+import pl.cba.knest.ClassicEdit.Executors.BlockExecutor;
 import pl.cba.knest.ClassicEdit.Executors.CuboidExecutor;
 import pl.cba.knest.ClassicEdit.Executors.Executor;
 import pl.cba.knest.ClassicEdit.Executors.GunExecutor;
@@ -65,6 +67,16 @@ public class ClassicEdit extends JavaPlugin{
 	public void onDisable(){
 		
 	}
+	
+	
+	public static long getLimit(Player p, boolean dropmode){
+		if(p.hasPermission("ClassicEdit.limit.more")){
+			return dropmode?2000000000:1000000;
+		}else{
+			return dropmode?2000000:20000;
+		}
+		
+	}
 	@Override
 	public boolean onCommand(CommandSender s, Command cmd, String label, String[] args) {
 
@@ -110,6 +122,8 @@ public class ClassicEdit extends JavaPlugin{
 			e = new PauseExecutor();
 		}else if(name.equals("gun")){
 			e = new GunExecutor();
+		}else if(name.equals("block")){
+			e = new BlockExecutor();
 		}
 		if(e == null) throw new ExecutorException(ChatColor.RED+"Bad command");
 		e.init(s, params, flags);

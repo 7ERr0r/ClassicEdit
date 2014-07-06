@@ -1,7 +1,10 @@
 package pl.cba.knest.ClassicEdit.Creations;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+
+import pl.cba.knest.ClassicEdit.ClassicEdit;
 
 
 public class CuboidCreation extends TwoPointCreation{
@@ -28,7 +31,7 @@ public class CuboidCreation extends TwoPointCreation{
 	public void init(){
 		super.init();
 		long blocks = width*height*length;
-		if((dropmode && blocks>20000) || (!dropmode && blocks>2000000)){
+		if(blocks>ClassicEdit.getLimit(Bukkit.getPlayerExact(nick),dropmode)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
 		}

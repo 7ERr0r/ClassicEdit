@@ -15,11 +15,11 @@ public class CuboidExecutor extends TwoPointExecutor{
 	public void execute() throws ExecutorException{
 		perms("ClassicEdit.create.cuboid");
 		super.execute();
-		
 		CuboidCreation c = getCreation(p.getName());
 		c.setFilling(f);
 		c.setDashed(flags.contains("d"));
 		c.setLoop(flags.contains("l"));
+		c.setBr(flags.contains("b"));
 		c.setDropmode(dropmode);
 		c.setMask(mask);
 		Selector sel = new TwoPointSelector(p, c);

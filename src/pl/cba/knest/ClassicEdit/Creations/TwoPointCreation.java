@@ -59,6 +59,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 	
 	boolean up = true;
 	
+	boolean br = false;
 	Mask mask;
 	
 	public boolean canPlace(int x, int y, int z){
@@ -76,9 +77,22 @@ public abstract class TwoPointCreation extends FilledCreation{
 	public void setLoop(boolean loop){
 		this.loop = loop;
 	}
+	public boolean isBr(){
+		return br;
+	}
+	public void setBr(boolean br){
+		this.br = br;
+	}
 	public void setMask(Mask mask){
 		this.mask = mask;
 	}
+	
+	public void stop(){
+		sum+=placed;
+		//placed = 0;
+		super.stop();
+	}
+	
 	@Override
 	public void run() {
 		Player p = null;
@@ -118,6 +132,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 						break;
 					}
 				}else{
+					placed = 0;
 					stop();
 					//msgEnd();
 					break;
@@ -157,7 +172,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 		Block b = w.getBlockAt(x,y,z);
 		Material t = b.getType();
 		//msgPlayer("trying to place at "+x+" "+y+" "+z);
-		if(t==f.getMaterial() && b.getData()==f.getData()) return true;
+		if(!br && t==f.getMaterial() && b.getData()==f.getData()) return true;
 		boolean place = true;
 		
 		if(dropmode){
@@ -261,12 +276,13 @@ public abstract class TwoPointCreation extends FilledCreation{
 		return ile;
 	}
 	boolean isVariant(ItemStack is, Material m, short d){
-		if(!is.getType().equals(m)) return false;
-		if(!m.isBlock()) return true;
+		//if(!m.isBlock()) return false;
 		switch(m){
 		case RAILS:
 		case HOPPER:
 		case FURNACE:
+		case DISPENSER:
+		case DROPPER:
 		case PUMPKIN:
 		case WOOD_STAIRS:
 		case BIRCH_WOOD_STAIRS:
@@ -274,17 +290,17 @@ public abstract class TwoPointCreation extends FilledCreation{
 		case JUNGLE_WOOD_STAIRS:
 		case ACACIA_STAIRS:
 		case DARK_OAK_STAIRS:
-		case STEP:
-		case WOOD_STEP:
 		case SANDSTONE_STAIRS:
 		case BRICK_STAIRS:
 		case COBBLESTONE_STAIRS:
-			return true;
+			return is.getType().equals(m);
 		case LOG:
 		case LOG_2:
-			return (is.getDurability() & 3)==(d & 3);
+			return is.getType().equals(m) && (is.getDurability() & 3)==(d & 3);
+		case REDSTONE_WIRE:
+			return is.getType()==Material.REDSTONE;
 		default:
-			return d==is.getDurability();
+			return is.getType().equals(m) && d==is.getDurability();
 		}
 	}
 	void setAmount(Material m, short d, PlayerInventory inv, int ile){

@@ -8,6 +8,7 @@ import java.util.Queue;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -149,6 +150,15 @@ public class GunCreation extends InfiniteCreation{
 		this.laser = laser;
 	}
 
-
+	public String getFullName(){
+		return getName();
+	}
+	public void msgStart(){
+		msgPlayer(ChatColor.YELLOW+"Starting "+getFullName());
+	}
+	
+	public void msgEnd(){
+			msgPlayer(ChatColor.YELLOW+"Stopping gun");
+	}
 	
 }

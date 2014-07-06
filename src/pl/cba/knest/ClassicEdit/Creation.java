@@ -32,6 +32,7 @@ public abstract class Creation implements Runnable {
 	}
 	public abstract void init();
 	public void stop(){
+		
 		ClassicEdit.getCuboidManager().removeCreation(this);
 	}
 

@@ -45,7 +45,7 @@ public class GunExecutor extends CreationExecutor {
 	void flag(char c, Iterator<String> i) throws ExecutorException {
 		switch(c){
 		case 'e':
-			if(!(p.isOp() || p.hasPermission("ClassicEdit.fun.gun.explode"))){
+			if(!(s.isOp() || s.hasPermission("ClassicEdit.fun.gun.explode"))){
 				throw new ExecutorException(ChatColor.RED+"You don't have permission to use explode flag");
 			}
 			explode = true;

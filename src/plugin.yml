@@ -18,6 +18,10 @@ commands:
     description: Creates a spheroid.
     usage: /spheroid <block>
     aliases: [ellipsoid, e]
+  persp:
+    description: Creates a perspective creation.
+    usage: /perspective <block>
+    aliases: [perspective]
   line:
     description: Creates line.
     usage: /line <block>

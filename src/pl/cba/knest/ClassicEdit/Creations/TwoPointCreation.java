@@ -6,16 +6,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Cow;
+import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.util.Vector;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Mask;
@@ -30,14 +34,9 @@ public abstract class TwoPointCreation extends FilledCreation{
 	Location l1;
 	Location l2;
 	World w;
-
-	
-	
 	
 	boolean dropmode = false;
 	
-	
-
 	int maxx;
 	int maxy;
 	int maxz;
@@ -104,7 +103,9 @@ public abstract class TwoPointCreation extends FilledCreation{
 			if(p==null){
 				pause(); return;
 			}
-			if(f.getMaterial()!=Material.AIR){
+			if(p!=null && p.getGameMode()==GameMode.CREATIVE){
+				amount.set(1000000);
+			}else if(f.getMaterial()!=Material.AIR){
 				amount.set(getAmount(f.getMaterial(), f.getData(), p.getInventory()));
 				items = amount.get();
 			}
@@ -145,7 +146,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 
 	@Override
 	public String getName() {
-		return "2-point structure";
+		return "2-point box";
 	}
 
 
@@ -183,6 +184,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 				BlockBreakEvent be = new BlockBreakEvent(b, p);
 				//msgPlayer("Event");
 				ClassicEdit.callEventWithoutNCP(be);
+
 				if(!be.isCancelled()){
 					for(ItemStack drop : b.getDrops()){
 						HashMap<Integer, ItemStack> out = p.getInventory().addItem(drop);
@@ -191,6 +193,8 @@ public abstract class TwoPointCreation extends FilledCreation{
 						}
 					}
 					b.setType(Material.AIR);
+					//Pig c = w.spawn(b.getLocation(), Pig.class);
+					//c.setVelocity(new Vector(0,2d,0));
 				}else{
 					if(getFilling().getMaterial()==Material.AIR){
 						place = false;
@@ -227,7 +231,8 @@ public abstract class TwoPointCreation extends FilledCreation{
 		
 		if(place){
 			if(dropmode){
-				w.playEffect(b.getLocation(), Effect.STEP_SOUND, t);
+				//w.playEffect(b.getLocation(), Effect.STEP_SOUND, t);
+				w.playEffect(b.getLocation(), Effect.HEART, 1);
 				//if(f.getMaterial()!=Material.AIR){
 				//	w.playEffect(b.getLocation(), Effect., t);
 				//}

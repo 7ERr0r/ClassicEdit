@@ -12,12 +12,11 @@ import pl.cba.knest.ClassicEdit.ExecutorException;
 
 public class PlayerCmdExecutor extends Executor{
 
-	Player p;
+	Player p = null;
 	
 	public void msgPlayer(String msg){
 		msg(p, msg);
 	}
-	
 	@Override
 	public void execute() throws ExecutorException {
 		super.execute();

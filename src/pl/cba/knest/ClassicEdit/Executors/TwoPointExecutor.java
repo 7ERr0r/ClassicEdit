@@ -4,7 +4,6 @@ package pl.cba.knest.ClassicEdit.Executors;
 import java.util.Iterator;
 
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Mask;
@@ -20,7 +19,7 @@ public class TwoPointExecutor extends CreationExecutor {
 	
 	public void execute() throws ExecutorException{
 		super.execute();
-		dropmode = p.getGameMode()!=GameMode.CREATIVE;
+		dropmode = !p.hasPermission("ClassicEdit.dropmode");
 	}
 	@Override
 	void flag(char c, Iterator<String> i) throws ExecutorException {

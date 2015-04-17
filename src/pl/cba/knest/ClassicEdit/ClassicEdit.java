@@ -26,6 +26,7 @@ import pl.cba.knest.ClassicEdit.Executors.GunExecutor;
 import pl.cba.knest.ClassicEdit.Executors.LineExecutor;
 import pl.cba.knest.ClassicEdit.Executors.MazeExecutor;
 import pl.cba.knest.ClassicEdit.Executors.PauseExecutor;
+import pl.cba.knest.ClassicEdit.Executors.PerspectiveExecutor;
 import pl.cba.knest.ClassicEdit.Executors.SpheroidExecutor;
 
 
@@ -105,6 +106,9 @@ public class ClassicEdit extends JavaPlugin{
 		}else if(name.equals("spheroid")){
 			perms("ClassicEdit.create.spheroid", s);
 			e = new SpheroidExecutor();
+		}else if(name.equals("persp")){
+			perms("ClassicEdit.create.persp", s);
+			e = new PerspectiveExecutor();
 		}else if(name.equals("line")){
 			perms("ClassicEdit.create.line", s);
 			e = new LineExecutor();

@@ -46,8 +46,7 @@ public class MazeCreation extends TwoPointCreation{
 	@Override
 	public void init(){
 		super.init();
-		long blocks = width*height*length;
-		if(blocks>ClassicEdit.getLimit(Bukkit.getPlayerExact(nick),dropmode)){
+		if(Math.max(width, height)>ClassicEdit.getLimit(Bukkit.getPlayerExact(nick),dropmode)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
 		}
@@ -91,10 +90,8 @@ public class MazeCreation extends TwoPointCreation{
 		return cells[mazex][mazez];
 	}
 	public boolean search(){
-		//ClassicEdit.plugin.getLogger().info(mazex+" "+mazez);
 		int dir = randDir(mazex, mazez);
 		
-		//ClassicEdit.plugin.getLogger().info("Dir "+dir);
 		if(dir != 0){
 			queueBlocks(mazex,mazez,dir);
 			move(dir);
@@ -104,7 +101,6 @@ public class MazeCreation extends TwoPointCreation{
 			
 		}else{
 			if(!move(current())){
-				//ClassicEdit.plugin.getLogger().info("cant return");
 				return false;
 			}else{
 				search();
@@ -158,7 +154,6 @@ public class MazeCreation extends TwoPointCreation{
 	}
 	@Override
 	public boolean next(){
-		//ClassicEdit.plugin.getLogger().info("Q size "+q.size());
 		if(q.size()<1){
 			try{
 				if(!search()){

@@ -6,6 +6,7 @@ import java.util.Queue;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
@@ -97,5 +98,14 @@ public class Manager extends BukkitRunnable {
 	public void stopCreations(String nick) {
 		Queue<Creation> q = creas.get(nick.toLowerCase());
 		q.clear();
+	}
+	public void callPhysicsEvent(BlockPhysicsEvent e) {
+		for(Queue<Creation> q : creas.values()){
+			if(q.element() != null){
+				q.element().onBlockPhysics(e);
+			}
+			if(e.isCancelled()) return;
+		}
+		
 	}
 }

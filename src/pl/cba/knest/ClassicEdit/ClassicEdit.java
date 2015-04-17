@@ -49,7 +49,7 @@ public class ClassicEdit extends JavaPlugin{
 		pertick = 256;
 		droppertick = 1;
 		Bukkit.getPluginManager().registerEvents(new ClickListener(), this);
-
+		Bukkit.getPluginManager().registerEvents(new PhysicsListener(), this);
 		cm = new Manager();
 		cm.runTaskTimer(this, 10L, 1L);
 		
@@ -183,5 +183,10 @@ public class ClassicEdit extends JavaPlugin{
 				}
 			}
 		}
+	}
+
+	public static ClassicEdit getInstance() {
+		return plugin;
+		
 	}
 }

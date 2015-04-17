@@ -90,7 +90,6 @@ public class GunCreation extends InfiniteCreation{
 	@Override
 	public void click(Location l){
 		Vector v = l.getDirection();
-		//v.multiply(1.4);
 		l.add(0, 1, 0);
 		l.add(v);
 		l.add(v);
@@ -120,7 +119,6 @@ public class GunCreation extends InfiniteCreation{
 	@Override
 	public void init(){
 		super.init();
-		//msgPlayer(ChatColor.YELLOW+"Gun enabled");
 	}
 
 	@Override
@@ -129,8 +127,6 @@ public class GunCreation extends InfiniteCreation{
 		for(Bolt b : bolts){
 			b.kill();
 		}
-		//msgPlayer(ChatColor.YELLOW+"Gun disabled");
-
 	}
 
 	@Override
@@ -158,7 +154,7 @@ public class GunCreation extends InfiniteCreation{
 	}
 	
 	public void msgEnd(){
-			msgPlayer(ChatColor.YELLOW+"Stopping gun");
+		msgPlayer(ChatColor.YELLOW+"Stopping gun");
 	}
 	
 }

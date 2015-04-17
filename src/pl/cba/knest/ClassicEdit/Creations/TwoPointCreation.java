@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -61,8 +62,12 @@ public abstract class TwoPointCreation extends FilledCreation{
 		}
 		return true;
 	}
-	
-	
+	public boolean isInside(int x, int y, int z){
+		return x>minx && y>miny && z>minz && x<maxx && y<maxy && z<maxz;
+	}
+	public boolean isInside(Block b){
+		return isInside(b.getX(), b.getY(), b.getZ());
+	}
 	public boolean isLoop(){
 		return loop;
 	}
@@ -319,6 +324,11 @@ public abstract class TwoPointCreation extends FilledCreation{
 		return ClassicEdit.getCuboidManager().getCreation(nick)==this;
 	}
 
+	@Override
+	public void onBlockPhysics(BlockPhysicsEvent e){
+		if(e.isCancelled()) return;
+		if(isInside(e.getBlock())) e.setCancelled(true);
+	}
 
 
 

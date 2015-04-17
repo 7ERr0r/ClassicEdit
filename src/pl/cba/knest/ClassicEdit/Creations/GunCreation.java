@@ -31,16 +31,14 @@ public class GunCreation extends InfiniteCreation{
 		private Queue<Block> last = new LinkedList<Block>();
 		private final int len;
 		private int end = 200;
-		private final GunCreation gun;
-		public Bolt(GunCreation gun, Location l, Vector v, int len){
-			this.gun = gun;
+		public Bolt(Location l, Vector v, int len){
 			this.l = l;
 			this.v = v;
 			this.len = len;
 			
 		}
 		public void colide(Block b){
-			if(gun.explode){
+			if(explode){
 				Location ex = b.getLocation();
 				World w = ex.getWorld();
 				TNTPrimed e = (TNTPrimed) w.spawnEntity(ex, EntityType.PRIMED_TNT);
@@ -93,7 +91,7 @@ public class GunCreation extends InfiniteCreation{
 		l.add(0, 1, 0);
 		l.add(v);
 		l.add(v);
-		Bolt bo = new Bolt(this, l, v, laser?40:10);
+		Bolt bo = new Bolt(l, v, laser?40:10);
 		
 		bolts.add(bo);
 		bo.tick();

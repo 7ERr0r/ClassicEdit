@@ -41,9 +41,9 @@ public abstract class TwoPointCreation extends FilledCreation{
 	int miny;
 	int minz;
 	
-	int x;
-	int y;
-	int z;
+	int currentx;
+	int currenty;
+	int currentz;
 	
 	int width;
 	int length;
@@ -110,7 +110,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 		ppt = 0;
 		for(int i = 0; i<2048; i++){
 			
-			if(canPlace(x,y,z)){
+			if(canPlace(currentx,currenty,currentz)){
 				if(!place(amount, p)){
 					break;
 				}
@@ -167,7 +167,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 	
 	@SuppressWarnings("deprecation")
 	public boolean place(AtomicInteger amount, Player p){
-		Block b = w.getBlockAt(x,y,z);
+		Block b = w.getBlockAt(currentx,currenty,currentz);
 		Material t = b.getType();
 		//msgPlayer("trying to place at "+x+" "+y+" "+z);
 		if(!br && t==f.getMaterial() && b.getData()==f.getData()) return true;

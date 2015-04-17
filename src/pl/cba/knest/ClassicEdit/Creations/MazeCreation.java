@@ -172,9 +172,9 @@ public class MazeCreation extends TwoPointCreation{
 			stop();
 			return false;
 		}
-		x = b.getX();
-		y = b.getY();
-		z = b.getZ();
+		currentx = b.getX();
+		currenty = b.getY();
+		currentz = b.getZ();
 		
 		return true;
 	}

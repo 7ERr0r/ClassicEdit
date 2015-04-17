@@ -45,9 +45,9 @@ public class LineCreation extends TwoPointCreation{
 	public boolean next(){
 		
 		if(i++ > dist) return false;
-		x = (int) dx;
-		y = (int) dy;
-		z = (int) dz;
+		currentx = (int) dx;
+		currenty = (int) dy;
+		currentz = (int) dz;
 		dx+=sx;
 		dy+=sy;
 		dz+=sz;

@@ -35,19 +35,19 @@ public class CuboidCreation extends TwoPointCreation{
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
 		}
-		x = minx;
-		y = up?miny:maxy;
-		z = minz;
+		currentx = minx;
+		currenty = up?miny:maxy;
+		currentz = minz;
 	}
 	@Override
 	public boolean next(){
-		x++;
-		if(x>maxx){ 
-			x = minx; if(up) y++; else y--; 
-			if((up && y>maxy) || (!up && y<miny)){ 
-				if(up) y = miny; else y = maxy; 
-				z++;
-				if(z>maxz){
+		currentx++;
+		if(currentx>maxx){ 
+			currentx = minx; if(up) currenty++; else currenty--; 
+			if((up && currenty>maxy) || (!up && currenty<miny)){ 
+				if(up) currenty = miny; else currenty = maxy; 
+				currentz++;
+				if(currentz>maxz){
 					return false;
 				}
 			}

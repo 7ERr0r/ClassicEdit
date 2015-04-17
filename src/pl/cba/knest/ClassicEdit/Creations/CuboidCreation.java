@@ -34,6 +34,7 @@ public class CuboidCreation extends TwoPointCreation{
 		if(Math.max(width, height)>ClassicEdit.getLimit(Bukkit.getPlayerExact(nick),dropmode)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
+			return;
 		}
 		currentx = minx;
 		currenty = up?miny:maxy;

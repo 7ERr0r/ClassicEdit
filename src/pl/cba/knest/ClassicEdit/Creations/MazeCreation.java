@@ -49,14 +49,11 @@ public class MazeCreation extends TwoPointCreation{
 		if(Math.max(width, height)>ClassicEdit.getLimit(Bukkit.getPlayerExact(nick),dropmode)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
+			return;
 		}
 		mazew = (width/2)+1;
 		mazeh = (length/2)+1;
-		cells = new byte[mazew][mazeh];
-		
-		
-		
-		
+		cells = new byte[mazew][mazeh];		
 		mazex = r.nextInt(mazew);
 		mazez = r.nextInt(mazeh);
 		setIs(mazex,mazez);

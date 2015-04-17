@@ -53,16 +53,12 @@ public class ClassicEdit extends JavaPlugin{
 		cm = new Manager();
 		cm.runTaskTimer(this, 10L, 1L);
 		
-		
 		try {
 			Metrics m = new Metrics(this);
 			m.start();
 		} catch (IOException e){
 			
 		}
-		
-		
-		
 		log("Enabled !");
 		
 	}
@@ -72,10 +68,10 @@ public class ClassicEdit extends JavaPlugin{
 	
 	
 	public static long getLimit(Player p, boolean dropmode){
-		if(p.hasPermission("ClassicEdit.limit.more")){
-			return dropmode?2000000000:1000000;
+		if(p.hasPermission("ClassicEdit.more")){
+			return dropmode?256:8192;
 		}else{
-			return dropmode?2000000:20000;
+			return dropmode?128:1024;
 		}
 		
 	}

@@ -34,6 +34,7 @@ public class LineCreation extends TwoPointCreation{
 		if((dropmode && dist>2000) || (!dropmode && dist>200000)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
+			return;
 		}
 		
 		sx = ((double)vx)/dist;

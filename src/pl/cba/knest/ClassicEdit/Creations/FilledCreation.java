@@ -10,8 +10,8 @@ public abstract class FilledCreation extends Creation{
 	Filling f = new Filling(Material.AIR, (byte) 0);
 	
 	int placed = 0;
-	int sum = 0;
-	int ppt = 0;
+	long sum = 0;
+	int ticksDone = 0;
 	
 	
 	public String getFullName(){

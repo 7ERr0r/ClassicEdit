@@ -27,12 +27,10 @@ public abstract class TwoPointCreation extends FilledCreation{
 		super(nick);
 	}
 	boolean started = false;
-	
+	boolean dropmode = false;	
 	Location l1;
 	Location l2;
 	World w;
-	
-	boolean dropmode = false;
 	
 	int maxx;
 	int maxy;
@@ -52,9 +50,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 	int pertick = 1;
 	
 	boolean loop = false;
-	
 	boolean up = true;
-	
 	boolean br = false;
 	Mask mask;
 	
@@ -85,7 +81,6 @@ public abstract class TwoPointCreation extends FilledCreation{
 	
 	public void stop(){
 		sum+=placed;
-		//placed = 0;
 		super.stop();
 	}
 	
@@ -107,7 +102,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 				items = amount.get();
 			}
 		}
-		ppt = 0;
+		ticksDone = 0;
 		for(int i = 0; i<2048; i++){
 			
 			if(canPlace(currentx,currenty,currentz)){
@@ -132,13 +127,14 @@ public abstract class TwoPointCreation extends FilledCreation{
 				}else{
 					placed = 0;
 					stop();
-					//msgEnd();
 					break;
 				}
 			}
-			if(ppt>=pertick) break;
+			if(ticksDone>=pertick) break;
 		}
-		if(dropmode) setAmount(f.getMaterial(), f.getData(), p.getInventory(), items-amount.get());
+		if(dropmode && p!=null && p.getGameMode()==GameMode.CREATIVE){
+			setAmount(f.getMaterial(), f.getData(), p.getInventory(), items-amount.get());
+		}
 	}
 
 	@Override
@@ -169,7 +165,6 @@ public abstract class TwoPointCreation extends FilledCreation{
 	public boolean place(AtomicInteger amount, Player p){
 		Block b = w.getBlockAt(currentx,currenty,currentz);
 		Material t = b.getType();
-		//msgPlayer("trying to place at "+x+" "+y+" "+z);
 		if(!br && t==f.getMaterial() && b.getData()==f.getData()) return true;
 		boolean place = true;
 		
@@ -179,7 +174,6 @@ public abstract class TwoPointCreation extends FilledCreation{
 			
 			if(t!=Material.AIR){
 				BlockBreakEvent be = new BlockBreakEvent(b, p);
-				//msgPlayer("Event");
 				ClassicEdit.callEventWithoutNCP(be);
 
 				if(!be.isCancelled()){
@@ -190,14 +184,12 @@ public abstract class TwoPointCreation extends FilledCreation{
 						}
 					}
 					b.setType(Material.AIR);
-					//Pig c = w.spawn(b.getLocation(), Pig.class);
-					//c.setVelocity(new Vector(0,2d,0));
 				}else{
 					if(getFilling().getMaterial()==Material.AIR){
 						place = false;
 						if(b.getType()==Material.AIR){
 							p.playEffect(b.getLocation(), Effect.STEP_SOUND, t);
-							ppt++;
+							ticksDone++;
 							placed++;
 						}else{
 							cancelled();
@@ -228,16 +220,12 @@ public abstract class TwoPointCreation extends FilledCreation{
 		
 		if(place){
 			if(dropmode){
-				//w.playEffect(b.getLocation(), Effect.STEP_SOUND, t);
-				w.playEffect(b.getLocation(), Effect.HEART, 1);
-				//if(f.getMaterial()!=Material.AIR){
-				//	w.playEffect(b.getLocation(), Effect., t);
-				//}
+				w.playEffect(b.getLocation(), Effect.STEP_SOUND, t);
 			}
 			b.setType(f.getMaterial());
 			b.setData(f.getData());
 			placed++;
-			ppt++;
+			ticksDone++;
 
 		}
 

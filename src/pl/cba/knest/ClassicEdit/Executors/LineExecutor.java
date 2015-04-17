@@ -22,7 +22,6 @@ public class LineExecutor extends TwoPointExecutor{
 		
 		LineCreation c = getCreation(p.getName());
 		c.setFilling(f);
-		//c.setDashed(flags.contains("d"));
 		c.setLoop(loop);
 		c.setBr(br);
 		c.setDropmode(dropmode);

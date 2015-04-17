@@ -43,7 +43,7 @@ public class InfiniteSelector extends Selector{
 
 	@Override
 	public void end() {
-		//p.sendMessage(ChatColor.YELLOW+"Gun disabled");
+		
 	}
 
 	@Override

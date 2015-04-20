@@ -4,6 +4,9 @@ version: 2.0
 description: 
              ClassicEdit adds Minecraft-classic commands based on McLawl engine.
 commands:
+  classicedit:
+    description: Main command.
+    aliases: [ce]
   cuboid:
     description: Creates a cuboid.
     usage: /cuboid <block>

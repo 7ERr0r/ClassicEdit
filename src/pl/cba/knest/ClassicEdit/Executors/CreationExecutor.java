@@ -31,7 +31,8 @@ public class CreationExecutor extends PlayerCmdExecutor {
 		if(f != null && f.getMaterial() == null){
 			throw new ExecutorException(ChatColor.RED+"Invalid block name or id");
 		}
-		
+		Session sess = ClassicEdit.getCreationManager().getSession(player);
+		sess.skipUseless();
 		
 	}
 

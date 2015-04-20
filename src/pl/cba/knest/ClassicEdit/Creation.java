@@ -4,14 +4,13 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public abstract class Creation implements Runnable {
 	protected Session session;
-	boolean started;
+	protected boolean started;
 	protected boolean initialised;
 	protected Queue<Selector> selectors;
 
@@ -28,7 +27,9 @@ public abstract class Creation implements Runnable {
 		if(!initialised){
 			if(init()){
 				initialised = true;
-			}else return;
+				start();
+			}
+			return;
 		}
 		run();
 	}
@@ -83,45 +84,48 @@ public abstract class Creation implements Runnable {
 	}
 	
 	public void msgStart(){
-		msgPlayer(ChatColor.YELLOW+"Creating "+getFullName());
+		boolean active = session.isActive(this);
+		msgPlayer(ChatColor.YELLOW+(active?"Creating ":"Queued ")+getFullName());
 	}
 	
 	public void msgEnd(){
 		msgPlayer(ChatColor.YELLOW+"Stopped "+getFullName());
 	}
 	
-	public void handleBlockSelect(Block b){
+	public void handleInteract(PlayerInteractEvent e){
 		Selector s = selectors.peek();
-		if(s != null && s.selectBlock(b)){
+		if(s != null && s.handleInteract(e)){
 			nextSelector();
 		}
 	}
-	public void handleAirSelect(Player p, Action a){
-		Selector s = selectors.peek();
-		if(s != null && s.selectAir(p, a)){
-			nextSelector();
-		}
-	}
+
 	public void nextSelector(){
 		Selector s = selectors.poll();
 		if(s != null){
 			s.end();
-			s = selectors.peek();
-			if(s != null){
-				s.start();
-			}
+			startSelector();
 		}
-		
+	}
+	public void startSelector(){
+		Selector s = selectors.peek();
+		if(s != null){
+			s.start();
+		}
 	}
 	
 	public void attach(Session session){
 		this.session = session;
 		session.setPending(this);
-		start();
+		startSelector();
+	}
+	public boolean isUseless(){
+		return false;
+	}
+	
+	public String toString(){
+		return getName();
 	}
 
-
-	
 
 
 }

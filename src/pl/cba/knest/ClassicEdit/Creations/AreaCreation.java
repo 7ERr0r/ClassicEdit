@@ -336,8 +336,8 @@ public abstract class AreaCreation extends FilledCreation {
 	}
 	@Override
 	public void attach(Session s){
-		super.attach(s);
 		selectors.add(areaSelector);
+		super.attach(s);
 	}
 	
 

@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
 import pl.cba.knest.ClassicEdit.Executors.BlockExecutor;
+import pl.cba.knest.ClassicEdit.Executors.ClassicEditExecutor;
 import pl.cba.knest.ClassicEdit.Executors.CuboidExecutor;
 import pl.cba.knest.ClassicEdit.Executors.Executor;
 import pl.cba.knest.ClassicEdit.Executors.GunExecutor;
@@ -98,7 +99,10 @@ public class ClassicEdit extends JavaPlugin{
 		
 		String name = cmd.getName();
 		Executor e = null;
-		if(name.equals("cuboid")){
+		if(name.equals("classicedit")){
+			perms("ClassicEdit.main", s);
+			e = new ClassicEditExecutor();
+		}else if(name.equals("cuboid")){
 			perms("ClassicEdit.create.cuboid", s);
 			e = new CuboidExecutor();
 		}else if(name.equals("spheroid")){

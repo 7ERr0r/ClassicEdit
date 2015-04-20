@@ -17,7 +17,6 @@ public class CuboidExecutor extends AreaExecutor {
 	boolean br = false;
 	public void execute() throws ExecutorException{
 		super.execute();
-		
 		CuboidCreation c = new CuboidCreation();
 		c.setFilling(f);
 		c.setDashed(dashed);

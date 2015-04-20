@@ -2,9 +2,9 @@ package pl.cba.knest.ClassicEdit.Selectors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import pl.cba.knest.ClassicEdit.Creation;
@@ -28,7 +28,6 @@ public class InfiniteSelector extends DirectionSelector {
 	}
 	public void start(){
 		msgPlayer(ChatColor.YELLOW+"Click air to determiante direction");
-		c.start();
 	}
 
 
@@ -38,7 +37,9 @@ public class InfiniteSelector extends DirectionSelector {
 	}
 
 	@Override
-	public boolean selectAir(Player p, Action a) {
+	public boolean handleInteract(PlayerInteractEvent e){
+		Player p = e.getPlayer();
+		if(e.getAction() != Action.LEFT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_AIR) return false;
 		if(p != null){
 			ItemStack is = p.getItemInHand();
 			
@@ -58,10 +59,6 @@ public class InfiniteSelector extends DirectionSelector {
 		return false;
 	}
 
-	@Override
-	public boolean selectBlock(Block b) {
-		return true;
-	}
 
 
 	@Override

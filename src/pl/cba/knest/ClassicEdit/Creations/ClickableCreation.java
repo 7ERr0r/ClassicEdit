@@ -22,8 +22,8 @@ public abstract class ClickableCreation extends FilledCreation {
 	}
 	@Override
 	public void attach(Session s){
-		super.attach(s);
 		selectors.add(directionSelector);
+		super.attach(s);
 	}
 
 }

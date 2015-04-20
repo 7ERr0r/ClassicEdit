@@ -1,9 +1,8 @@
 package pl.cba.knest.ClassicEdit;
 
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public abstract class Selector {
 
@@ -15,8 +14,7 @@ public abstract class Selector {
 		if(p != null) p.sendMessage(ChatColor.AQUA+"CE: "+msg);
 	}
 	public abstract Player getPlayer();
-	public abstract boolean selectBlock(Block b);
-	public abstract boolean selectAir(Player p, Action a);
+	public abstract boolean handleInteract(PlayerInteractEvent e);
 	public abstract void start();
 	public abstract void end();
 }

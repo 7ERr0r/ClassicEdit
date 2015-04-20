@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import pl.cba.knest.ClassicEdit.Creation;
@@ -35,10 +36,16 @@ public class HandAreaSelector extends AreaSelector {
 	}
 
 	@Override
-	public boolean selectBlock(Block b){
+	public boolean handleInteract(PlayerInteractEvent e){
+		if(e.getAction() != Action.LEFT_CLICK_BLOCK && e.getAction() != Action.RIGHT_CLICK_BLOCK) return false;
+		Block b = e.getClickedBlock();
+		if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
+			b = b.getRelative(e.getBlockFace());
+		}
 		Player p = getPlayer();
 		if(stage == 0){
 			l1 = b.getLocation();
+			e.setCancelled(true);
 		}else if(stage == 1){
 			l2 = b.getLocation();
 			
@@ -54,8 +61,7 @@ public class HandAreaSelector extends AreaSelector {
 					}
 				}
 			}
-			
-			c.start();
+			e.setCancelled(true);
 		}else{
 			// done
 		}
@@ -72,10 +78,6 @@ public class HandAreaSelector extends AreaSelector {
 		//info();
 	}
 
-	@Override
-	public boolean selectAir(Player p, Action a){
-		return false;
-	}
 
 
 

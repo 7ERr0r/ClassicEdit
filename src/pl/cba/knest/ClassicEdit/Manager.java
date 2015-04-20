@@ -20,10 +20,16 @@ public class Manager extends BukkitRunnable {
 		return getSession(p.getUniqueId());
 	}
 	public Session getSession(UUID uuid){
-		if(sessions.get(uuid) == null){
+		if(!hasSession(uuid)){
 			sessions.put(uuid, new Session(uuid));
 		}
 		return sessions.get(uuid);
+	}
+	public boolean hasSession(UUID uuid){
+		return sessions.get(uuid) != null;		
+	}
+	public boolean hasSession(Player p){
+		return hasSession(p.getUniqueId());		
 	}
 	
 	

@@ -5,10 +5,9 @@ import java.util.Queue;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Session implements Runnable {
 	private final UUID uuid;
@@ -29,20 +28,17 @@ public class Session implements Runnable {
 			c.onBlockPhysics(e);
 		}	
 	}
-	public void selectBlock(Block b){
-		if(pending != null){
-			for(Selector s : pending.getSelectors()){
-				if(s.selectBlock(b)) return;
-			}
+
+	public void handleInteract(PlayerInteractEvent e) {
+		if(getPending() != null){
+			getPending().handleInteract(e);
 		}
-	}
-	public void selectAir(Player p, Action a) {
-		if(pending != null){
-			for(Selector s : pending.getSelectors()){
-				if(s.selectAir(p, a)) return;
-			}
+		if(getActive() != null){
+			getActive().handleInteract(e);
 		}
+		
 	}
+	
 	@Override
 	public void run() {
 		Creation c = getActive();
@@ -67,43 +63,54 @@ public class Session implements Runnable {
 		}
 	}
 
-	public Creation getActive() {
+	public Creation getActive(){
 		return queue.peek();
 	}
+	
+	public boolean isActive(Creation c){
+		return queue.peek() == c;
+	}
+	
 	public Creation getPending(){
 		return pending;
 	}
-	public Player getPlayer() {
+	
+	public Player getPlayer(){
 		if(player == null || !player.isOnline()){
 			player = Bukkit.getPlayer(uuid);
 		}
 		return player;
 	}
-	private void msgPlayer(String msg) {
+	
+	private void msgPlayer(String msg){
 		Player p = getPlayer();
 		if(p != null){
 			p.sendMessage(msg);
 		}
 		
 	}
-	public void addCreation(Creation c) {
+	
+	public void addCreation(Creation c){
 		queue.add(c);
 	}
 
-	public void removeCreation(Creation c) {
+	public void removeCreation(Creation c){
 		queue.remove(c);
 	}
+	
 	public boolean isPaused(){
 		return paused;
 	}
 	
 	
 	private void onPause(){
-		msgPlayer("Paused");
+		//msgPlayer("Paused");
 	}
+	
 	private void onUnpause(){
-		msgPlayer("Unpaused");
+		//msgPlayer("Unpaused");
 	}
+	
 	public void setPaused(boolean p){
 		if(p == paused) return;
 		paused = p;
@@ -114,29 +121,52 @@ public class Session implements Runnable {
 		}
 		
 	}
+	
 	public void pause(){
 		setPaused(true);
 	}
+	
 	public void unpause(){
 		setPaused(false);
 	}
-	public void togglePause() {
+	
+	public void togglePause(){
 		setPaused(!paused);
 		
 	}
 
-	public UUID getUUID() {
+	public UUID getUUID(){
 		return uuid;
 	}
 
-	public void setPending(Creation c) {
+	public void setPending(Creation c){
 		pending = c;	
 	}
 
-	public void stop() {
+	public void stop(){
 		queue.clear();
 		pending = null;
 	}
+
+	public Queue<Creation> getCreations(){
+		return queue;
+	}
+	
+	public void skipUseless(){
+		Creation c = getActive();
+		if(c != null && c.isUseless()){
+			c.stop();
+		}
+		while(queue.peek() != null){
+			c = queue.peek();
+			if(c.isUseless()){
+				queue.poll();
+			}else{
+				break;
+			}
+		}
+	}
+
 
 
 }

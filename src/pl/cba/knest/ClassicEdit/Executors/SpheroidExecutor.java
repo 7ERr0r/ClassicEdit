@@ -12,7 +12,7 @@ import pl.cba.knest.ClassicEdit.Creations.SpheroidCreation;
 import pl.cba.knest.ClassicEdit.Selectors.HandAreaSelector;
 
 
-public class SpheroidExecutor extends TwoPointExecutor {
+public class SpheroidExecutor extends AreaExecutor {
 
 	boolean dashed = false;
 	boolean loop = false;
@@ -20,7 +20,7 @@ public class SpheroidExecutor extends TwoPointExecutor {
 	public void execute() throws ExecutorException{
 		super.execute();
 		
-		CuboidCreation c = new SpheroidCreation(getSession());
+		CuboidCreation c = new SpheroidCreation();
 		c.setFilling(f);
 		c.setDashed(dashed);
 		c.setLoop(loop);
@@ -28,7 +28,7 @@ public class SpheroidExecutor extends TwoPointExecutor {
 		c.setDropmode(dropmode);
 		c.setMask(mask);
 		c.setAreaSelector(new HandAreaSelector());
-		c.attach();
+		c.attach(getSession());
 	}
 	@Override
 	void flag(char c, Iterator<String> i) throws ExecutorException {

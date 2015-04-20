@@ -20,16 +20,12 @@ import org.bukkit.inventory.PlayerInventory;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Mask;
-import pl.cba.knest.ClassicEdit.NotSelectedException;
-import pl.cba.knest.ClassicEdit.Selector;
 import pl.cba.knest.ClassicEdit.Session;
 import pl.cba.knest.ClassicEdit.Selectors.AreaSelector;
 
-public abstract class AreaCreation extends FilledCreation{
+public abstract class AreaCreation extends FilledCreation {
 	
-	public AreaCreation(Session s) {
-		super(s);
-	}
+
 	boolean started = false;
 	boolean dropmode = false;	
 	Location l1;
@@ -235,22 +231,17 @@ public abstract class AreaCreation extends FilledCreation{
 		return true;
 	}
 	
-	@Override
-	public void start(){
-		try{
-			l1 = areaSelector.getLocationMin();
-			l2 = areaSelector.getLocationMax();
-			w = l1.getWorld();
-			super.start();
-		}catch(NotSelectedException e){
-			
-		}
-	}
+
 	
 	
 	
 	@Override
 	public void init(){
+		l1 = areaSelector.getLocationMin();
+		if(l1 == null) return;
+		l2 = areaSelector.getLocationMax();
+		if(l2 == null) return;
+		w = l1.getWorld();
 		maxx = Math.max(l1.getBlockX(), l2.getBlockX());
 		maxy = Math.max(l1.getBlockY(), l2.getBlockY());
 		maxz = Math.max(l1.getBlockZ(), l2.getBlockZ());
@@ -264,7 +255,7 @@ public abstract class AreaCreation extends FilledCreation{
 		up = f.getMaterial()!=Material.AIR;
 
 		pertick = dropmode?ClassicEdit.droppertick:ClassicEdit.pertick;
-		started = true;
+		initialised = true;
 	}
 
 	int getAmount(Material m, short d, PlayerInventory inv){
@@ -336,14 +327,15 @@ public abstract class AreaCreation extends FilledCreation{
 		if(e.isCancelled()) return;
 		if(isInside(e.getBlock())) e.setCancelled(true);
 	}
-	public Selector[] getSelectors(){
-		return new Selector[]{areaSelector};
-	}
 	public void setAreaSelector(AreaSelector s) {
 		this.areaSelector = s;
 		s.setCreation(this);
 	}
-	
+	@Override
+	public void attach(Session s){
+		super.attach(s);
+		selectors.add(areaSelector);
+	}
 	
 
 

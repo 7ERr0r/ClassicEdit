@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
-import pl.cba.knest.ClassicEdit.Session;
 
 
 
@@ -33,9 +32,7 @@ public class MazeCreation extends AreaCreation{
 	private static final int DOWN = 3;
 	private static final int LEFT = 4;
 	private static final int IS = 16;
-	public MazeCreation(Session s) {
-		super(s);
-	}
+
 
 
 	@Override

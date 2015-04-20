@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit;
+package pl.cba.knest.ClassicEdit.listener;
 
 
 import org.bukkit.block.Block;
@@ -8,7 +8,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class ClickListener implements Listener{
+import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.Session;
+
+public class ClickListener implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e){
 		Player p = e.getPlayer();

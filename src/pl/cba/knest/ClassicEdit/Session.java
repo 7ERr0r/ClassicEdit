@@ -46,8 +46,24 @@ public class Session implements Runnable {
 	@Override
 	public void run() {
 		Creation c = getActive();
-		if(c != null){
-			if(!isPaused()) c.run();
+		if(c != null && !isPaused()){
+			try{
+				c.tick();
+			}catch(Exception e){
+				e.printStackTrace();
+				pause();
+				msgPlayer("Active creation: exception caught, paused");
+			}
+		}
+		c = getPending();
+		if(c != null && !c.isInitialised()){
+			try{
+				c.tick();
+			}catch(Exception e){
+				setPending(null);
+				e.printStackTrace();
+				msgPlayer("Pending creation: exception caught, removed");
+			}
 		}
 	}
 

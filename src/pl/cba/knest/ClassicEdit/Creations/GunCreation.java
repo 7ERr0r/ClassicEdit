@@ -17,8 +17,6 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.util.Vector;
 
-import pl.cba.knest.ClassicEdit.Session;
-
 
 public class GunCreation extends ClickableCreation {
 	private class Bolt{
@@ -85,9 +83,6 @@ public class GunCreation extends ClickableCreation {
 	private boolean laser = false;
 	
 	
-	public GunCreation(Session s) {
-		super(s);
-	}
 	@Override
 	public void click(Location l){
 		Vector v = l.getDirection();

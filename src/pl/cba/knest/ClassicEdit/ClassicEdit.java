@@ -30,6 +30,8 @@ import pl.cba.knest.ClassicEdit.Executors.PerspectiveExecutor;
 import pl.cba.knest.ClassicEdit.Executors.SpheroidExecutor;
 
 
+import pl.cba.knest.ClassicEdit.listener.ClickListener;
+import pl.cba.knest.ClassicEdit.listener.PhysicsListener;
 import fr.neatmonster.nocheatplus.NoCheatPlus;
 
 public class ClassicEdit extends JavaPlugin{
@@ -136,8 +138,8 @@ public class ClassicEdit extends JavaPlugin{
 	public static Manager getCreationManager(){
 		return plugin.getManager();
 	}
-	public void log(String str){
-		getLogger().info(str);
+	public static void log(String str){
+		plugin.getLogger().info(str);
 	}
 
 	public static synchronized void callEventWithoutNCP(Event event) {

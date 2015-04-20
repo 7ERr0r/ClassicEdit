@@ -30,13 +30,13 @@ public class GunExecutor extends CreationExecutor {
 			}
 				
 		}*/
-		GunCreation c = new GunCreation(getSession());
+		GunCreation c = new GunCreation();
 		DirectionSelector s = new InfiniteSelector();
 		c.setDirectionSelector(s);
 		
 		c.setExplode(explode);
 		c.setLaser(laser);
-		s.start();
+		c.attach(getSession());
 	}
 	@Override
 	void flag(char c, Iterator<String> i) throws ExecutorException {

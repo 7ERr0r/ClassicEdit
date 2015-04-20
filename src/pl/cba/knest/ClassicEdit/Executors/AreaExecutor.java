@@ -9,7 +9,7 @@ import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Mask;
 
 
-public class TwoPointExecutor extends CreationExecutor {
+public class AreaExecutor extends CreationExecutor {
 	boolean dropmode = false;
 	Mask mask = null;
 

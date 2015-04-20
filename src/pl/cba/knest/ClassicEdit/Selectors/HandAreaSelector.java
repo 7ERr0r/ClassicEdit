@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.NotSelectedException;
 import pl.cba.knest.ClassicEdit.Creations.AreaCreation;
 
 public class HandAreaSelector extends AreaSelector {
@@ -19,20 +18,19 @@ public class HandAreaSelector extends AreaSelector {
 	private int stage = 0;
 	private Location l1;
 	private Location l2;
-	private boolean first = true;
 
 
-	public Player getPlayer() {
+	public Player getPlayer(){
 		return c.getPlayer();
 	}
 
 
 
-	public Creation getCreation() {
+	public Creation getCreation(){
 		return c;
 	}
 
-	public void setCreation(AreaCreation c) {
+	public void setCreation(AreaCreation c){
 		this.c = c;
 	}
 
@@ -66,32 +64,27 @@ public class HandAreaSelector extends AreaSelector {
 	}
 	public void start(){
 		msgPlayer(ChatColor.YELLOW+"Click two blocks to determinate the edges");
-		first = false;
 	}
 
 
 	@Override
-	public void end() {
+	public void end(){
 		//info();
 	}
 
 	@Override
-	public boolean selectAir(Player p, Action a) {
-		return true;
+	public boolean selectAir(Player p, Action a){
+		return false;
 	}
 
 
 
 	@Override
-	public Location getLocationMin() throws NotSelectedException {
-		if(first) start();
-		if(l1==null) throw new NotSelectedException();
+	public Location getLocationMin(){
 		return l1;
 	}
 	@Override
-	public Location getLocationMax() throws NotSelectedException {
-		if(first) start();
-		if(l2==null) throw new NotSelectedException();
+	public Location getLocationMax(){
 		return l2;
 	}
 	

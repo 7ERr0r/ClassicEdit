@@ -9,7 +9,7 @@ import pl.cba.knest.ClassicEdit.Creations.LineCreation;
 import pl.cba.knest.ClassicEdit.Selectors.AreaSelector;
 import pl.cba.knest.ClassicEdit.Selectors.HandAreaSelector;
 
-public class LineExecutor extends TwoPointExecutor{
+public class LineExecutor extends AreaExecutor{
 	private boolean loop;
 	private boolean br;
 
@@ -17,14 +17,14 @@ public class LineExecutor extends TwoPointExecutor{
 	public void execute() throws ExecutorException{
 		super.execute();
 		
-		LineCreation c = new LineCreation(getSession());
+		LineCreation c = new LineCreation();
 		c.setFilling(f);
 		c.setLoop(loop);
 		c.setBr(br);
 		c.setDropmode(dropmode);
 		AreaSelector s = new HandAreaSelector();
 		c.setAreaSelector(s);
-		c.attach();
+		c.attach(getSession());
 	}
 
 	@Override

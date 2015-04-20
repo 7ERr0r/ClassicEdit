@@ -1,21 +1,41 @@
 package pl.cba.knest.ClassicEdit;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPhysicsEvent;
 
 public abstract class Creation implements Runnable {
 	protected Session session;
 	boolean started;
-	
-	public Creation(Session session) {
-		this.session = session;
+	protected boolean initialised;
+	protected Queue<Selector> selectors;
+
+	public Creation(){
+		selectors = new LinkedList<Selector>();
 	}
-	
 	public abstract String getName();
 	public abstract void onBlockPhysics(BlockPhysicsEvent e);
 	public abstract void init();
-	public abstract Selector[] getSelectors();
+	public boolean isInitialised(){
+		return initialised;
+	}
+	public void tick(){
+		if(!initialised){
+			init();
+			if(!initialised){
+				return;
+			}
+		}
+		run();
+	}
+	public Queue<Selector> getSelectors(){
+		return selectors;
+	}
 	
 	public Session getSession(){
 		return session;
@@ -38,8 +58,10 @@ public abstract class Creation implements Runnable {
 			started = true;
 			session.addCreation(this);
 			session.setPending(null);
-			init();
 			msgStart();
+		}else{
+			ClassicEdit.log("Warning: start() was invoked more than once");
+			msgPlayer("Warning: start() was invoked more than once");
 		}
 	}
 
@@ -68,7 +90,33 @@ public abstract class Creation implements Runnable {
 	public void msgEnd(){
 		msgPlayer(ChatColor.YELLOW+"Stopped "+getFullName());
 	}
-	public void attach(){
+	
+	public void handleBlockSelect(Block b){
+		Selector s = selectors.peek();
+		if(s != null && s.selectBlock(b)){
+			nextSelector();
+		}
+	}
+	public void handleAirSelect(Player p, Action a){
+		Selector s = selectors.peek();
+		if(s != null && s.selectAir(p, a)){
+			nextSelector();
+		}
+	}
+	public void nextSelector(){
+		Selector s = selectors.poll();
+		if(s != null){
+			s.end();
+			s = selectors.peek();
+			if(s != null){
+				s.start();
+			}
+		}
+		
+	}
+	
+	public void attach(Session session){
+		this.session = session;
 		session.setPending(this);
 		start();
 	}

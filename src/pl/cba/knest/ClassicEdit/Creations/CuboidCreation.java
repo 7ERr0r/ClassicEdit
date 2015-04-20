@@ -1,28 +1,22 @@
 package pl.cba.knest.ClassicEdit.Creations;
 
 
+
 import org.bukkit.ChatColor;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
-import pl.cba.knest.ClassicEdit.Session;
 
 
 public class CuboidCreation extends AreaCreation {
 	
-
-	
 	public boolean dashed = false;
 
 	
-	public CuboidCreation(Session s) {
-		super(s);
-	}
-
-
 	@Override
 	public boolean canPlace(int x, int y, int z){
 		return isDashed(x,y,z) && super.canPlace(x,y,z);
 	}
+	
 	public boolean isDashed(int x, int y, int z){
 		if(dashed) return (x+y+z)%2==0;
 		return true;
@@ -56,11 +50,12 @@ public class CuboidCreation extends AreaCreation {
 		return true;
 	}
 	@Override
-	public String getName() {
+	public String getName(){
 		return "cuboid";
 	}
 	public void setDashed(boolean dashed){
 		this.dashed = dashed;
 	}
+
 
 }

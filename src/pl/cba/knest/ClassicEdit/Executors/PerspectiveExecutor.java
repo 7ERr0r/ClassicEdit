@@ -12,7 +12,7 @@ import pl.cba.knest.ClassicEdit.Selectors.AreaSelector;
 import pl.cba.knest.ClassicEdit.Selectors.HandAreaSelector;
 
 
-public class PerspectiveExecutor extends TwoPointExecutor{
+public class PerspectiveExecutor extends AreaExecutor{
 	Location per =	new Location(null,0,0,0,0,0);
 	boolean loop = false;
 	boolean br = false;
@@ -21,7 +21,7 @@ public class PerspectiveExecutor extends TwoPointExecutor{
 
 	public void execute() throws ExecutorException{
 		super.execute();
-		PerspectiveCreation c = new PerspectiveCreation(getSession());
+		PerspectiveCreation c = new PerspectiveCreation();
 		c.setFilling(f);
 		c.setLoop(loop);
 		c.setBr(br);
@@ -31,7 +31,7 @@ public class PerspectiveExecutor extends TwoPointExecutor{
 		c.setScale(sc);
 		AreaSelector s = new HandAreaSelector();
 		c.setAreaSelector(s);
-		c.attach();
+		c.attach(getSession());
 	}
 
 	void flag(char c, Iterator<String> i) throws ExecutorException {

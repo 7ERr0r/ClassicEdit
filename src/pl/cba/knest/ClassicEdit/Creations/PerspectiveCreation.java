@@ -3,9 +3,6 @@ package pl.cba.knest.ClassicEdit.Creations;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import pl.cba.knest.ClassicEdit.Session;
-
-
 
 public class PerspectiveCreation extends CuboidCreation {
 	Location per;
@@ -14,8 +11,8 @@ public class PerspectiveCreation extends CuboidCreation {
 	int dh = 7;
 	double s = 1;
 	
-	public PerspectiveCreation(Session s) {
-		super(s);
+	public PerspectiveCreation() {
+		
 		String a = "000000000000000000000000000000000000000000000000000000000" +
 				   "001000100111110001111001111100111110011110001110001110000" +
 				   "001100100100000010000000010000100000010001000100010001000" +

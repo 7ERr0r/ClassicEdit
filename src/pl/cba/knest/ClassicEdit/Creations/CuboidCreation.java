@@ -1,20 +1,21 @@
 package pl.cba.knest.ClassicEdit.Creations;
 
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.Session;
 
 
-public class CuboidCreation extends TwoPointCreation{
+public class CuboidCreation extends AreaCreation {
 	
 
 	
 	public boolean dashed = false;
+
 	
-	public CuboidCreation(String nick) {
-		super(nick);
+	public CuboidCreation(Session s) {
+		super(s);
 	}
 
 
@@ -30,8 +31,7 @@ public class CuboidCreation extends TwoPointCreation{
 	@Override
 	public void init(){
 		super.init();
-		
-		if(Math.max(width, height)>ClassicEdit.getLimit(Bukkit.getPlayerExact(nick),dropmode)){
+		if(Math.max(width, height)>ClassicEdit.getLimit(session.getPlayer(), dropmode)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
 			return;
@@ -62,9 +62,5 @@ public class CuboidCreation extends TwoPointCreation{
 	public void setDashed(boolean dashed){
 		this.dashed = dashed;
 	}
-
-
-
-
 
 }

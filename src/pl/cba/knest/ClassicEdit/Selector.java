@@ -6,14 +6,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
 public abstract class Selector {
-	protected Player p;
-	public Selector(Player p) {
-		this.p = p;
+
+	public Selector() {
+		
 	}
 	public void msgPlayer(String msg){
-		p.sendMessage(ChatColor.AQUA+"CE: "+msg);
+		Player p = getPlayer();
+		if(p != null) p.sendMessage(ChatColor.AQUA+"CE: "+msg);
 	}
-	
+	public abstract Player getPlayer();
 	public abstract boolean selectBlock(Block b);
 	public abstract boolean selectAir(Player p, Action a);
 	public abstract void start();

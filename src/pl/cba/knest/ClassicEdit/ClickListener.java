@@ -13,28 +13,24 @@ public class ClickListener implements Listener{
 	public void onPlayerInteract(PlayerInteractEvent e){
 		Player p = e.getPlayer();
 		Action a = e.getAction();
-		String nick = p.getName().toLowerCase();
 		if(a == Action.LEFT_CLICK_BLOCK || a == Action.RIGHT_CLICK_BLOCK){
-			if(ClassicEdit.getCuboidManager().isSelecting(nick)){
-				Selector sel = ClassicEdit.getCuboidManager().getSelector(nick);
+			
+			Session sess = ClassicEdit.getCreationManager().getSession(p);
+			if(sess.getPending() != null){
 				Block b = e.getClickedBlock();
 				if(a == Action.RIGHT_CLICK_BLOCK){
 					b = b.getRelative(e.getBlockFace());
 				}
-				if(!sel.selectBlock(b)){
-					e.setCancelled(true);
-				}
+				sess.selectBlock(b);
+				e.setCancelled(true);
 			}
-		}else{
-			if(a == Action.LEFT_CLICK_AIR || a == Action.RIGHT_CLICK_AIR){
-				if(ClassicEdit.getCuboidManager().isSelecting(nick)){
-					Selector sel = ClassicEdit.getCuboidManager().getSelector(nick);
-					
-					if(!sel.selectAir(p, a)){
-						e.setCancelled(true);
-					}
-				}
+		}else if(a == Action.LEFT_CLICK_AIR || a == Action.RIGHT_CLICK_AIR){
+			Session sess = ClassicEdit.getCreationManager().getSession(p);
+			if(sess.getPending() != null){
+				sess.selectAir(p, a);
+				e.setCancelled(true);
 			}
 		}
 	}
+	
 }

@@ -1,111 +1,53 @@
 package pl.cba.knest.ClassicEdit;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import pl.cba.knest.ClassicEdit.Creations.CuboidCreation;
+
 
 public class Manager extends BukkitRunnable {
-	private HashMap<String, Selector> scs;
-	private HashMap<String, Queue<Creation>> creas;
+	private HashMap<UUID, Session> sessions;
 	public Manager(){
-		this.scs = new HashMap<String, Selector>();
-		this.creas = new HashMap<String, Queue<Creation>>();
-	}
-	public void setSelector(Player p, Selector s){
-		setSelector(p.getName().toLowerCase(), s);
-	}
-	public void setSelector(String nick, Selector s){
-		removeSelector(nick);
-		scs.put(nick, s);
-	}
-	public Selector getSelector(Player p){
-		return getSelector(p.getName().toLowerCase());
-	}
-	public Selector getSelector(String nick){
-		return scs.get(nick);
-	}
-	public boolean isSelecting(String nick){
-		return scs.containsKey(nick);
-	}
-	public boolean isSelecting(Player p){
-		return isSelecting(p.getName().toLowerCase());
-	}
-	public void removeSelector(Player p){
-		removeSelector(p.getName().toLowerCase());
-	}
-	public void removeSelector(String nick){
-		if(isSelecting(nick)){
-			scs.get(nick).end();
-			scs.remove(nick);
-		}
+		this.sessions = new HashMap<UUID, Session>();
 	}
 	
-	private void put(String nick, Creation c){
-		if(!creas.containsKey(nick.toLowerCase())){
-			creas.put(nick.toLowerCase(), new LinkedList<Creation>());
+	public Session getSession(Player p){
+		return getSession(p.getUniqueId());
+	}
+	public Session getSession(UUID uuid){
+		if(sessions.get(uuid) == null){
+			sessions.put(uuid, new Session(uuid));
 		}
-		Queue<Creation> q = creas.get(nick.toLowerCase());
-		if(!q.contains(c)) q.add(c);
-		
+		return sessions.get(uuid);
 	}
 	
 	
-	public void addCreation(String nick, Creation c){
-		put(nick,c);
-		if(getCreation(nick)==c){
-			c.msgStart();
-		}else{
-			c.msgPlayer(ChatColor.YELLOW+"Queued "+c.getFullName());
-		}
-	}
 
-	public void removeCreation(Creation c){
-		Queue<Creation> q = creas.get(c.getPlayerName().toLowerCase());
-		if(q.remove(c)){
-			c.msgEnd();
-		}
-		Creation nc = q.peek();
-		if(nc!=null){
-			c.msgPlayer(ChatColor.YELLOW+"Started next "+nc.getFullName());
-		}
-		
-	}
-	public Creation getCreation(Player p){
-		return getCreation(p.getName());
-	}
 
-	public Creation getCreation(String nick){
-		if(!creas.containsKey(nick.toLowerCase())) return null;
-		return creas.get(nick.toLowerCase()).peek();
-	}
 	@Override
 	public void run() {
-		for(Queue<Creation> q : creas.values()){
-			Creation c = q.peek();
-			if(c == null) continue;
-			if(!c.isPause()) c.run();
+		for(Session s : sessions.values()){
+			s.run();
 		}
-	}
-	public void stopCreations(Player p) {
-		stopCreations(p.getName());
-	}
-	public void stopCreations(String nick) {
-		Queue<Creation> q = creas.get(nick.toLowerCase());
-		q.clear();
 	}
 	public void callPhysicsEvent(BlockPhysicsEvent e) {
-		for(Queue<Creation> q : creas.values()){
-			if(q.element() != null){
-				q.element().onBlockPhysics(e);
-			}
-			if(e.isCancelled()) return;
+		for(Session s : sessions.values()){
+			s.callPhysicsEvent(e);
 		}
+		
+	}
+
+	public Creation getCreation(Player p) {
+		return getSession(p).getActive();
+	}
+
+	public void append(CuboidCreation c) {
+		c.getSession();
 		
 	}
 }

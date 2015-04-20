@@ -2,7 +2,9 @@ package pl.cba.knest.ClassicEdit.Creations;
 
 import org.bukkit.ChatColor;
 
-public class LineCreation extends TwoPointCreation{
+import pl.cba.knest.ClassicEdit.Session;
+
+public class LineCreation extends AreaCreation {
 	double dx;
 	double dy;
 	double dz;
@@ -15,8 +17,8 @@ public class LineCreation extends TwoPointCreation{
 	double sy;
 	double sz;
 	
-	public LineCreation(String nick) {
-		super(nick);
+	public LineCreation(Session s) {
+		super(s);
 	}
 	public void init(){
 		super.init();

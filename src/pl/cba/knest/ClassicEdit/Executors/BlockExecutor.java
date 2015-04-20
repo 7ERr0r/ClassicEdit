@@ -16,10 +16,7 @@ import pl.cba.knest.ClassicEdit.Creations.FilledCreation;
 public class BlockExecutor extends PlayerCmdExecutor {
 	public void execute() throws ExecutorException{
 		super.execute();
-		if(!p.hasPermission("ClassicEdit.create") && !p.isOp()){
-			throw new ExecutorException(ChatColor.RED+"You do not have permission to do this");
-		}
-		Creation c = ClassicEdit.getCuboidManager().getCreation(p);
+		Creation c = ClassicEdit.getCreationManager().getCreation(player);
 		if(c == null){
 			throw new ExecutorException(ChatColor.RED+"You don't have any cuboid running");
 		}
@@ -28,7 +25,7 @@ public class BlockExecutor extends PlayerCmdExecutor {
 			if(params.size()>0){
 				f = Filling.parse(params.get(0));
 			}else{
-				ItemStack is = p.getItemInHand();
+				ItemStack is = player.getItemInHand();
 				if(is != null && is.getType().isBlock()){
 					f = new Filling(is.getType(), (byte) 0);
 				}else{

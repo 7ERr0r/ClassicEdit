@@ -5,31 +5,28 @@ package pl.cba.knest.ClassicEdit.Executors;
 import java.util.Iterator;
 
 
-import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.ExecutorException;
-import pl.cba.knest.ClassicEdit.Selector;
 import pl.cba.knest.ClassicEdit.Creations.CuboidCreation;
-import pl.cba.knest.ClassicEdit.Selectors.TwoPointSelector;
+import pl.cba.knest.ClassicEdit.Selectors.HandAreaSelector;
 
-public class CuboidExecutor extends TwoPointExecutor{
-	public CuboidCreation getCreation(String nick){
-		return new CuboidCreation(nick);
-	}
+
+public class CuboidExecutor extends TwoPointExecutor {
+
 	boolean dashed = false;
 	boolean loop = false;
 	boolean br = false;
 	public void execute() throws ExecutorException{
 		super.execute();
-		CuboidCreation c = getCreation(p.getName());
+		
+		CuboidCreation c = new CuboidCreation(getSession());
 		c.setFilling(f);
 		c.setDashed(dashed);
 		c.setLoop(loop);
 		c.setBr(br);
 		c.setDropmode(dropmode);
 		c.setMask(mask);
-		Selector sel = new TwoPointSelector(p, c);
-		ClassicEdit.getCuboidManager().setSelector(p, sel);
-		sel.start();
+		c.setAreaSelector(new HandAreaSelector());
+		c.attach();
 	}
 	@Override
 	void flag(char c, Iterator<String> i) throws ExecutorException {

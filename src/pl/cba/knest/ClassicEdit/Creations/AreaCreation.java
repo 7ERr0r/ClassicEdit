@@ -3,7 +3,6 @@ package pl.cba.knest.ClassicEdit.Creations;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
@@ -21,11 +20,15 @@ import org.bukkit.inventory.PlayerInventory;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Mask;
+import pl.cba.knest.ClassicEdit.NotSelectedException;
+import pl.cba.knest.ClassicEdit.Selector;
+import pl.cba.knest.ClassicEdit.Session;
+import pl.cba.knest.ClassicEdit.Selectors.AreaSelector;
 
-public abstract class TwoPointCreation extends FilledCreation{
+public abstract class AreaCreation extends FilledCreation{
 	
-	public TwoPointCreation(String nick) {
-		super(nick);
+	public AreaCreation(Session s) {
+		super(s);
 	}
 	boolean started = false;
 	boolean dropmode = false;	
@@ -54,6 +57,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 	boolean up = true;
 	boolean br = false;
 	Mask mask;
+	private AreaSelector areaSelector;
 	
 	public boolean canPlace(int x, int y, int z){
 		if(mask!=null){
@@ -96,9 +100,10 @@ public abstract class TwoPointCreation extends FilledCreation{
 		
 		int items = 0;
 		if(dropmode){
-			p = Bukkit.getPlayer(nick);
+			p = session.getPlayer();
 			if(p==null){
-				pause(); return;
+				pause();
+				return;
 			}
 			if(p!=null && p.getGameMode()==GameMode.CREATIVE){
 				amount.set(1000000);
@@ -144,19 +149,12 @@ public abstract class TwoPointCreation extends FilledCreation{
 
 	@Override
 	public String getName() {
-		return "2-point box";
+		return "area";
 	}
 
 
 	public void setDropmode(boolean dropmode){
 		if(!started) this.dropmode = dropmode;
-	}
-
-	public void setPoints(Location l1, Location l2){
-		if(started) return;
-		this.l1 = l1;
-		this.w = l1.getWorld();
-		this.l2 = l2;
 	}
 
 	
@@ -237,13 +235,22 @@ public abstract class TwoPointCreation extends FilledCreation{
 		return true;
 	}
 	
-	
+	@Override
+	public void start(){
+		try{
+			l1 = areaSelector.getLocationMin();
+			l2 = areaSelector.getLocationMax();
+			w = l1.getWorld();
+			super.start();
+		}catch(NotSelectedException e){
+			
+		}
+	}
 	
 	
 	
 	@Override
 	public void init(){
-		
 		maxx = Math.max(l1.getBlockX(), l2.getBlockX());
 		maxy = Math.max(l1.getBlockY(), l2.getBlockY());
 		maxz = Math.max(l1.getBlockZ(), l2.getBlockZ());
@@ -321,7 +328,7 @@ public abstract class TwoPointCreation extends FilledCreation{
 
 
 	public boolean isRunning() {
-		return ClassicEdit.getCuboidManager().getCreation(nick)==this;
+		return session.getActive() == this;
 	}
 
 	@Override
@@ -329,6 +336,15 @@ public abstract class TwoPointCreation extends FilledCreation{
 		if(e.isCancelled()) return;
 		if(isInside(e.getBlock())) e.setCancelled(true);
 	}
+	public Selector[] getSelectors(){
+		return new Selector[]{areaSelector};
+	}
+	public void setAreaSelector(AreaSelector s) {
+		this.areaSelector = s;
+		s.setCreation(this);
+	}
+	
+	
 
 
 

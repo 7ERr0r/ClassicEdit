@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,11 +17,10 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.util.Vector;
 
+import pl.cba.knest.ClassicEdit.Session;
 
-public class GunCreation extends InfiniteCreation{
-	private List<Bolt> bolts = new ArrayList<Bolt>();
-	private boolean explode = false;
-	private boolean laser = false;
+
+public class GunCreation extends ClickableCreation {
 	private class Bolt{
 		private final Location l;
 		private final Vector v;
@@ -82,8 +79,14 @@ public class GunCreation extends InfiniteCreation{
 			}
 		}
 	}
-	public GunCreation(String nick) {
-		super(nick);
+	
+	private List<Bolt> bolts = new ArrayList<Bolt>();
+	private boolean explode = false;
+	private boolean laser = false;
+	
+	
+	public GunCreation(Session s) {
+		super(s);
 	}
 	@Override
 	public void click(Location l){
@@ -154,5 +157,7 @@ public class GunCreation extends InfiniteCreation{
 	public void msgEnd(){
 		msgPlayer(ChatColor.YELLOW+"Stopping gun");
 	}
+
+
 	
 }

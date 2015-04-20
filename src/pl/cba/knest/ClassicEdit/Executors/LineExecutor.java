@@ -4,30 +4,27 @@ package pl.cba.knest.ClassicEdit.Executors;
 
 import java.util.Iterator;
 
-import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.ExecutorException;
-import pl.cba.knest.ClassicEdit.Selector;
 import pl.cba.knest.ClassicEdit.Creations.LineCreation;
-import pl.cba.knest.ClassicEdit.Selectors.TwoPointSelector;
+import pl.cba.knest.ClassicEdit.Selectors.AreaSelector;
+import pl.cba.knest.ClassicEdit.Selectors.HandAreaSelector;
 
 public class LineExecutor extends TwoPointExecutor{
 	private boolean loop;
 	private boolean br;
 
-	public LineCreation getCreation(String nick){
-		return new LineCreation(nick);
-	}
+
 	public void execute() throws ExecutorException{
 		super.execute();
 		
-		LineCreation c = getCreation(p.getName());
+		LineCreation c = new LineCreation(getSession());
 		c.setFilling(f);
 		c.setLoop(loop);
 		c.setBr(br);
 		c.setDropmode(dropmode);
-		Selector sel = new TwoPointSelector(p, c);
-		ClassicEdit.getCuboidManager().setSelector(p, sel);
-		sel.start();
+		AreaSelector s = new HandAreaSelector();
+		c.setAreaSelector(s);
+		c.attach();
 	}
 
 	@Override

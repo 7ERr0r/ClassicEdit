@@ -6,12 +6,10 @@ import java.util.NoSuchElementException;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
-import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.ExecutorException;
-import pl.cba.knest.ClassicEdit.Selector;
 import pl.cba.knest.ClassicEdit.Creations.PerspectiveCreation;
-import pl.cba.knest.ClassicEdit.Selectors.TwoPointSelector;
-
+import pl.cba.knest.ClassicEdit.Selectors.AreaSelector;
+import pl.cba.knest.ClassicEdit.Selectors.HandAreaSelector;
 
 
 public class PerspectiveExecutor extends TwoPointExecutor{
@@ -19,14 +17,11 @@ public class PerspectiveExecutor extends TwoPointExecutor{
 	boolean loop = false;
 	boolean br = false;
 	double sc = 1;
-	@Override
-	public PerspectiveCreation getCreation(String nick) {
-		return new PerspectiveCreation(nick);
-	}
+
 
 	public void execute() throws ExecutorException{
 		super.execute();
-		PerspectiveCreation c = getCreation(p.getName());
+		PerspectiveCreation c = new PerspectiveCreation(getSession());
 		c.setFilling(f);
 		c.setLoop(loop);
 		c.setBr(br);
@@ -34,9 +29,9 @@ public class PerspectiveExecutor extends TwoPointExecutor{
 		c.setMask(mask);
 		c.setPerspective(per);
 		c.setScale(sc);
-		Selector sel = new TwoPointSelector(p, c);
-		ClassicEdit.getCuboidManager().setSelector(p, sel);
-		sel.start();
+		AreaSelector s = new HandAreaSelector();
+		c.setAreaSelector(s);
+		c.attach();
 	}
 
 	void flag(char c, Iterator<String> i) throws ExecutorException {
@@ -51,7 +46,7 @@ public class PerspectiveExecutor extends TwoPointExecutor{
 			try{
 				sc = Double.parseDouble(i.next());
 			}catch(NoSuchElementException e){
-				throw new ExecutorException(ChatColor.RED+"Not enough arguments for perspective (-p <x> <y> <z> <yaw> <pitch>)");
+				throw new ExecutorException(ChatColor.RED+"Not enough arguments for perspective (-s <scale>)");
 			}
 		return;
 		case 'p':

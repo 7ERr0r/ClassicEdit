@@ -133,7 +133,7 @@ public class ClassicEdit extends JavaPlugin{
 	public Manager getManager(){
 		return cm;
 	}
-	public static Manager getCuboidManager(){
+	public static Manager getCreationManager(){
 		return plugin.getManager();
 	}
 	public void log(String str){
@@ -189,4 +189,6 @@ public class ClassicEdit extends JavaPlugin{
 		return plugin;
 		
 	}
+
+
 }

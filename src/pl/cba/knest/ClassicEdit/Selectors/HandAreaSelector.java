@@ -8,53 +8,46 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 
-import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.Selector;
-import pl.cba.knest.ClassicEdit.Creations.TwoPointCreation;
+import pl.cba.knest.ClassicEdit.NotSelectedException;
+import pl.cba.knest.ClassicEdit.Creations.AreaCreation;
 
-public class TwoPointSelector extends Selector{
+public class HandAreaSelector extends AreaSelector {
 	
-	private TwoPointCreation c;
-	private boolean first = true;
+	private AreaCreation c;
+	private int stage = 0;
 	private Location l1;
 	private Location l2;
-	public TwoPointSelector(Player p, TwoPointCreation c){
-		super(p);
-		this.c = c;
-	}
+	private boolean first = true;
+
 
 	public Player getPlayer() {
-		return p;
+		return c.getPlayer();
 	}
 
-	public void setPlayer(Player p) {
-		this.p = p;
-	}
 
-	public Creation getC() {
+
+	public Creation getCreation() {
 		return c;
 	}
 
-	public void setC(TwoPointCreation c) {
+	public void setCreation(AreaCreation c) {
 		this.c = c;
 	}
 
 	@Override
 	public boolean selectBlock(Block b){
-		if(first){
+		Player p = getPlayer();
+		if(stage == 0){
 			l1 = b.getLocation();
-			first = false;
-		}else{
+		}else if(stage == 1){
 			l2 = b.getLocation();
 			
 			if(c.getFilling() == null){
 				
 				if(p != null){
 					ItemStack is = p.getItemInHand();
-					
-					ClassicEdit.getCuboidManager().removeSelector(p);
 					
 					if(is != null && is.getType().isBlock() && is.getType()!=Material.AIR){
 						c.setFilling(new Filling(is.getType(), (byte) is.getDurability()));
@@ -64,21 +57,18 @@ public class TwoPointSelector extends Selector{
 				}
 			}
 			
-			c.setPoints(l1, l2);
-			ClassicEdit.getCuboidManager().removeSelector(p);
 			c.start();
-			if(c.isRunning()){
-				info();
-			}
+		}else{
+			// done
 		}
-		return false;
+		stage++;
+		return stage > 2;
 	}
 	public void start(){
 		msgPlayer(ChatColor.YELLOW+"Click two blocks to determinate the edges");
+		first = false;
 	}
-	public void info(){
-		//msgPlayer(ChatColor.YELLOW+"Creating "+c.getName()+" of "+c.getFilling());
-	}
+
 
 	@Override
 	public void end() {
@@ -90,7 +80,20 @@ public class TwoPointSelector extends Selector{
 		return true;
 	}
 
-		
+
+
+	@Override
+	public Location getLocationMin() throws NotSelectedException {
+		if(first) start();
+		if(l1==null) throw new NotSelectedException();
+		return l1;
+	}
+	@Override
+	public Location getLocationMax() throws NotSelectedException {
+		if(first) start();
+		if(l2==null) throw new NotSelectedException();
+		return l2;
+	}
 	
 
 }

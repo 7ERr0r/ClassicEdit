@@ -1,62 +1,80 @@
 package pl.cba.knest.ClassicEdit;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPhysicsEvent;
 
 public abstract class Creation implements Runnable {
-	protected String nick;
-	private boolean pause;
+	protected Session session;
+	boolean started;
 	
-	public Creation(String nick) {
-		this.nick = nick.toLowerCase();
+	public Creation(Session session) {
+		this.session = session;
 	}
 	
-	public String getPlayerName(){
-		return nick;
+	public abstract String getName();
+	public abstract void onBlockPhysics(BlockPhysicsEvent e);
+	public abstract void init();
+	public abstract Selector[] getSelectors();
+	
+	public Session getSession(){
+		return session;
+	}
+	public Player getPlayer(){
+		return session.getPlayer();
 	}
 	
 	public void msgPlayer(String msg){
-		Player p = Bukkit.getPlayer(nick);
+		Player p = getPlayer();
 		if(p!=null) p.sendMessage(ChatColor.GOLD+"CE: "+msg);
 	}
 
-	public abstract String getName();
+
 	public String getFullName(){
 		return getName();
 	}
 	public void start(){
-		ClassicEdit.getCuboidManager().addCreation(nick, this);
-		init();
+		if(!started){
+			started = true;
+			session.addCreation(this);
+			session.setPending(null);
+			init();
+			msgStart();
+		}
 	}
-	public abstract void init();
+
 	public void stop(){
-		
-		ClassicEdit.getCuboidManager().removeCreation(this);
+		session.removeCreation(this);
+		msgEnd();
 	}
 
 	public void pause(){
-		pause = true;
+		session.pause();
 	}
 	public void unpause(){
-		pause = false;
+		session.unpause();
 	}
 	public void togglePause(){
-		pause = !pause;
+		session.togglePause();
 	}
-	
-	public boolean isPause(){
-		return pause;
+	public boolean isPaused() {
+		return session.isPaused();
 	}
 	
 	public void msgStart(){
-		msgPlayer(ChatColor.YELLOW+"Creating "+getName());
+		msgPlayer(ChatColor.YELLOW+"Creating "+getFullName());
 	}
 	
 	public void msgEnd(){
-		msgPlayer(ChatColor.YELLOW+"Stopped "+getName());
+		msgPlayer(ChatColor.YELLOW+"Stopped "+getFullName());
 	}
+	public void attach(){
+		session.setPending(this);
+		start();
+	}
+
+
 	
-	public void onBlockPhysics(BlockPhysicsEvent e){}
+
+
 }

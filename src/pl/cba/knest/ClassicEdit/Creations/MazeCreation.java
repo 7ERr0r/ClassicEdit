@@ -6,15 +6,15 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.Session;
 
 
 
-public class MazeCreation extends TwoPointCreation{
+public class MazeCreation extends AreaCreation{
 	
 	Random r = new Random();
 	int mazex = 1;
@@ -33,8 +33,8 @@ public class MazeCreation extends TwoPointCreation{
 	private static final int DOWN = 3;
 	private static final int LEFT = 4;
 	private static final int IS = 16;
-	public MazeCreation(String nick) {
-		super(nick);
+	public MazeCreation(Session s) {
+		super(s);
 	}
 
 
@@ -46,7 +46,7 @@ public class MazeCreation extends TwoPointCreation{
 	@Override
 	public void init(){
 		super.init();
-		if(Math.max(width, height)>ClassicEdit.getLimit(Bukkit.getPlayerExact(nick),dropmode)){
+		if(Math.max(width, height)>ClassicEdit.getLimit(session.getPlayer(), dropmode)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
 			return;
@@ -154,19 +154,16 @@ public class MazeCreation extends TwoPointCreation{
 		if(q.size()<1){
 			try{
 				if(!search()){
-					stop();
 					return false;
 				}
 			}catch(Exception e){
 				e.printStackTrace();
-				stop();
 				return false;
 			}
 		}
 		
 		Block b = q.poll();
 		if(b==null){
-			stop();
 			return false;
 		}
 		currentx = b.getX();

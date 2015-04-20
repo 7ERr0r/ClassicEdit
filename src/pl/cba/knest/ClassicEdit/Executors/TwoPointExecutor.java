@@ -7,19 +7,15 @@ import org.bukkit.ChatColor;
 
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Mask;
-import pl.cba.knest.ClassicEdit.Creations.CuboidCreation;
-import pl.cba.knest.ClassicEdit.Creations.TwoPointCreation;
+
 
 public class TwoPointExecutor extends CreationExecutor {
 	boolean dropmode = false;
 	Mask mask = null;
-	public TwoPointCreation getCreation(String nick){
-		return new CuboidCreation(nick);
-	}
-	
+
 	public void execute() throws ExecutorException{
 		super.execute();
-		dropmode = !p.hasPermission("ClassicEdit.dropmode");
+		dropmode = !player.hasPermission("ClassicEdit.dropmode");
 	}
 	@Override
 	void flag(char c, Iterator<String> i) throws ExecutorException {

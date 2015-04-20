@@ -1,11 +1,11 @@
 package pl.cba.knest.ClassicEdit.Creations;
 
+import pl.cba.knest.ClassicEdit.Session;
 
+public class SpheroidCreation extends CuboidCreation {
 
-public class SpheroidCreation extends CuboidCreation{
-
-	public SpheroidCreation(String nick) {
-		super(nick);
+	public SpheroidCreation(Session s) {
+		super(s);
 	}
 	public boolean canPlace(int x,int y,int z){
 		if(!super.canPlace(x, y, z)) return false;

@@ -9,30 +9,21 @@ import org.bukkit.inventory.ItemStack;
 
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.Selector;
-import pl.cba.knest.ClassicEdit.Creations.InfiniteCreation;
+import pl.cba.knest.ClassicEdit.Creations.ClickableCreation;
 
-public class InfiniteSelector extends Selector{
-	private InfiniteCreation c;
+public class InfiniteSelector extends DirectionSelector {
+	private ClickableCreation c;
 
-	public InfiniteSelector(Player p, InfiniteCreation c){
-		super(p);
-		this.c = c;
+	public InfiniteSelector(){
+
 	}
 
-	public Player getPlayer() {
-		return p;
-	}
 
-	public void setPlayer(Player p) {
-		this.p = p;
-	}
-
-	public Creation getC() {
+	public Creation getCreation() {
 		return c;
 	}
 
-	public void setC(InfiniteCreation c) {
+	public void setCreation(ClickableCreation c) {
 		this.c = c;
 	}
 	public void start(){
@@ -70,6 +61,12 @@ public class InfiniteSelector extends Selector{
 	@Override
 	public boolean selectBlock(Block b) {
 		return true;
+	}
+
+
+	@Override
+	public Player getPlayer() {
+		return c.getPlayer();
 	}
 		
 	

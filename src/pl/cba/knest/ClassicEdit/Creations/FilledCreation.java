@@ -5,6 +5,7 @@ import org.bukkit.Material;
 
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
+import pl.cba.knest.ClassicEdit.Session;
 
 public abstract class FilledCreation extends Creation{
 	Filling f = new Filling(Material.AIR, (byte) 0);
@@ -13,6 +14,10 @@ public abstract class FilledCreation extends Creation{
 	long sum = 0;
 	int ticksDone = 0;
 	
+	
+	public FilledCreation(Session s){
+		super(s);
+	}
 	
 	public String getFullName(){
 		return getName()+" of "+getFilling();
@@ -24,9 +29,7 @@ public abstract class FilledCreation extends Creation{
 	public void msgEnd(){
 			msgPlayer(ChatColor.YELLOW+"Created "+sum+" block"+(sum==1?"":"s")+" of "+getFilling().toString());
 	}
-	public FilledCreation(String nick) {
-		super(nick);
-	}
+
 	public void setFilling(Filling f){
 		this.f = f;
 	}

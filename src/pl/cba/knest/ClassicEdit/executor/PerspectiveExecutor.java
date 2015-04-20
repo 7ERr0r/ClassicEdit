@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit.Executors;
+package pl.cba.knest.ClassicEdit.executor;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -7,9 +7,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import pl.cba.knest.ClassicEdit.ExecutorException;
-import pl.cba.knest.ClassicEdit.Creations.PerspectiveCreation;
-import pl.cba.knest.ClassicEdit.Selectors.AreaSelector;
-import pl.cba.knest.ClassicEdit.Selectors.HandAreaSelector;
+import pl.cba.knest.ClassicEdit.creation.PerspectiveCreation;
+import pl.cba.knest.ClassicEdit.selector.AreaSelector;
+import pl.cba.knest.ClassicEdit.selector.HandAreaSelector;
 
 
 public class PerspectiveExecutor extends AreaExecutor{

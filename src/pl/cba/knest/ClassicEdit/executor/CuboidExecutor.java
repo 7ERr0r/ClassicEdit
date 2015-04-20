@@ -1,13 +1,15 @@
-package pl.cba.knest.ClassicEdit.Executors;
+package pl.cba.knest.ClassicEdit.executor;
 
 
 
 import java.util.Iterator;
 
 
+
+
 import pl.cba.knest.ClassicEdit.ExecutorException;
-import pl.cba.knest.ClassicEdit.Creations.CuboidCreation;
-import pl.cba.knest.ClassicEdit.Selectors.HandAreaSelector;
+import pl.cba.knest.ClassicEdit.creation.CuboidCreation;
+import pl.cba.knest.ClassicEdit.selector.HandAreaSelector;
 
 
 public class CuboidExecutor extends AreaExecutor {

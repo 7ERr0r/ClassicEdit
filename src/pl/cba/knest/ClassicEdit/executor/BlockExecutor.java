@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit.Executors;
+package pl.cba.knest.ClassicEdit.executor;
 
 
 
@@ -10,7 +10,7 @@ import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.Creations.FilledCreation;
+import pl.cba.knest.ClassicEdit.creation.FilledCreation;
 
 
 public class BlockExecutor extends PlayerCmdExecutor {

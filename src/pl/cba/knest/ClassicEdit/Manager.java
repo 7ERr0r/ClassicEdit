@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import pl.cba.knest.ClassicEdit.Creations.CuboidCreation;
+import pl.cba.knest.ClassicEdit.creation.CuboidCreation;
 
 
 public class Manager extends BukkitRunnable {

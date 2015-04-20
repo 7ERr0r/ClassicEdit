@@ -2,7 +2,7 @@ package pl.cba.knest.ClassicEdit;
 
 import org.bukkit.command.CommandSender;
 
-import pl.cba.knest.ClassicEdit.Executors.Executor;
+import pl.cba.knest.ClassicEdit.executor.Executor;
 
 public class ExecutorException extends Exception{
 

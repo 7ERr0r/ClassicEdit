@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit.Creations;
+package pl.cba.knest.ClassicEdit.creation;
 
 
 import java.util.ArrayList;

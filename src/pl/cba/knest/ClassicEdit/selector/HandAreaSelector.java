@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit.Selectors;
+package pl.cba.knest.ClassicEdit.selector;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.Creations.AreaCreation;
+import pl.cba.knest.ClassicEdit.creation.AreaCreation;
 
 public class HandAreaSelector extends AreaSelector {
 	

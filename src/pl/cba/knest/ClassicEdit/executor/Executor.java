@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit.Executors;
+package pl.cba.knest.ClassicEdit.executor;
 
 import java.util.Iterator;
 import java.util.List;

@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit.Creations;
+package pl.cba.knest.ClassicEdit.creation;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

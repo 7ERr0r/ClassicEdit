@@ -1,7 +1,7 @@
-package pl.cba.knest.ClassicEdit.Selectors;
+package pl.cba.knest.ClassicEdit.selector;
 
 import pl.cba.knest.ClassicEdit.Selector;
-import pl.cba.knest.ClassicEdit.Creations.ClickableCreation;
+import pl.cba.knest.ClassicEdit.creation.ClickableCreation;
 
 public abstract class DirectionSelector extends Selector {
 

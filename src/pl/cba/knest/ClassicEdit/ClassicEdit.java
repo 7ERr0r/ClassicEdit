@@ -19,18 +19,18 @@ import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
-import pl.cba.knest.ClassicEdit.Executors.BlockExecutor;
-import pl.cba.knest.ClassicEdit.Executors.ClassicEditExecutor;
-import pl.cba.knest.ClassicEdit.Executors.CuboidExecutor;
-import pl.cba.knest.ClassicEdit.Executors.Executor;
-import pl.cba.knest.ClassicEdit.Executors.GunExecutor;
-import pl.cba.knest.ClassicEdit.Executors.LineExecutor;
-import pl.cba.knest.ClassicEdit.Executors.MazeExecutor;
-import pl.cba.knest.ClassicEdit.Executors.PauseExecutor;
-import pl.cba.knest.ClassicEdit.Executors.PerspectiveExecutor;
-import pl.cba.knest.ClassicEdit.Executors.SpheroidExecutor;
 
 
+import pl.cba.knest.ClassicEdit.executor.BlockExecutor;
+import pl.cba.knest.ClassicEdit.executor.ClassicEditExecutor;
+import pl.cba.knest.ClassicEdit.executor.CuboidExecutor;
+import pl.cba.knest.ClassicEdit.executor.Executor;
+import pl.cba.knest.ClassicEdit.executor.GunExecutor;
+import pl.cba.knest.ClassicEdit.executor.LineExecutor;
+import pl.cba.knest.ClassicEdit.executor.MazeExecutor;
+import pl.cba.knest.ClassicEdit.executor.PauseExecutor;
+import pl.cba.knest.ClassicEdit.executor.PerspectiveExecutor;
+import pl.cba.knest.ClassicEdit.executor.SpheroidExecutor;
 import pl.cba.knest.ClassicEdit.listener.ClickListener;
 import pl.cba.knest.ClassicEdit.listener.PhysicsListener;
 import fr.neatmonster.nocheatplus.NoCheatPlus;

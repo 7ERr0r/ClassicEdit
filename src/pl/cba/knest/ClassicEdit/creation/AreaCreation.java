@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit.Creations;
+package pl.cba.knest.ClassicEdit.creation;
 
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,7 +21,7 @@ import org.bukkit.inventory.PlayerInventory;
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Mask;
 import pl.cba.knest.ClassicEdit.Session;
-import pl.cba.knest.ClassicEdit.Selectors.AreaSelector;
+import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 
 public abstract class AreaCreation extends FilledCreation {
 	

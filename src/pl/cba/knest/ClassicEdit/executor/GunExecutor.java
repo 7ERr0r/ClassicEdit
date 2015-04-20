@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit.Executors;
+package pl.cba.knest.ClassicEdit.executor;
 
 
 
@@ -9,9 +9,9 @@ import org.bukkit.ChatColor;
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Session;
-import pl.cba.knest.ClassicEdit.Creations.GunCreation;
-import pl.cba.knest.ClassicEdit.Selectors.DirectionSelector;
-import pl.cba.knest.ClassicEdit.Selectors.InfiniteSelector;
+import pl.cba.knest.ClassicEdit.creation.GunCreation;
+import pl.cba.knest.ClassicEdit.selector.DirectionSelector;
+import pl.cba.knest.ClassicEdit.selector.InfiniteSelector;
 
 public class GunExecutor extends CreationExecutor {
 

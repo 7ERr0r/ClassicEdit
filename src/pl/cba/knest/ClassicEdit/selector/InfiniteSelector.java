@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit.Selectors;
+package pl.cba.knest.ClassicEdit.selector;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.Creations.ClickableCreation;
+import pl.cba.knest.ClassicEdit.creation.ClickableCreation;
 
 public class InfiniteSelector extends DirectionSelector {
 	private ClickableCreation c;

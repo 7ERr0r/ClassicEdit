@@ -20,7 +20,7 @@ public class MazeExecutor extends AreaExecutor{
 		c.setFilling(f);
 		c.setDropmode(dropmode);
 		c.setLoop(loop);
-		c.setBr(br);
+		c.setForceBreak(br);
 		AreaSelector s = new HandAreaSelector();
 		c.setAreaSelector(s);
 		c.attach(getSession());

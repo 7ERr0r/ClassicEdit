@@ -24,7 +24,7 @@ public class PerspectiveExecutor extends AreaExecutor{
 		PerspectiveCreation c = new PerspectiveCreation();
 		c.setFilling(f);
 		c.setLoop(loop);
-		c.setBr(br);
+		c.setForceBreak(br);
 		c.setDropmode(dropmode);
 		c.setMask(mask);
 		c.setPerspective(per);

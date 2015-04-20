@@ -20,7 +20,7 @@ public class LineExecutor extends AreaExecutor{
 		LineCreation c = new LineCreation();
 		c.setFilling(f);
 		c.setLoop(loop);
-		c.setBr(br);
+		c.setForceBreak(br);
 		c.setDropmode(dropmode);
 		AreaSelector s = new HandAreaSelector();
 		c.setAreaSelector(s);

@@ -20,16 +20,15 @@ public abstract class Creation implements Runnable {
 	}
 	public abstract String getName();
 	public abstract void onBlockPhysics(BlockPhysicsEvent e);
-	public abstract void init();
+	public abstract boolean init();
 	public boolean isInitialised(){
 		return initialised;
 	}
 	public void tick(){
 		if(!initialised){
-			init();
-			if(!initialised){
-				return;
-			}
+			if(init()){
+				initialised = true;
+			}else return;
 		}
 		run();
 	}

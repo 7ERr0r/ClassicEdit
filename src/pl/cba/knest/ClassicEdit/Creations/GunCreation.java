@@ -113,8 +113,9 @@ public class GunCreation extends ClickableCreation {
 	}
 
 	@Override
-	public void init(){
-		super.init();
+	public boolean init(){
+		if(!super.init()) return false;
+		return true;
 	}
 
 	@Override

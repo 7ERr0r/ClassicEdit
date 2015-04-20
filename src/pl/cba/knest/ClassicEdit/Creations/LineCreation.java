@@ -15,8 +15,8 @@ public class LineCreation extends AreaCreation {
 	double sy;
 	double sz;
 	
-	public void init(){
-		super.init();
+	public boolean init(){
+		if(!super.init()) return false;
 		dx = l1.getBlockX()+0.5;
 		dy = l1.getBlockY()+0.5;
 		dz = l1.getBlockZ()+0.5;
@@ -31,12 +31,13 @@ public class LineCreation extends AreaCreation {
 		if((dropmode && dist>2000) || (!dropmode && dist>200000)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
-			return;
+			return false;
 		}
 		
 		sx = ((double)vx)/dist;
 		sy = ((double)vy)/dist;
 		sz = ((double)vz)/dist;
+		return true;
 	}
 	
 	@Override

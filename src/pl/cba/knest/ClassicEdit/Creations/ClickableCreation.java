@@ -13,8 +13,8 @@ public abstract class ClickableCreation extends FilledCreation {
 
 
 	public abstract void click(Location location);
-	public void init(){
-		
+	public boolean init(){
+		return true;
 	}
 	public void setDirectionSelector(DirectionSelector s) {
 		this.directionSelector = s;

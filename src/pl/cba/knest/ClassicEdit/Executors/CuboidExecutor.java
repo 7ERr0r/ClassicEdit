@@ -22,7 +22,7 @@ public class CuboidExecutor extends AreaExecutor {
 		c.setFilling(f);
 		c.setDashed(dashed);
 		c.setLoop(loop);
-		c.setBr(br);
+		c.setForceBreak(br);
 		c.setDropmode(dropmode);
 		c.setMask(mask);
 		c.setAreaSelector(new HandAreaSelector());

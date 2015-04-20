@@ -23,24 +23,25 @@ public class CuboidCreation extends AreaCreation {
 	}
 	
 	@Override
-	public void init(){
-		super.init();
+	public boolean init(){
+		if(!super.init()) return false;
 		if(Math.max(width, height)>ClassicEdit.getLimit(session.getPlayer(), dropmode)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
-			return;
+			return false;
 		}
 		currentx = minx;
-		currenty = up?miny:maxy;
+		currenty = goup?miny:maxy;
 		currentz = minz;
+		return true;
 	}
 	@Override
 	public boolean next(){
 		currentx++;
 		if(currentx>maxx){ 
-			currentx = minx; if(up) currenty++; else currenty--; 
-			if((up && currenty>maxy) || (!up && currenty<miny)){ 
-				if(up) currenty = miny; else currenty = maxy; 
+			currentx = minx; if(goup) currenty++; else currenty--; 
+			if((goup && currenty>maxy) || (!goup && currenty<miny)){ 
+				if(goup) currenty = miny; else currenty = maxy; 
 				currentz++;
 				if(currentz>maxz){
 					return false;

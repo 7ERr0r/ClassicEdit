@@ -41,12 +41,12 @@ public class MazeCreation extends AreaCreation{
 	}
 	
 	@Override
-	public void init(){
-		super.init();
+	public boolean init(){
+		if(!super.init()) return false;
 		if(Math.max(width, height)>ClassicEdit.getLimit(session.getPlayer(), dropmode)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
-			return;
+			return false;
 		}
 		mazew = (width/2)+1;
 		mazeh = (length/2)+1;
@@ -60,6 +60,7 @@ public class MazeCreation extends AreaCreation{
 			q.add(w.getBlockAt(x,miny+y,z));
 		}
 		next();
+		return true;
 	}
 	
 	private void queueBlocks(int mazex, int mazez,int dir){

@@ -26,8 +26,13 @@ import pl.cba.knest.ClassicEdit.Selectors.AreaSelector;
 public abstract class AreaCreation extends FilledCreation {
 	
 
-	boolean started = false;
+
 	boolean dropmode = false;	
+	boolean loop = false;
+	boolean goup = true;
+	boolean forcebreak = false;
+	
+	
 	Location l1;
 	Location l2;
 	World w;
@@ -49,9 +54,7 @@ public abstract class AreaCreation extends FilledCreation {
 	
 	int pertick = 1;
 	
-	boolean loop = false;
-	boolean up = true;
-	boolean br = false;
+
 	Mask mask;
 	private AreaSelector areaSelector;
 	
@@ -74,11 +77,11 @@ public abstract class AreaCreation extends FilledCreation {
 	public void setLoop(boolean loop){
 		this.loop = loop;
 	}
-	public boolean isBr(){
-		return br;
+	public boolean isForceBreak(){
+		return forcebreak;
 	}
-	public void setBr(boolean br){
-		this.br = br;
+	public void setForceBreak(boolean br){
+		this.forcebreak = br;
 	}
 	public void setMask(Mask mask){
 		this.mask = mask;
@@ -150,7 +153,7 @@ public abstract class AreaCreation extends FilledCreation {
 
 
 	public void setDropmode(boolean dropmode){
-		if(!started) this.dropmode = dropmode;
+		this.dropmode = dropmode;
 	}
 
 	
@@ -164,7 +167,7 @@ public abstract class AreaCreation extends FilledCreation {
 	public boolean place(AtomicInteger amount, Player p){
 		Block b = w.getBlockAt(currentx,currenty,currentz);
 		Material t = b.getType();
-		if(!br && t==f.getMaterial() && b.getData()==f.getData()) return true;
+		if(!forcebreak && t==f.getMaterial() && b.getData()==f.getData()) return true;
 		boolean place = true;
 		
 		if(dropmode){
@@ -236,11 +239,11 @@ public abstract class AreaCreation extends FilledCreation {
 	
 	
 	@Override
-	public void init(){
+	public boolean init(){
 		l1 = areaSelector.getLocationMin();
-		if(l1 == null) return;
+		if(l1 == null) return false;
 		l2 = areaSelector.getLocationMax();
-		if(l2 == null) return;
+		if(l2 == null) return false;
 		w = l1.getWorld();
 		maxx = Math.max(l1.getBlockX(), l2.getBlockX());
 		maxy = Math.max(l1.getBlockY(), l2.getBlockY());
@@ -252,10 +255,10 @@ public abstract class AreaCreation extends FilledCreation {
 		height = maxy-miny+1;
 		length = maxz-minz+1;
 
-		up = f.getMaterial()!=Material.AIR;
+		goup = f.getMaterial()!=Material.AIR;
 
 		pertick = dropmode?ClassicEdit.droppertick:ClassicEdit.pertick;
-		initialised = true;
+		return true;
 	}
 
 	int getAmount(Material m, short d, PlayerInventory inv){

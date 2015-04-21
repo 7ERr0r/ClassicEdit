@@ -1,29 +1,22 @@
 package pl.cba.knest.ClassicEdit.creation;
 
-import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.bukkit.ChatColor;
-import org.bukkit.Effect;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Mask;
 import pl.cba.knest.ClassicEdit.Session;
 import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 
-public abstract class AreaCreation extends FilledCreation {
+public abstract class AreaCreation extends Creation {
 	
 
 
@@ -53,7 +46,9 @@ public abstract class AreaCreation extends FilledCreation {
 	int height;
 	
 	int pertick = 1;
-	
+	int ticksDone = 0;
+	int placed = 0;
+	long sum = 0;
 
 	Mask mask;
 	private AreaSelector areaSelector;
@@ -66,7 +61,7 @@ public abstract class AreaCreation extends FilledCreation {
 		return true;
 	}
 	public boolean isInside(int x, int y, int z){
-		return x>minx && y>miny && z>minz && x<maxx && y<maxy && z<maxz;
+		return x>=minx-1 && y>=miny-1 && z>=minz-1 && x<=maxx+1 && y<=maxy+1 && z<=maxz+1;
 	}
 	public boolean isInside(Block b){
 		return isInside(b.getX(), b.getY(), b.getZ());
@@ -92,30 +87,17 @@ public abstract class AreaCreation extends FilledCreation {
 		super.stop();
 	}
 	
+	public abstract boolean place();
+	
 	@Override
 	public void run() {
-		Player p = null;
-		AtomicInteger amount = new AtomicInteger(0);
-		
-		int items = 0;
-		if(dropmode){
-			p = session.getPlayer();
-			if(p==null){
-				pause();
-				return;
-			}
-			if(p!=null && p.getGameMode()==GameMode.CREATIVE){
-				amount.set(1000000);
-			}else if(f.getMaterial()!=Material.AIR){
-				amount.set(getAmount(f.getMaterial(), f.getData(), p.getInventory()));
-				items = amount.get();
-			}
-		}
+
+
 		ticksDone = 0;
 		for(int i = 0; i<2048; i++){
 			
 			if(canPlace(currentx,currenty,currentz)){
-				if(!place(amount, p)){
+				if(!place()){
 					break;
 				}
 			}
@@ -141,9 +123,7 @@ public abstract class AreaCreation extends FilledCreation {
 			}
 			if(ticksDone>=pertick) break;
 		}
-		if(dropmode && p!=null && p.getGameMode()==GameMode.CREATIVE){
-			setAmount(f.getMaterial(), f.getData(), p.getInventory(), items-amount.get());
-		}
+
 	}
 
 	@Override
@@ -163,76 +143,7 @@ public abstract class AreaCreation extends FilledCreation {
 		pause(); 
 	}
 	
-	@SuppressWarnings("deprecation")
-	public boolean place(AtomicInteger amount, Player p){
-		Block b = w.getBlockAt(currentx,currenty,currentz);
-		Material t = b.getType();
-		if(!forcebreak && t==f.getMaterial() && b.getData()==f.getData()) return true;
-		boolean place = true;
-		
-		if(dropmode){
-			if(t==Material.BEDROCK || t==Material.ENDER_PORTAL || t==Material.ENDER_PORTAL_FRAME)
-				return true;
-			
-			if(t!=Material.AIR){
-				BlockBreakEvent be = new BlockBreakEvent(b, p);
-				ClassicEdit.callEventWithoutNCP(be);
 
-				if(!be.isCancelled()){
-					for(ItemStack drop : b.getDrops()){
-						HashMap<Integer, ItemStack> out = p.getInventory().addItem(drop);
-						for(ItemStack is : out.values()){
-							w.dropItemNaturally(b.getLocation(), is);
-						}
-					}
-					b.setType(Material.AIR);
-				}else{
-					if(getFilling().getMaterial()==Material.AIR){
-						place = false;
-						if(b.getType()==Material.AIR){
-							p.playEffect(b.getLocation(), Effect.STEP_SOUND, t);
-							ticksDone++;
-							placed++;
-						}else{
-							cancelled();
-							return false;
-						}
-					}
-				}
-			}
-			
-			if(getFilling().getMaterial()!=Material.AIR){
-				ItemStack is = new ItemStack(getFilling().getMaterial(), amount.get()>64?64:amount.get(), getFilling().getData());
-				
-				BlockPlaceEvent bp = new BlockPlaceEvent(b, b.getState(), b.getRelative(BlockFace.DOWN), is, p, true);
-				ClassicEdit.callEventWithoutNCP(bp);
-				if(!bp.isCancelled()){
-					if(amount.decrementAndGet() < 0){
-						msgPlayer(ChatColor.RED+"You do not have required materials ("+f+")");
-						msgPlayer(ChatColor.YELLOW+"Supply them and type /p or /p stop");
-						pause(); 
-						return false;
-					}
-				}else{
-					cancelled();
-					return false;
-				}
-			}
-		}
-		
-		if(place){
-			if(dropmode){
-				w.playEffect(b.getLocation(), Effect.STEP_SOUND, t);
-			}
-			b.setType(f.getMaterial());
-			b.setData(f.getData());
-			placed++;
-			ticksDone++;
-
-		}
-
-		return true;
-	}
 	
 
 	
@@ -255,7 +166,7 @@ public abstract class AreaCreation extends FilledCreation {
 		height = maxy-miny+1;
 		length = maxz-minz+1;
 
-		goup = f.getMaterial()!=Material.AIR;
+
 
 		pertick = dropmode?ClassicEdit.droppertick:ClassicEdit.pertick;
 		return true;
@@ -326,9 +237,13 @@ public abstract class AreaCreation extends FilledCreation {
 	}
 
 	@Override
-	public void onBlockPhysics(BlockPhysicsEvent e){
-		if(e.isCancelled()) return;
-		if(isInside(e.getBlock())) e.setCancelled(true);
+	public void onBlockPhysics(BlockEvent e){
+		//if(e.isCancelled()) return;
+		if(isInside(e.getBlock())){
+			if(e instanceof Cancellable){
+			((Cancellable) e).setCancelled(true);
+			}
+		}
 	}
 	public void setAreaSelector(AreaSelector s) {
 		this.areaSelector = s;

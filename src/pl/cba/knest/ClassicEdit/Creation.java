@@ -5,7 +5,7 @@ import java.util.Queue;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public abstract class Creation implements Runnable {
@@ -18,7 +18,7 @@ public abstract class Creation implements Runnable {
 		selectors = new LinkedList<Selector>();
 	}
 	public abstract String getName();
-	public abstract void onBlockPhysics(BlockPhysicsEvent e);
+	public abstract void onBlockPhysics(BlockEvent e);
 	public abstract boolean init();
 	public boolean isInitialised(){
 		return initialised;
@@ -67,6 +67,7 @@ public abstract class Creation implements Runnable {
 
 	public void stop(){
 		session.removeCreation(this);
+		if(session.getPending()==this) session.setPending(null);
 		msgEnd();
 	}
 

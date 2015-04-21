@@ -14,11 +14,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
-import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.util.Vector;
 
+import pl.cba.knest.ClassicEdit.Filling;
 
-public class GunCreation extends ClickableCreation {
+
+public class GunCreation extends ClickableCreation implements FilledCreation {
 	private class Bolt{
 		private final Location l;
 		private final Vector v;
@@ -46,14 +48,14 @@ public class GunCreation extends ClickableCreation {
 			
 			if(b == null) return false;
 			if(ticks<end-len){
-				if(b.getType()!=Material.AIR && b.getType()!=f.getMaterial()){
+				if(b.getType()!=Material.AIR && b.getType()!=filling.getMaterial()){
 					end = ticks+len;
 					colide(b);
 				}else{
 					if(end>ticks){
 						l.add(v);
 						if(!last.contains(b)){
-							place(b, f.getMaterial(), f.getData());
+							place(b, filling.getMaterial(), filling.getData());
 							last.add(b);
 						}
 					}
@@ -96,6 +98,7 @@ public class GunCreation extends ClickableCreation {
 	private boolean laser = false;
 	private boolean gravity = false;
 	private boolean real = false;
+	private Filling filling;
 	
 	@Override
 	public void click(Location l){
@@ -141,7 +144,7 @@ public class GunCreation extends ClickableCreation {
 	}
 
 	@Override
-	public void onBlockPhysics(BlockPhysicsEvent e){
+	public void onBlockPhysics(BlockEvent e){
 		
 	}
 	public boolean isExplode() {
@@ -184,6 +187,15 @@ public class GunCreation extends ClickableCreation {
 	public boolean isUseless(){
 		return true;
 	}
+	@Override
+	public Filling getFilling() {
+		return filling;
+	}
+	@Override
+	public void setFilling(Filling f) {
+		this.filling = f;
+	}
+
 
 
 

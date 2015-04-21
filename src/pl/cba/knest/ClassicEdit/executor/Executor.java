@@ -12,6 +12,7 @@ import pl.cba.knest.ClassicEdit.ExecutorException;
 public class Executor{
 	CommandSender s;
 	List<String> params;
+	String label;
 	public Executor(){
 
 	}
@@ -21,9 +22,10 @@ public class Executor{
 	}
 	
 
-	public void init(CommandSender s, List<String> params){
+	public void init(CommandSender s, List<String> params, String label){
 		this.s = s;
 		this.params = params;
+		this.label = label;
 	}
 	public void execute() throws ExecutorException {
 		Iterator<String> i = params.iterator();

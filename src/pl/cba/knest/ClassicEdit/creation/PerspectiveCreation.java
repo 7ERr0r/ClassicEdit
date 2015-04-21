@@ -3,13 +3,16 @@ package pl.cba.knest.ClassicEdit.creation;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+import pl.cba.knest.ClassicEdit.selector.AreaSelector;
+
 
 public class PerspectiveCreation extends CuboidCreation {
-	Location per;
-	boolean[][] data;
-	int dw = 57;
-	int dh = 7;
-	double s = 1;
+	protected Location per;
+	protected boolean[][] data;
+	protected int dw = 57;
+	protected int dh = 7;
+	protected double s = 1;
+	protected AreaSelector sourceSelector;
 	
 	public PerspectiveCreation() {
 		

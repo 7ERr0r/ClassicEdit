@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import pl.cba.knest.ClassicEdit.creation.CuboidCreation;
@@ -41,7 +41,7 @@ public class Manager extends BukkitRunnable {
 			s.run();
 		}
 	}
-	public void callPhysicsEvent(BlockPhysicsEvent e) {
+	public void callPhysicsEvent(BlockEvent e) {
 		for(Session s : sessions.values()){
 			s.callPhysicsEvent(e);
 		}

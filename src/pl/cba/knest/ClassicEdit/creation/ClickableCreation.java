@@ -2,11 +2,12 @@ package pl.cba.knest.ClassicEdit.creation;
 
 import org.bukkit.Location;
 
+import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Session;
 import pl.cba.knest.ClassicEdit.selector.DirectionSelector;
 
 
-public abstract class ClickableCreation extends FilledCreation {
+public abstract class ClickableCreation extends Creation {
 
 	DirectionSelector directionSelector;
 	

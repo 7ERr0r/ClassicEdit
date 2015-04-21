@@ -7,7 +7,7 @@ import org.bukkit.ChatColor;
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 
 
-public class CuboidCreation extends AreaCreation {
+public class CuboidCreation extends PlaceableCreation {
 	
 	public boolean dashed = false;
 
@@ -26,7 +26,7 @@ public class CuboidCreation extends AreaCreation {
 	public boolean init(){
 		if(!super.init()) return false;
 		if(Math.max(width, height)>ClassicEdit.getLimit(session.getPlayer(), dropmode)){
-			msgPlayer(ChatColor.RED+"Too many blocks to place");
+			msgPlayer(ChatColor.RED+"Too many blocks");
 			stop();
 			return false;
 		}
@@ -40,7 +40,7 @@ public class CuboidCreation extends AreaCreation {
 		currentx++;
 		if(currentx>maxx){ 
 			currentx = minx; if(goup) currenty++; else currenty--; 
-			if((goup && currenty>maxy) || (!goup && currenty<miny)){ 
+			if(goup?currenty>maxy:currenty<miny){ 
 				if(goup) currenty = miny; else currenty = maxy; 
 				currentz++;
 				if(currentz>maxz){

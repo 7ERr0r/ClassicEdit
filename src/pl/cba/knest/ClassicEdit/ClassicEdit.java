@@ -21,6 +21,10 @@ import org.mcstats.Metrics;
 
 
 
+
+
+import com.sk89q.worldedit.WorldEdit;
+
 import pl.cba.knest.ClassicEdit.executor.BlockExecutor;
 import pl.cba.knest.ClassicEdit.executor.ClassicEditExecutor;
 import pl.cba.knest.ClassicEdit.executor.CuboidExecutor;
@@ -84,7 +88,7 @@ public class ClassicEdit extends JavaPlugin{
 		List<String> params = new ArrayList<String>(Arrays.asList(args));
 		try{
 			try{
-				execute(s, params, cmd);
+				execute(s, params, cmd, label);
 			} catch (ExecutorException e) {
 				e.send(s);
 			}
@@ -95,7 +99,7 @@ public class ClassicEdit extends JavaPlugin{
 
 		return true;
 	}
-	private void execute(CommandSender s, List<String> params, Command cmd) throws ExecutorException {
+	private void execute(CommandSender s, List<String> params, Command cmd, String label) throws ExecutorException {
 		
 		String name = cmd.getName();
 		Executor e = null;
@@ -126,7 +130,7 @@ public class ClassicEdit extends JavaPlugin{
 			e = new BlockExecutor();
 		}
 		if(e == null) throw new ExecutorException(ChatColor.RED+"Bad command");
-		e.init(s, params);
+		e.init(s, params, label);
 		e.execute();
 		
 	}
@@ -191,9 +195,19 @@ public class ClassicEdit extends JavaPlugin{
 		}
 	}
 
-	public static ClassicEdit getInstance() {
+	public static ClassicEdit getInstance(){
 		return plugin;
 		
+	}
+
+	public static Object getWorldEdit(){
+		try{
+			Class.forName("com.sk89q.worldedit.WorldEdit");
+			return WorldEdit.getInstance();
+		}catch(ClassNotFoundException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 

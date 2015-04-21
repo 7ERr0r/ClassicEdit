@@ -2,7 +2,7 @@ package pl.cba.knest.ClassicEdit.creation;
 
 import org.bukkit.ChatColor;
 
-public class LineCreation extends AreaCreation {
+public class LineCreation extends PlaceableCreation {
 	double dx;
 	double dy;
 	double dz;
@@ -62,5 +62,6 @@ public class LineCreation extends AreaCreation {
 		super.run();
 		
 	}
+
 
 }

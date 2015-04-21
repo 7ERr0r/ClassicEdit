@@ -7,9 +7,11 @@ import java.util.Iterator;
 
 
 
+
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.creation.CuboidCreation;
 import pl.cba.knest.ClassicEdit.selector.HandAreaSelector;
+import pl.cba.knest.ClassicEdit.selector.WEAreaSelector;
 
 
 public class CuboidExecutor extends AreaExecutor {
@@ -26,7 +28,7 @@ public class CuboidExecutor extends AreaExecutor {
 		c.setForceBreak(br);
 		c.setDropmode(dropmode);
 		c.setMask(mask);
-		c.setAreaSelector(new HandAreaSelector());
+		c.setAreaSelector(worldedit?new WEAreaSelector():new HandAreaSelector());
 		c.attach(getSession());
 	}
 	@Override

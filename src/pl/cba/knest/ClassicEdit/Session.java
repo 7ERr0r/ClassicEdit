@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Session implements Runnable {
@@ -15,6 +15,7 @@ public class Session implements Runnable {
 	private Queue<Creation> queue;
 	private Creation pending;
 	private boolean paused;
+	private Clipboard clipboard;
 	
 	
 	public Session(UUID uuid){
@@ -22,7 +23,7 @@ public class Session implements Runnable {
 		queue = new LinkedList<Creation>();
 	}
 	
-	public void callPhysicsEvent(BlockPhysicsEvent e){
+	public void callPhysicsEvent(BlockEvent e){
 		Creation c = getActive();
 		if(c != null){
 			c.onBlockPhysics(e);
@@ -165,6 +166,14 @@ public class Session implements Runnable {
 				break;
 			}
 		}
+	}
+
+	public Clipboard getClipboard() {
+		return clipboard;
+	}
+
+	public void setClipboard(Clipboard clipboard) {
+		this.clipboard = clipboard;
 	}
 
 

@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
 import pl.cba.knest.ClassicEdit.creation.AreaCreation;
+import pl.cba.knest.ClassicEdit.creation.FilledCreation;
 
 public class HandAreaSelector extends AreaSelector {
 	
@@ -48,16 +49,18 @@ public class HandAreaSelector extends AreaSelector {
 			e.setCancelled(true);
 		}else if(stage == 1){
 			l2 = b.getLocation();
-			
-			if(c.getFilling() == null){
-				
-				if(p != null){
-					ItemStack is = p.getItemInHand();
+			if(c instanceof FilledCreation){
+				FilledCreation fc = (FilledCreation) c;
+				if(fc.getFilling() == null){
 					
-					if(is != null && is.getType().isBlock() && is.getType()!=Material.AIR){
-						c.setFilling(new Filling(is.getType(), (byte) is.getDurability()));
-					}else{
-						c.setFilling(new Filling(Material.AIR, (byte) 0));
+					if(p != null){
+						ItemStack is = p.getItemInHand();
+						
+						if(is != null && is.getType().isBlock() && is.getType()!=Material.AIR){
+							fc.setFilling(new Filling(is.getType(), (byte) is.getDurability()));
+						}else{
+							fc.setFilling(new Filling(Material.AIR, (byte) 0));
+						}
 					}
 				}
 			}
@@ -89,6 +92,9 @@ public class HandAreaSelector extends AreaSelector {
 	public Location getLocationMax(){
 		return l2;
 	}
+
+
+
 	
 
 }

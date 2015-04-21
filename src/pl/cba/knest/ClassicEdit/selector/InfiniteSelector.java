@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
 import pl.cba.knest.ClassicEdit.creation.ClickableCreation;
+import pl.cba.knest.ClassicEdit.creation.FilledCreation;
 
 public class InfiniteSelector extends DirectionSelector {
 	private ClickableCreation c;
@@ -44,14 +45,18 @@ public class InfiniteSelector extends DirectionSelector {
 			ItemStack is = p.getItemInHand();
 			
 			
-			
-			if(is != null && is.getType().isBlock()){
-				c.setFilling(new Filling(is.getType(), (byte) is.getDurability()));
-			}else{
-				c.setFilling(new Filling(Material.AIR, (byte) 0));
-			}
-			if(c.getFilling() == null || c.getFilling().getMaterial()==Material.AIR){
-				msgPlayer(ChatColor.RED+"Material cannot be air");
+			if(c instanceof FilledCreation){
+				FilledCreation fc = (FilledCreation) c;
+				if(is != null && is.getType().isBlock()){
+					fc.setFilling(new Filling(is.getType(), (byte) is.getDurability()));
+				}else{
+					fc.setFilling(new Filling(Material.AIR, (byte) 0));
+				}
+				if(fc.getFilling() == null || fc.getFilling().getMaterial()==Material.AIR){
+					msgPlayer(ChatColor.RED+"Material cannot be air");
+				}else{
+					c.click(p.getLocation());
+				}
 			}else{
 				c.click(p.getLocation());
 			}

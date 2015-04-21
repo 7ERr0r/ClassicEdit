@@ -13,7 +13,7 @@ import pl.cba.knest.ClassicEdit.ClassicEdit;
 
 
 
-public class MazeCreation extends AreaCreation{
+public class MazeCreation extends PlaceableCreation{
 	
 	Random r = new Random();
 	int mazex = 1;

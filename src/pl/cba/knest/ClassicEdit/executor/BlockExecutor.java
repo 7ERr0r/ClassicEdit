@@ -10,7 +10,7 @@ import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.creation.FilledCreation;
+import pl.cba.knest.ClassicEdit.creation.PlaceableCreation;
 
 
 public class BlockExecutor extends PlayerCmdExecutor {
@@ -20,7 +20,7 @@ public class BlockExecutor extends PlayerCmdExecutor {
 		if(c == null){
 			throw new ExecutorException(ChatColor.RED+"You don't have any cuboid running");
 		}
-		if(c instanceof FilledCreation){
+		if(c instanceof PlaceableCreation){
 			Filling f;
 			if(params.size()>0){
 				f = Filling.parse(params.get(0));
@@ -33,7 +33,7 @@ public class BlockExecutor extends PlayerCmdExecutor {
 				}
 				
 			}
-			FilledCreation fc = (FilledCreation) c;
+			PlaceableCreation fc = (PlaceableCreation) c;
 			fc.setFilling(f);
 			msgPlayer(ChatColor.YELLOW+"Filling set to "+f.toString());
 		}else{

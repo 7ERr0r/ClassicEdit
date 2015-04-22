@@ -5,10 +5,14 @@ package pl.cba.knest.ClassicEdit.creation;
 import org.bukkit.ChatColor;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 
 
 public class CuboidCreation extends PlaceableCreation {
 	
+	public CuboidCreation(AreaSelector as) {
+		super(as);
+	}
 	public boolean dashed = false;
 
 	
@@ -35,21 +39,7 @@ public class CuboidCreation extends PlaceableCreation {
 		currentz = minz;
 		return true;
 	}
-	@Override
-	public boolean next(){
-		currentx++;
-		if(currentx>maxx){ 
-			currentx = minx; if(goup) currenty++; else currenty--; 
-			if(goup?currenty>maxy:currenty<miny){ 
-				if(goup) currenty = miny; else currenty = maxy; 
-				currentz++;
-				if(currentz>maxz){
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+
 	@Override
 	public String getName(){
 		return "cuboid";
@@ -57,6 +47,8 @@ public class CuboidCreation extends PlaceableCreation {
 	public void setDashed(boolean dashed){
 		this.dashed = dashed;
 	}
+
+
 
 
 }

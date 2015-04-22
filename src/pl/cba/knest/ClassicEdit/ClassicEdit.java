@@ -20,11 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
 
-
-
-
-import com.sk89q.worldedit.WorldEdit;
-
 import pl.cba.knest.ClassicEdit.executor.BlockExecutor;
 import pl.cba.knest.ClassicEdit.executor.ClassicEditExecutor;
 import pl.cba.knest.ClassicEdit.executor.CuboidExecutor;
@@ -35,7 +30,7 @@ import pl.cba.knest.ClassicEdit.executor.MazeExecutor;
 import pl.cba.knest.ClassicEdit.executor.PauseExecutor;
 import pl.cba.knest.ClassicEdit.executor.PerspectiveExecutor;
 import pl.cba.knest.ClassicEdit.executor.SpheroidExecutor;
-import pl.cba.knest.ClassicEdit.listener.ClickListener;
+import pl.cba.knest.ClassicEdit.listener.PlayerListener;
 import pl.cba.knest.ClassicEdit.listener.PhysicsListener;
 import fr.neatmonster.nocheatplus.NoCheatPlus;
 
@@ -55,7 +50,7 @@ public class ClassicEdit extends JavaPlugin{
 	public void onEnable(){
 		pertick = 256;
 		droppertick = 1;
-		Bukkit.getPluginManager().registerEvents(new ClickListener(), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PhysicsListener(), this);
 		cm = new Manager();
 		cm.runTaskTimer(this, 10L, 1L);
@@ -200,14 +195,13 @@ public class ClassicEdit extends JavaPlugin{
 		
 	}
 
-	public static Object getWorldEdit(){
+	public static boolean isWorldEdit(){
 		try{
 			Class.forName("com.sk89q.worldedit.WorldEdit");
-			return WorldEdit.getInstance();
+			return true;
 		}catch(ClassNotFoundException e){
-			e.printStackTrace();
+			return false;
 		}
-		return null;
 	}
 
 

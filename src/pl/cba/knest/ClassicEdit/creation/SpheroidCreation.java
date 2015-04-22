@@ -1,9 +1,14 @@
 package pl.cba.knest.ClassicEdit.creation;
 
+import pl.cba.knest.ClassicEdit.selector.AreaSelector;
+
 
 public class SpheroidCreation extends CuboidCreation {
 
 
+	public SpheroidCreation(AreaSelector as) {
+		super(as);
+	}
 	public boolean canPlace(int x,int y,int z){
 		if(!super.canPlace(x, y, z)) return false;
 		int rx = x-minx;

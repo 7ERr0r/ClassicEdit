@@ -1,4 +1,4 @@
-package pl.cba.knest.ClassicEdit;
+package pl.cba.knest.ClassicEdit.creation;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -8,7 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public abstract class Creation implements Runnable {
+import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.Session;
+import pl.cba.knest.ClassicEdit.selector.Selector;
+
+public abstract class Creation implements ICreation, Runnable {
 	protected Session session;
 	protected boolean started;
 	protected boolean initialised;
@@ -110,7 +114,9 @@ public abstract class Creation implements Runnable {
 	public void startSelector(){
 		Selector s = selectors.peek();
 		if(s != null){
-			s.start();
+			if(s.start(this)){
+				nextSelector();
+			}
 		}
 	}
 	

@@ -18,9 +18,14 @@ import org.bukkit.event.block.BlockEvent;
 import org.bukkit.util.Vector;
 
 import pl.cba.knest.ClassicEdit.Filling;
+import pl.cba.knest.ClassicEdit.selector.DirectionSelector;
 
 
-public class GunCreation extends ClickableCreation implements FilledCreation {
+public class GunCreation extends DirectionalCreation implements IFilledCreation {
+	
+	public GunCreation(DirectionSelector ds) {
+		super(ds);
+	}
 	private class Bolt{
 		private final Location l;
 		private final Vector v;
@@ -101,7 +106,8 @@ public class GunCreation extends ClickableCreation implements FilledCreation {
 	private Filling filling;
 	
 	@Override
-	public void click(Location l){
+	public void onClick(){
+		Location l = getPlayer().getLocation();
 		Vector v = l.getDirection();
 		l.add(0, 1, 0);
 		l.add(v);

@@ -3,9 +3,9 @@ package pl.cba.knest.ClassicEdit.executor;
 
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
-import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Session;
+import pl.cba.knest.ClassicEdit.creation.Creation;
 
 
 public class ClassicEditExecutor extends PlayerCmdExecutor {

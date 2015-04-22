@@ -33,6 +33,11 @@ public class CreationExecutor extends PlayerCmdExecutor {
 			throw new ExecutorException(ChatColor.RED+"Invalid block name or id");
 		}
 		worldedit = label.charAt(0) == '/';
+		if(worldedit){
+			if(!ClassicEdit.isWorldEdit()){
+				throw new ExecutorException(ChatColor.RED+"WorldEdit not found");
+			}
+		}
 		Session sess = ClassicEdit.getCreationManager().getSession(player);
 		sess.skipUseless();
 		

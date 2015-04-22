@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import pl.cba.knest.ClassicEdit.creation.Creation;
 import pl.cba.knest.ClassicEdit.creation.CuboidCreation;
 
 

@@ -19,16 +19,17 @@ public class CuboidExecutor extends AreaExecutor {
 	boolean dashed = false;
 	boolean loop = false;
 	boolean br = false;
+	boolean nophysics = false;
 	public void execute() throws ExecutorException{
 		super.execute();
-		CuboidCreation c = new CuboidCreation();
+		CuboidCreation c = new CuboidCreation(worldedit?new WEAreaSelector():new HandAreaSelector());
 		c.setFilling(f);
 		c.setDashed(dashed);
 		c.setLoop(loop);
 		c.setForceBreak(br);
 		c.setDropmode(dropmode);
+		c.setNophysics(nophysics);
 		c.setMask(mask);
-		c.setAreaSelector(worldedit?new WEAreaSelector():new HandAreaSelector());
 		c.attach(getSession());
 	}
 	@Override
@@ -42,6 +43,9 @@ public class CuboidExecutor extends AreaExecutor {
 		return;
 		case 'b':
 			br = true;
+		return;
+		case 'p':
+			nophysics = true;
 		return;
 		}
 		super.flag(c, i);

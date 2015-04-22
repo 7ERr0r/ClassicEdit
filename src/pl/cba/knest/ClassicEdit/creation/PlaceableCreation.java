@@ -16,8 +16,13 @@ import org.bukkit.inventory.ItemStack;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Filling;
+import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 
-public abstract class PlaceableCreation extends AreaCreation implements FilledCreation {
+public abstract class PlaceableCreation extends AreaCreation implements IFilledCreation {
+	
+	public PlaceableCreation(AreaSelector as) {
+		super(as);
+	}
 	Filling f = new Filling(Material.AIR, (byte) 0);
 	AtomicInteger amount;
 
@@ -115,7 +120,7 @@ public abstract class PlaceableCreation extends AreaCreation implements FilledCr
 			}
 		}
 		super.run();
-		if(dropmode && p!=null && p.getGameMode()==GameMode.CREATIVE){
+		if(dropmode && p!=null && p.getGameMode()!=GameMode.CREATIVE){
 			setAmount(f.getMaterial(), f.getData(), p.getInventory(), items-amount.get());
 		}
 	}
@@ -133,6 +138,7 @@ public abstract class PlaceableCreation extends AreaCreation implements FilledCr
 	}
 	
 	public void msgEnd(){
+		if(!initialised) return;
 		if(getFilling()==null){
 			msgPlayer(ChatColor.YELLOW+"Created "+sum+" block"+(sum==1?"":"s")+" (filling=null)");
 		}else{

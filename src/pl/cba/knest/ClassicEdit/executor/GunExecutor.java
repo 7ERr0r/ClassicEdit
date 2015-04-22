@@ -10,8 +10,7 @@ import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Session;
 import pl.cba.knest.ClassicEdit.creation.GunCreation;
-import pl.cba.knest.ClassicEdit.selector.DirectionSelector;
-import pl.cba.knest.ClassicEdit.selector.InfiniteSelector;
+import pl.cba.knest.ClassicEdit.selector.InfiniteDirectionSelector;
 
 public class GunExecutor extends CreationExecutor {
 
@@ -27,9 +26,7 @@ public class GunExecutor extends CreationExecutor {
 			msgPlayer(ChatColor.RED+"You have an active "+sess.getActive()+" running");
 			return;
 		}
-		GunCreation c = new GunCreation();
-		DirectionSelector s = new InfiniteSelector();
-		c.setDirectionSelector(s);
+		GunCreation c = new GunCreation(new InfiniteDirectionSelector());
 		c.setExplode(explode);
 		c.setLaser(laser);
 		c.setGravity(gravity);

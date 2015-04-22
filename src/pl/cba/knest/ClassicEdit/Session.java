@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import pl.cba.knest.ClassicEdit.creation.Creation;
+
 public class Session implements Runnable {
 	private final UUID uuid;
 	private Player player;
@@ -174,6 +176,10 @@ public class Session implements Runnable {
 
 	public void setClipboard(Clipboard clipboard) {
 		this.clipboard = clipboard;
+	}
+
+	public void setPlayer(Player p) {
+		this.player = p;
 	}
 
 

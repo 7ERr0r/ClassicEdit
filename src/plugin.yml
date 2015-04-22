@@ -25,7 +25,7 @@ commands:
   persp:
     description: Creates a perspective creation.
     usage: /perspective <block>
-    aliases: [perspective]
+    aliases: [perspective,/persp,/perspective]
   line:
     description: Creates line.
     usage: /line <block>

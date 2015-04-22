@@ -10,11 +10,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 
 
 
 public class MazeCreation extends PlaceableCreation{
 	
+	public MazeCreation(AreaSelector as) {
+		super(as);
+	}
 	Random r = new Random();
 	int mazex = 1;
 	int mazez = 1;

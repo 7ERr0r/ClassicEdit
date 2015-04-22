@@ -5,8 +5,8 @@ package pl.cba.knest.ClassicEdit.executor;
 import org.bukkit.ChatColor;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
-import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.ExecutorException;
+import pl.cba.knest.ClassicEdit.creation.Creation;
 
 
 public class PauseExecutor extends PlayerCmdExecutor {

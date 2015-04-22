@@ -2,39 +2,32 @@ package pl.cba.knest.ClassicEdit.selector;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
-import pl.cba.knest.ClassicEdit.Creation;
-import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.creation.AreaCreation;
-import pl.cba.knest.ClassicEdit.creation.FilledCreation;
+import pl.cba.knest.ClassicEdit.creation.ICreation;
 
 public class HandAreaSelector extends AreaSelector {
 	
-	private AreaCreation c;
+	private ICreation creation;
 	private int stage = 0;
 	private Location l1;
 	private Location l2;
 
 
 	public Player getPlayer(){
-		return c.getPlayer();
+		return creation.getPlayer();
 	}
 
 
 
-	public Creation getCreation(){
-		return c;
+	public ICreation getCreation(){
+		return creation;
 	}
 
-	public void setCreation(AreaCreation c){
-		this.c = c;
-	}
+
 
 	@Override
 	public boolean handleInteract(PlayerInteractEvent e){
@@ -43,41 +36,29 @@ public class HandAreaSelector extends AreaSelector {
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
 			b = b.getRelative(e.getBlockFace());
 		}
-		Player p = getPlayer();
 		if(stage == 0){
 			l1 = b.getLocation();
 			e.setCancelled(true);
 		}else if(stage == 1){
 			l2 = b.getLocation();
-			if(c instanceof FilledCreation){
-				FilledCreation fc = (FilledCreation) c;
-				if(fc.getFilling() == null){
-					
-					if(p != null){
-						ItemStack is = p.getItemInHand();
-						
-						if(is != null && is.getType().isBlock() && is.getType()!=Material.AIR){
-							fc.setFilling(new Filling(is.getType(), (byte) is.getDurability()));
-						}else{
-							fc.setFilling(new Filling(Material.AIR, (byte) 0));
-						}
-					}
-				}
-			}
+			setFillingAuto();
 			e.setCancelled(true);
 		}else{
 			// done
 		}
 		stage++;
-		return stage > 2;
+		return stage > 1;
 	}
-	public void start(){
+	public boolean start(ICreation c){
+		this.creation = c;
 		msgPlayer(ChatColor.YELLOW+"Click two blocks to determinate the edges");
+		return false;
 	}
 
 
 	@Override
 	public void end(){
+		msgPlayer(ChatColor.YELLOW+"Selected the edges");
 		//info();
 	}
 

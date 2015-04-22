@@ -11,20 +11,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
-import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Mask;
 import pl.cba.knest.ClassicEdit.Session;
 import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 
 public abstract class AreaCreation extends Creation {
 	
-
+	public AreaCreation(AreaSelector as){
+		super();
+		selectors.add(as); 
+		areaSelector = as;
+	}
 
 	boolean dropmode = false;	
 	boolean loop = false;
 	boolean goup = true;
 	boolean forcebreak = false;
-	
+	boolean nophysics = false;
 	
 	Location l1;
 	Location l2;
@@ -52,6 +55,7 @@ public abstract class AreaCreation extends Creation {
 
 	Mask mask;
 	private AreaSelector areaSelector;
+
 	
 	public boolean canPlace(int x, int y, int z){
 		if(mask!=null){
@@ -228,8 +232,21 @@ public abstract class AreaCreation extends Creation {
 		
 	}
 
-	public abstract boolean next();
-
+	
+	public boolean next(){
+		currentx++;
+		if(currentx>maxx){ 
+			currentx = minx; if(goup) currenty++; else currenty--; 
+			if(goup?currenty>maxy:currenty<miny){ 
+				if(goup) currenty = miny; else currenty = maxy; 
+				currentz++;
+				if(currentz>maxz){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 
 	public boolean isRunning() {
@@ -238,20 +255,21 @@ public abstract class AreaCreation extends Creation {
 
 	@Override
 	public void onBlockPhysics(BlockEvent e){
-		//if(e.isCancelled()) return;
-		if(isInside(e.getBlock())){
+		if(nophysics && isInside(e.getBlock())){
 			if(e instanceof Cancellable){
 			((Cancellable) e).setCancelled(true);
 			}
 		}
 	}
-	public void setAreaSelector(AreaSelector s) {
-		this.areaSelector = s;
-		s.setCreation(this);
+	public void setNophysics(boolean nophysics) {
+		this.nophysics = nophysics;
 	}
+	public boolean isNophysics(){
+		return nophysics;
+	}
+
 	@Override
 	public void attach(Session s){
-		selectors.add(areaSelector);
 		super.attach(s);
 	}
 	

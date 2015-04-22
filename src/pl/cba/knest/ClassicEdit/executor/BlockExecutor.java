@@ -7,9 +7,9 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
-import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.Filling;
+import pl.cba.knest.ClassicEdit.creation.Creation;
 import pl.cba.knest.ClassicEdit.creation.PlaceableCreation;
 
 

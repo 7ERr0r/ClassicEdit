@@ -7,28 +7,26 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import pl.cba.knest.ClassicEdit.Creation;
 import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.creation.ClickableCreation;
-import pl.cba.knest.ClassicEdit.creation.FilledCreation;
+import pl.cba.knest.ClassicEdit.creation.IClickableCreation;
+import pl.cba.knest.ClassicEdit.creation.ICreation;
+import pl.cba.knest.ClassicEdit.creation.IFilledCreation;
 
-public class InfiniteSelector extends DirectionSelector {
-	private ClickableCreation c;
+public class InfiniteDirectionSelector extends DirectionSelector {
+	private ICreation creation;
 
-	public InfiniteSelector(){
 
+
+
+	public ICreation getCreation() {
+		return creation;
 	}
 
 
-	public Creation getCreation() {
-		return c;
-	}
-
-	public void setCreation(ClickableCreation c) {
-		this.c = c;
-	}
-	public void start(){
+	public boolean start(ICreation c){
+		this.creation = c;
 		msgPlayer(ChatColor.YELLOW+"Click air to determiante direction");
+		return false;
 	}
 
 
@@ -37,6 +35,12 @@ public class InfiniteSelector extends DirectionSelector {
 		
 	}
 
+	public void callClick(){
+		if(creation instanceof IClickableCreation){
+			((IClickableCreation) creation).onClick();
+		}
+	}
+	
 	@Override
 	public boolean handleInteract(PlayerInteractEvent e){
 		Player p = e.getPlayer();
@@ -45,8 +49,8 @@ public class InfiniteSelector extends DirectionSelector {
 			ItemStack is = p.getItemInHand();
 			
 			
-			if(c instanceof FilledCreation){
-				FilledCreation fc = (FilledCreation) c;
+			if(creation instanceof IFilledCreation){
+				IFilledCreation fc = (IFilledCreation) creation;
 				if(is != null && is.getType().isBlock()){
 					fc.setFilling(new Filling(is.getType(), (byte) is.getDurability()));
 				}else{
@@ -55,10 +59,10 @@ public class InfiniteSelector extends DirectionSelector {
 				if(fc.getFilling() == null || fc.getFilling().getMaterial()==Material.AIR){
 					msgPlayer(ChatColor.RED+"Material cannot be air");
 				}else{
-					c.click(p.getLocation());
+					callClick();
 				}
 			}else{
-				c.click(p.getLocation());
+				callClick();
 			}
 		}
 		return false;
@@ -68,7 +72,7 @@ public class InfiniteSelector extends DirectionSelector {
 
 	@Override
 	public Player getPlayer() {
-		return c.getPlayer();
+		return creation.getPlayer();
 	}
 		
 	

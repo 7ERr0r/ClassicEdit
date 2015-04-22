@@ -6,7 +6,6 @@ import java.util.Iterator;
 
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.creation.LineCreation;
-import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 import pl.cba.knest.ClassicEdit.selector.HandAreaSelector;
 
 public class LineExecutor extends AreaExecutor{
@@ -17,13 +16,11 @@ public class LineExecutor extends AreaExecutor{
 	public void execute() throws ExecutorException{
 		super.execute();
 		
-		LineCreation c = new LineCreation();
+		LineCreation c = new LineCreation(new HandAreaSelector());
 		c.setFilling(f);
 		c.setLoop(loop);
 		c.setForceBreak(br);
 		c.setDropmode(dropmode);
-		AreaSelector s = new HandAreaSelector();
-		c.setAreaSelector(s);
 		c.attach(getSession());
 	}
 

@@ -6,8 +6,8 @@ import java.util.Iterator;
 
 import pl.cba.knest.ClassicEdit.ExecutorException;
 import pl.cba.knest.ClassicEdit.creation.MazeCreation;
-import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 import pl.cba.knest.ClassicEdit.selector.HandAreaSelector;
+import pl.cba.knest.ClassicEdit.selector.WEAreaSelector;
 
 public class MazeExecutor extends AreaExecutor{
 	private boolean loop;
@@ -16,13 +16,11 @@ public class MazeExecutor extends AreaExecutor{
 	
 	public void execute() throws ExecutorException{
 		super.execute();
-		MazeCreation c = new MazeCreation();
+		MazeCreation c = new MazeCreation(worldedit?new WEAreaSelector():new HandAreaSelector());
 		c.setFilling(f);
 		c.setDropmode(dropmode);
 		c.setLoop(loop);
 		c.setForceBreak(br);
-		AreaSelector s = new HandAreaSelector();
-		c.setAreaSelector(s);
 		c.attach(getSession());
 	}
 	@Override

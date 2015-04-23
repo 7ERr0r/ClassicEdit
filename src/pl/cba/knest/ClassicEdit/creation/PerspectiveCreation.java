@@ -1,5 +1,7 @@
 package pl.cba.knest.ClassicEdit.creation;
 
+import java.util.Random;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -22,54 +24,91 @@ public class PerspectiveCreation extends CuboidCreation implements IClickableCre
 	public static final Filling AIR = new Filling(Material.AIR, (byte) 0);
 	protected Location per;
 	protected double scale = 1;
+	protected double chance = 1;
 	protected AreaSelector sourceSelector;
 	protected DirectionSelector perspectiveSelector;
 	protected Location s1;
 	protected Location s2;
-	protected int centerx;
-	protected int centery;
-	protected int centerz;
+	protected int sminx;
+	protected int sminy;
+	protected int sminz;
+	protected int smaxx;
+	protected int smaxy;
+	protected int smaxz;
+	protected int swidth;
+	protected int sheight;
+	protected int slength;
+	protected int scenterx;
+	protected int scentery;
+	protected int scenterz;
+	protected Random r = new Random();
+	protected double near = 1;
+	protected double far = 1000;
 
 	
 	@SuppressWarnings("deprecation")
 	private Filling getExpectedAt(int x, int y){
-		int ex = centerx+x;
-		int ez = centerz+y;
-		if(ex < minx || ex > maxx) return null;
-		if(ez < minz || ez > maxz) return null;
-		Block b = w.getBlockAt(ex, miny, ez);
+		//ClassicEdit.log(x+" "+sminy+" "+y);
+		int ex = scenterx+x;
+		int ez = scenterz+y;
+		if(ex < sminx || ex > smaxx) return AIR;
+		if(ez < sminz || ez > smaxz) return AIR;
+
+		Block b = w.getBlockAt(ex, sminy, ez);
 		return new Filling(b.getType(), b.getData());
 	}
-	private double[] rotate2d(double x, double y,double a){
+	public double[] rotate2d(double x, double y, double a){
 		return new double[]{Math.cos(a)*x-Math.sin(a)*y,Math.sin(a)*x+Math.cos(a)*y};
 	}
-	private Vector rotate(Vector v, double a, double b){
-		double[] p;
+	private Vector rotate(Vector v, double a, double b, double c){
 		v = v.clone();
-		p = rotate2d(v.getX(),v.getZ(), a);
-		v.setX(p[0]);
-		v.setZ(p[1]);
-		p = rotate2d(v.getX(),v.getY(), 0);
-		v.setX(p[0]);
-		v.setY(p[1]);
-		p = rotate2d(v.getZ(),v.getY(), b);
-		v.setZ(p[0]);
-		v.setY(p[1]);
+		v = new Vector(
+				v.getX()*Math.cos(c)-v.getY()*Math.sin(c), 
+				v.getX()*Math.sin(c)+v.getY()*Math.cos(c), 
+				v.getZ()); //R z
+		v = new Vector(
+				v.getX()*Math.cos(b)+v.getZ()*Math.sin(b), 
+				v.getY(), 
+				-v.getX()*Math.sin(b)+v.getZ()*Math.cos(b)); //R y
+		v = new Vector(
+				v.getX(), 
+				v.getY()*Math.cos(a)-v.getZ()*Math.sin(a), 
+				v.getY()*Math.sin(a)+v.getZ()*Math.cos(a)); //R x
 		return v;
 	}
 	public void setScale(double s){
 		this.scale = s;
 	}
-	public boolean canPlace(int x,int y,int z){
-		if(!super.canPlace(x, y, z)) return false;
-		Vector v = new Vector(x-per.getX(),y-per.getY(),z-per.getZ());
-		v = rotate(v,(per.getPitch()/180f)*Math.PI,(per.getYaw()/180f)*Math.PI);
-		if(v.getZ()<0) return false;
+	public Filling calculateFilling(double x, double y, double z){
+		Vector v = new Vector(x-per.getX(),y-(per.getY()+1.6),z-per.getZ());
+		v = rotate(v,-(per.getPitch()/180f)*Math.PI,(per.getYaw()/180f)*Math.PI, 0);
+		if(v.getZ()<near || v.getZ()>far){
+			return AIR;
+		}
 		double sc = scale/v.getZ();
 		int rx = (int) (-sc*v.getX());
 		int ry = (int) (-sc*v.getY());
-		Filling f = getExpectedAt(rx, ry);
-		if(f == null) return false;
+		return getExpectedAt(rx, ry);
+	}
+	public Filling getPerspectiveFilling(int x, int y, int z){
+		if(r.nextDouble()>chance){
+			return AIR;
+		}
+		Filling f = calculateFilling(x+0.5, y+0.5, z+0.5);
+		if(calculateFilling(x, y, z).getMaterial()==Material.AIR) return AIR;
+		if(calculateFilling(x+1, y, z).getMaterial()==Material.AIR) return AIR;
+		if(calculateFilling(x+1, y+1, z).getMaterial()==Material.AIR) return AIR;
+		if(calculateFilling(x+1, y+1, z+1).getMaterial()==Material.AIR) return AIR;
+		if(calculateFilling(x, y+1, z).getMaterial()==Material.AIR) return AIR;
+		if(calculateFilling(x, y+1, z+1).getMaterial()==Material.AIR) return AIR;
+		if(calculateFilling(x+1, y, z+1).getMaterial()==Material.AIR) return AIR;
+		if(calculateFilling(x, y, z+1).getMaterial()==Material.AIR) return AIR;
+		return f;
+	}
+	public boolean canPlace(int x, int y, int z){
+		if(!super.canPlace(x, y, z)) return false;
+		Filling f = getPerspectiveFilling(x, y, z);
+		if(!forcebreak && f.getMaterial() == Material.AIR) return false;
 		this.f = f;
 		return true;
 	}
@@ -84,14 +123,23 @@ public class PerspectiveCreation extends CuboidCreation implements IClickableCre
 	@Override
 	public boolean init(){
 		if(!super.init()) return false;
-		s1 = sourceSelector.getLocationMin();
+		s1 = sourceSelector.getLocationA();
 		if(s1 == null) return false;
-		s2 = sourceSelector.getLocationMax();
+		s2 = sourceSelector.getLocationB();
 		if(s2 == null) return false;
 		if(per == null) return false;
-		centerx = minx+width/2;
-		centery = minx+height/2;
-		centerz = minx+length/2;
+		smaxx = Math.max(s1.getBlockX(), s2.getBlockX());
+		smaxy = Math.max(s1.getBlockY(), s2.getBlockY());
+		smaxz = Math.max(s1.getBlockZ(), s2.getBlockZ());
+		sminx = Math.min(s1.getBlockX(), s2.getBlockX());
+		sminy = Math.min(s1.getBlockY(), s2.getBlockY());
+		sminz = Math.min(s1.getBlockZ(), s2.getBlockZ());
+		swidth = smaxx-sminx+1;
+		sheight = smaxy-sminy+1;
+		slength = smaxz-sminz+1;
+		scenterx = sminx+swidth/2;
+		scentery = sminy+sheight/2;
+		scenterz = sminz+slength/2;
 		return true;
 	}
 	
@@ -100,10 +148,25 @@ public class PerspectiveCreation extends CuboidCreation implements IClickableCre
 		super.attach(s);
 
 	}
-
+	@Override
+	public String getFullName(){
+		return getName();
+	}
+	public double getChance(){
+		return chance;
+	}
+	public void setChance(double chance){
+		this.chance = chance;
+	}
 	@Override
 	public void onClick() {
 		Location l = getPlayer().getLocation();
 		this.per = l;
+	}
+	public void setNear(double near) {
+		this.near = near;
+	}
+	public void setFar(double far) {
+		this.far = far;
 	}
 }

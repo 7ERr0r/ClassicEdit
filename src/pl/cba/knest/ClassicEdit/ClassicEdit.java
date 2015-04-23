@@ -48,7 +48,7 @@ public class ClassicEdit extends JavaPlugin{
 	}
 	
 	public void onEnable(){
-		pertick = 256;
+		pertick = 6666;
 		droppertick = 1;
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PhysicsListener(), this);

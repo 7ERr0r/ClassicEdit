@@ -58,19 +58,18 @@ public class HandAreaSelector extends AreaSelector {
 
 	@Override
 	public void end(){
-		msgPlayer(ChatColor.YELLOW+"Selected the edges");
-		//info();
+		//msgPlayer(ChatColor.YELLOW+"Selected the edges");
 	}
 
 
 
 
 	@Override
-	public Location getLocationMin(){
+	public Location getLocationA(){
 		return l1;
 	}
 	@Override
-	public Location getLocationMax(){
+	public Location getLocationB(){
 		return l2;
 	}
 

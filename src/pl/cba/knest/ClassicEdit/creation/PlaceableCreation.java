@@ -133,9 +133,7 @@ public abstract class PlaceableCreation extends AreaCreation implements IFilledC
 	public String getFullName(){
 		return getName()+" of "+getFilling();
 	}
-	public void msgStart(){
-		msgPlayer(ChatColor.YELLOW+"Creating "+getFullName());
-	}
+
 	
 	public void msgEnd(){
 		if(!initialised) return;

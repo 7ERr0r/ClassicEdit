@@ -2,28 +2,23 @@ package pl.cba.knest.ClassicEdit.executor;
 
 
 
-import org.bukkit.ChatColor;
-
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.ExecutorException;
-import pl.cba.knest.ClassicEdit.creation.Creation;
+import pl.cba.knest.ClassicEdit.Session;
 
 
 public class PauseExecutor extends PlayerCmdExecutor {
 	public void execute() throws ExecutorException{
 		super.execute();
-		Creation c = ClassicEdit.getCreationManager().getSession(player).getActive();
-		if(c == null){
-			throw new ExecutorException(ChatColor.RED+"You don't have any cuboid running");
-		}
+		Session s = ClassicEdit.getCreationManager().getSession(player);
 
-		if(c!=null){
-			if(c.isPaused()){
-				msgPlayer(ChatColor.YELLOW+"Unpaused "+c.getName());
-				c.unpause();
+		if(s!=null){
+			if(s.isPaused()){
+				//msgPlayer(ChatColor.YELLOW+"Unpaused "+c.getName());
+				s.unpause();
 			}else{
-				msgPlayer(ChatColor.YELLOW+"Paused "+c.getName());
-				c.pause();
+				//msgPlayer(ChatColor.YELLOW+"Paused "+c.getName());
+				s.pause();
 			}
 				
 		}

@@ -31,12 +31,10 @@ public class PlayerCmdExecutor extends Executor {
 			throw new ExecutorException(ChatColor.YELLOW+"Finished "+c.getName());
 		}
 		if(params.contains("stop") || params.contains("s")){
-			Creation c = ClassicEdit.getCreationManager().getCreation(player);
-			if(c == null) throw new ExecutorException(ChatColor.YELLOW+"You don't have any cuboid running");
-			c.stop();
-			Session sess = ClassicEdit.getCreationManager().getSession(player);
-			sess.stop();
-			throw new ExecutorException(ChatColor.YELLOW+"Stopped all creations");
+			Session s = ClassicEdit.getCreationManager().getSession(player);
+			//if(c == null) throw new ExecutorException(ChatColor.YELLOW+"You don't have any cuboid running");
+			s.stop();
+			throw new ExecutorException(ChatColor.YELLOW+"Session stopped");
 		}
 		if(params.contains("help") || params.contains("h")){
 			help();

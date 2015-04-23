@@ -22,12 +22,12 @@ public class WEAreaSelector extends AreaSelector {
 	Location l2;
 	ICreation creation;
 	@Override
-	public Location getLocationMin() {
+	public Location getLocationA() {
 		return l1;
 	}
 
 	@Override
-	public Location getLocationMax() {
+	public Location getLocationB() {
 		return l2;
 	}
 
@@ -50,7 +50,7 @@ public class WEAreaSelector extends AreaSelector {
 		if(wep == null){
 			msgPlayer(ChatColor.RED+"WorldEdit plugin is null");
 			creation.stop();
-			return true;
+			return false;
 		}
 		LocalPlayer lp = wep.wrapPlayer(getPlayer());
 		LocalSession s = WorldEdit.getInstance().getSession(lp);
@@ -60,7 +60,7 @@ public class WEAreaSelector extends AreaSelector {
 		}catch(IncompleteRegionException e){
 			msgPlayer(ChatColor.RED+"Select a region first");
 			creation.stop();
-			return true;
+			return false;
 		}
 		Vector min = r.getMinimumPoint();
 		Vector max = r.getMaximumPoint();

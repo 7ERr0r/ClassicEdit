@@ -98,7 +98,7 @@ public abstract class AreaCreation extends Creation {
 
 
 		ticksDone = 0;
-		for(int i = 0; i<2048; i++){
+		for(int i = 0; i<8192; i++){
 			
 			if(canPlace(currentx,currenty,currentz)){
 				if(!place()){
@@ -111,12 +111,13 @@ public abstract class AreaCreation extends Creation {
 					if(placed>0){
 						placed = 0;
 						init();
-						msgPlayer(ChatColor.YELLOW+"Checking... next lap");
+						//msgPlayer(ChatColor.YELLOW+"Checking... next lap");
 					}else{
+						msgPlayer(ChatColor.YELLOW+"No more blocks to place.");
 						pause();
 						placed = 0;
 						init();
-						msgPlayer(ChatColor.YELLOW+"No more blocks to place, paused.");
+
 						break;
 					}
 				}else{
@@ -155,9 +156,9 @@ public abstract class AreaCreation extends Creation {
 	
 	@Override
 	public boolean init(){
-		l1 = areaSelector.getLocationMin();
+		l1 = areaSelector.getLocationA();
 		if(l1 == null) return false;
-		l2 = areaSelector.getLocationMax();
+		l2 = areaSelector.getLocationB();
 		if(l2 == null) return false;
 		w = l1.getWorld();
 		maxx = Math.max(l1.getBlockX(), l2.getBlockX());

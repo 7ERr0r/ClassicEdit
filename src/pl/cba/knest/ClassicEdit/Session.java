@@ -5,6 +5,7 @@ import java.util.Queue;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -85,10 +86,10 @@ public class Session implements Runnable {
 		return player;
 	}
 	
-	private void msgPlayer(String msg){
+	public void msgPlayer(String msg){
 		Player p = getPlayer();
 		if(p != null){
-			p.sendMessage(msg);
+			p.sendMessage(ChatColor.DARK_AQUA+"CE: "+ChatColor.RESET+msg);
 		}
 		
 	}
@@ -98,7 +99,13 @@ public class Session implements Runnable {
 	}
 
 	public void removeCreation(Creation c){
+		Creation a = getActive();
 		queue.remove(c);
+		if(a == c){
+			if(getActive() != null){
+				getActive().msgStart();
+			}
+		} 
 	}
 	
 	public boolean isPaused(){
@@ -107,11 +114,13 @@ public class Session implements Runnable {
 	
 	
 	private void onPause(){
-		//msgPlayer("Paused");
+		//if(getActive()!=null) getActive().onPause();
+		msgPlayer(ChatColor.YELLOW+"Paused session");
 	}
 	
 	private void onUnpause(){
-		//msgPlayer("Unpaused");
+		//if(getActive()!=null) getActive().onUnpause();
+		msgPlayer(ChatColor.YELLOW+"Unpaused session");
 	}
 	
 	public void setPaused(boolean p){

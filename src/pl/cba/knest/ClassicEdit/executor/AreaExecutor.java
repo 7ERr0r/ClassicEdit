@@ -22,7 +22,7 @@ public class AreaExecutor extends CreationExecutor {
 		switch(c){
 		case 'm':
 			if(i.hasNext()){
-				mask = new Mask(i.next());
+				mask = Mask.parseMask(i.next());
 				i.remove();
 			}else throw new ExecutorException(ChatColor.RED+"Not enough arguments for mask (-m <blocks>)");
 		return;

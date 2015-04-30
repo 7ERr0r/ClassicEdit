@@ -16,11 +16,12 @@ import pl.cba.knest.ClassicEdit.selector.WEAreaSelector;
 
 public class PerspectiveExecutor extends AreaExecutor{
 	boolean loop = false;
-	boolean br = false;
+	boolean forcebreak = false;
 	double scale = 1;
 	double chance = 1;
-	double near = 6;
-	double far = 1000;
+	double near = 1;
+	double far = 512;
+	double antialiasstart = 0;
 	public void execute() throws ExecutorException{
 		super.execute();
 		AreaSelector as = worldedit?new WEAreaSelector():new HandAreaSelector();
@@ -30,13 +31,14 @@ public class PerspectiveExecutor extends AreaExecutor{
 		PerspectiveCreation c = new PerspectiveCreation(as, ss, ps);
 		c.setFilling(f);
 		c.setLoop(loop);
-		c.setForceBreak(br);
+		c.setForceBreak(forcebreak);
 		c.setDropmode(dropmode);
 		c.setMask(mask);
 		c.setScale(scale);
 		c.setChance(chance);
 		c.setNear(near);
 		c.setFar(far);
+		c.setAntialiasstart(antialiasstart);
 		c.attach(getSession());
 	}
 
@@ -46,7 +48,7 @@ public class PerspectiveExecutor extends AreaExecutor{
 			loop = true;
 		return;
 		case 'b':
-			br = true;
+			forcebreak = true;
 		return;
 		case 's':
 			try{
@@ -69,7 +71,7 @@ public class PerspectiveExecutor extends AreaExecutor{
 				near = Double.parseDouble(i.next());
 				i.remove();
 			}catch(NoSuchElementException e){
-				throw new ExecutorException(ChatColor.RED+"Not enough arguments for near (-n <float>)");
+				throw new ExecutorException(ChatColor.RED+"Not enough arguments for near (-n <distance from camera>)");
 			}
 		return;
 		case 'f':
@@ -77,7 +79,15 @@ public class PerspectiveExecutor extends AreaExecutor{
 				far = Double.parseDouble(i.next());
 				i.remove();
 			}catch(NoSuchElementException e){
-				throw new ExecutorException(ChatColor.RED+"Not enough arguments for far (-f <float>)");
+				throw new ExecutorException(ChatColor.RED+"Not enough arguments for far (-f <distance from camera>)");
+			}
+		return;
+		case 'a':
+			try{
+				antialiasstart = Double.parseDouble(i.next());
+				i.remove();
+			}catch(NoSuchElementException e){
+				throw new ExecutorException(ChatColor.RED+"Not enough arguments for antialias - start (-s <distance from camera>)");
 			}
 		return;
 		}

@@ -34,5 +34,9 @@ public class Filling {
 		return new Filling(m, data);
 	}
 	
+	public boolean equals(Filling f){
+		return m==f.m && data==f.data;
+	}
+	
 	
 }

@@ -43,7 +43,9 @@ public class PerspectiveCreation extends CuboidCreation implements IClickableCre
 	protected int scenterz;
 	protected Random r = new Random();
 	protected double near = 1;
-	protected double far = 1000;
+	protected double far = 512;
+	protected double antialiasstart = 0;
+	protected boolean antialias;
 
 	
 	@SuppressWarnings("deprecation")
@@ -60,8 +62,9 @@ public class PerspectiveCreation extends CuboidCreation implements IClickableCre
 	public double[] rotate2d(double x, double y, double a){
 		return new double[]{Math.cos(a)*x-Math.sin(a)*y,Math.sin(a)*x+Math.cos(a)*y};
 	}
-	private Vector rotate(Vector v, double a, double b, double c){
+	private Vector rotate3d(Vector v, double a, double b, double c){
 		v = v.clone();
+		// WTF??? rotations are z -> y -> x ??? why? IDK... it works that way (it's a reverse perspective)
 		v = new Vector(
 				v.getX()*Math.cos(c)-v.getY()*Math.sin(c), 
 				v.getX()*Math.sin(c)+v.getY()*Math.cos(c), 
@@ -76,12 +79,16 @@ public class PerspectiveCreation extends CuboidCreation implements IClickableCre
 				v.getY()*Math.sin(a)+v.getZ()*Math.cos(a)); //R x
 		return v;
 	}
-	public void setScale(double s){
-		this.scale = s;
+	public void setScale(double scale){
+		this.scale = scale;
+	}
+	public void setAntialiasstart(double antialiasstart){
+		this.antialiasstart = antialiasstart;
 	}
 	public Filling calculateFilling(double x, double y, double z){
 		Vector v = new Vector(x-per.getX(),y-(per.getY()+1.6),z-per.getZ());
-		v = rotate(v,-(per.getPitch()/180f)*Math.PI,(per.getYaw()/180f)*Math.PI, 0);
+		v = rotate3d(v,-(per.getPitch()/180f)*Math.PI,(per.getYaw()/180f)*Math.PI, 0);
+		antialias = v.getZ()<antialiasstart;
 		if(v.getZ()<near || v.getZ()>far){
 			return AIR;
 		}
@@ -91,18 +98,25 @@ public class PerspectiveCreation extends CuboidCreation implements IClickableCre
 		return getExpectedAt(rx, ry);
 	}
 	public Filling getPerspectiveFilling(int x, int y, int z){
-		if(r.nextDouble()>chance){
+		if(chance != 1 && r.nextDouble()>chance){
 			return AIR;
 		}
 		Filling f = calculateFilling(x+0.5, y+0.5, z+0.5);
-		if(calculateFilling(x, y, z).getMaterial()==Material.AIR) return AIR;
-		if(calculateFilling(x+1, y, z).getMaterial()==Material.AIR) return AIR;
-		if(calculateFilling(x+1, y+1, z).getMaterial()==Material.AIR) return AIR;
-		if(calculateFilling(x+1, y+1, z+1).getMaterial()==Material.AIR) return AIR;
-		if(calculateFilling(x, y+1, z).getMaterial()==Material.AIR) return AIR;
-		if(calculateFilling(x, y+1, z+1).getMaterial()==Material.AIR) return AIR;
-		if(calculateFilling(x+1, y, z+1).getMaterial()==Material.AIR) return AIR;
-		if(calculateFilling(x, y, z+1).getMaterial()==Material.AIR) return AIR;
+		int passnear = 0;
+		boolean antialias = this.antialias;
+		Filling pass = antialias?f:AIR;
+		for(double fx = 0; fx<=1; fx++){
+			for(double fy = 0; fy<=1; fy++){
+				for(double fz = 0; fz<=1; fz++){
+					if(calculateFilling(x+fx, y+fy, z+fz).equals(pass)) passnear++; 
+				}
+			}
+		}
+		if(antialias){
+			if(passnear<8) return AIR;
+		}else{
+			if(passnear>0) return AIR;
+		}
 		return f;
 	}
 	public boolean canPlace(int x, int y, int z){
@@ -146,7 +160,6 @@ public class PerspectiveCreation extends CuboidCreation implements IClickableCre
 	@Override
 	public void attach(Session s){
 		super.attach(s);
-
 	}
 	@Override
 	public String getFullName(){

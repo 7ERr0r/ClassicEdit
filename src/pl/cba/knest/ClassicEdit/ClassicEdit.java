@@ -39,7 +39,7 @@ public class ClassicEdit extends JavaPlugin{
 	public static int pertick;
 	public static int droppertick;
 	
-	private Manager cm;
+	private Manager creationManager;
 	
 	
 
@@ -52,8 +52,8 @@ public class ClassicEdit extends JavaPlugin{
 		droppertick = 1;
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PhysicsListener(), this);
-		cm = new Manager();
-		cm.runTaskTimer(this, 10L, 1L);
+		creationManager = new Manager();
+		creationManager.runTaskTimer(this, 10L, 1L);
 		
 		try {
 			Metrics m = new Metrics(this);
@@ -108,7 +108,7 @@ public class ClassicEdit extends JavaPlugin{
 			perms("ClassicEdit.create.spheroid", s);
 			e = new SpheroidExecutor();
 		}else if(name.equals("persp")){
-			perms("ClassicEdit.create.persp", s);
+			perms("ClassicEdit.create.perspective", s);
 			e = new PerspectiveExecutor();
 		}else if(name.equals("line")){
 			perms("ClassicEdit.create.line", s);
@@ -136,7 +136,7 @@ public class ClassicEdit extends JavaPlugin{
 		return true;
 	}
 	public Manager getManager(){
-		return cm;
+		return creationManager;
 	}
 	public static Manager getCreationManager(){
 		return plugin.getManager();

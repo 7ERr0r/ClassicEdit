@@ -111,13 +111,15 @@ public abstract class AreaCreation extends Creation {
 					if(placed>0){
 						placed = 0;
 						init();
+						rotate();
 						//msgPlayer(ChatColor.YELLOW+"Checking... next lap");
+						break;
 					}else{
 						msgPlayer(ChatColor.YELLOW+"No more blocks to place.");
 						pause();
 						placed = 0;
 						init();
-
+						rotate();
 						break;
 					}
 				}else{
@@ -130,17 +132,17 @@ public abstract class AreaCreation extends Creation {
 		}
 
 	}
-
+	
 	@Override
 	public String getName() {
 		return "area";
 	}
-
-
+	
+	
 	public void setDropmode(boolean dropmode){
 		this.dropmode = dropmode;
 	}
-
+	
 	
 	public void cancelled(){
 		msgPlayer(ChatColor.YELLOW+"Event cancelled");
@@ -148,9 +150,7 @@ public abstract class AreaCreation extends Creation {
 		pause(); 
 	}
 	
-
 	
-
 	
 	
 	

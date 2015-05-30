@@ -142,7 +142,6 @@ public class Session implements Runnable {
 	
 	public void togglePause(){
 		setPaused(!paused);
-		
 	}
 
 	public UUID getUUID(){

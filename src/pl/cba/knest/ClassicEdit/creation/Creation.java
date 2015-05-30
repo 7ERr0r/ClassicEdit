@@ -75,7 +75,10 @@ public abstract class Creation implements ICreation, Runnable {
 		if(session.getPending()==this) session.setPending(null);
 
 	}
-
+	public void rotate(){
+		session.removeCreation(this);
+		session.addCreation(this);
+	}
 	public void pause(){
 		session.pause();
 	}

@@ -93,8 +93,8 @@ public class PerspectiveCreation extends CuboidCreation implements IClickableCre
 			return AIR;
 		}
 		double sc = scale/v.getZ();
-		int rx = (int) (-sc*v.getX());
-		int ry = (int) (-sc*v.getY());
+		int rx = (int) Math.round(-sc*v.getX());
+		int ry = (int) Math.round(-sc*v.getY());
 		return getExpectedAt(rx, ry);
 	}
 	public Filling getPerspectiveFilling(int x, int y, int z){

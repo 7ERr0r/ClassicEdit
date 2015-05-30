@@ -114,12 +114,10 @@ public class Session implements Runnable {
 	
 	
 	private void onPause(){
-		//if(getActive()!=null) getActive().onPause();
 		msgPlayer(ChatColor.YELLOW+"Paused session");
 	}
 	
 	private void onUnpause(){
-		//if(getActive()!=null) getActive().onUnpause();
 		msgPlayer(ChatColor.YELLOW+"Unpaused session");
 	}
 	

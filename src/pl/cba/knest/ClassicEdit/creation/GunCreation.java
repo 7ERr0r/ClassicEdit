@@ -53,7 +53,7 @@ public class GunCreation extends DirectionalCreation implements IFilledCreation 
 			
 			if(b == null) return false;
 			if(ticks<end-len){
-				if(b.getType()!=Material.AIR && b.getType()!=filling.getMaterial()){
+				if(b.getType()!=Material.AIR && !last.contains(b)){
 					end = ticks+len;
 					colide(b);
 				}else{

@@ -31,7 +31,7 @@ public abstract class PlaceableCreation extends AreaCreation implements IFilledC
 	@SuppressWarnings("deprecation")
 	public boolean place(){
 		Player p = session.getPlayer();
-		Block b = w.getBlockAt(currentx,currenty,currentz);
+		Block b = w.getBlockAt(currentx, currenty, currentz);
 		Material t = b.getType();
 		if(!forcebreak && t==f.getMaterial() && b.getData()==f.getData()) return true;
 		boolean place = true;
@@ -45,10 +45,12 @@ public abstract class PlaceableCreation extends AreaCreation implements IFilledC
 				ClassicEdit.callEventWithoutNCP(be);
 
 				if(!be.isCancelled()){
-					for(ItemStack drop : b.getDrops()){
-						HashMap<Integer, ItemStack> out = p.getInventory().addItem(drop);
-						for(ItemStack is : out.values()){
-							w.dropItemNaturally(b.getLocation(), is);
+					if(p!=null && p.getGameMode()!=GameMode.CREATIVE){
+						for(ItemStack drop : b.getDrops()){
+							HashMap<Integer, ItemStack> out = p.getInventory().addItem(drop);
+							for(ItemStack is : out.values()){
+								w.dropItemNaturally(b.getLocation(), is);
+							}
 						}
 					}
 					b.setType(Material.AIR);

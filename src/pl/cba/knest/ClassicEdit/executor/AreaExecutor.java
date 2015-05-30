@@ -15,7 +15,7 @@ public class AreaExecutor extends CreationExecutor {
 
 	public void execute() throws ExecutorException{
 		super.execute();
-		dropmode = !player.hasPermission("ClassicEdit.dropmode");
+		dropmode = !player.hasPermission("ClassicEdit.creative");
 	}
 	@Override
 	void flag(char c, Iterator<String> i) throws ExecutorException {

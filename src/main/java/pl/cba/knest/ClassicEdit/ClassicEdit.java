@@ -61,6 +61,7 @@ public class ClassicEdit extends JavaPlugin{
 		} catch (IOException e){
 			
 		}
+		saveConfig();
 		log("Enabled !");
 		
 	}

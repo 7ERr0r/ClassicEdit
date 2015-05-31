@@ -8,6 +8,8 @@
 bin/
 tmp/
 lib/
+target/
+path.cmd
 *.tmp
 *.bak
 *.swp

@@ -9,8 +9,8 @@ Bukkit plugin: http://dev.bukkit.org/bukkit-plugins/classicedit/
 Building
 ===========
 It requires to add some dependencies manually:
-CraftBukkit
-WorldEdit
-NoCheatPlus
+- CraftBukkit
+- WorldEdit
+- NoCheatPlus
 
 MongoDB driver is downloaded automatically.

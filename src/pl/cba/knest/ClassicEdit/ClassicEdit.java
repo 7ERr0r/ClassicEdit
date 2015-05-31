@@ -1,6 +1,7 @@
 package pl.cba.knest.ClassicEdit;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +20,6 @@ import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
-
 import pl.cba.knest.ClassicEdit.executor.BlockExecutor;
 import pl.cba.knest.ClassicEdit.executor.ClassicEditExecutor;
 import pl.cba.knest.ClassicEdit.executor.CuboidExecutor;
@@ -30,8 +30,8 @@ import pl.cba.knest.ClassicEdit.executor.MazeExecutor;
 import pl.cba.knest.ClassicEdit.executor.PauseExecutor;
 import pl.cba.knest.ClassicEdit.executor.PerspectiveExecutor;
 import pl.cba.knest.ClassicEdit.executor.SpheroidExecutor;
-import pl.cba.knest.ClassicEdit.listener.PlayerListener;
 import pl.cba.knest.ClassicEdit.listener.PhysicsListener;
+import pl.cba.knest.ClassicEdit.listener.PlayerListener;
 import fr.neatmonster.nocheatplus.NoCheatPlus;
 
 public class ClassicEdit extends JavaPlugin{
@@ -41,7 +41,7 @@ public class ClassicEdit extends JavaPlugin{
 	
 	private Manager creationManager;
 	
-	
+	private Backend creationBackend;
 
 	public ClassicEdit(){
 		plugin = this;
@@ -77,6 +77,7 @@ public class ClassicEdit extends JavaPlugin{
 		}
 		
 	}
+	
 	@Override
 	public boolean onCommand(CommandSender s, Command cmd, String label, String[] args) {
 
@@ -94,6 +95,7 @@ public class ClassicEdit extends JavaPlugin{
 
 		return true;
 	}
+	
 	private void execute(CommandSender s, List<String> params, Command cmd, String label) throws ExecutorException {
 		
 		String name = cmd.getName();
@@ -129,18 +131,22 @@ public class ClassicEdit extends JavaPlugin{
 		e.execute();
 		
 	}
+	
 	public boolean perms(String perm, CommandSender s) throws ExecutorException{
 		if(!s.hasPermission(perm) && !s.isOp()){
 			throw new ExecutorException(ChatColor.RED+"You do not have permission to do this");
 		}
 		return true;
 	}
+	
 	public Manager getManager(){
 		return creationManager;
 	}
+	
 	public static Manager getCreationManager(){
 		return plugin.getManager();
 	}
+	
 	public static void log(String str){
 		plugin.getLogger().info(str);
 	}
@@ -192,7 +198,6 @@ public class ClassicEdit extends JavaPlugin{
 
 	public static ClassicEdit getInstance(){
 		return plugin;
-		
 	}
 
 	public static boolean isWorldEdit(){
@@ -203,6 +208,18 @@ public class ClassicEdit extends JavaPlugin{
 			return false;
 		}
 	}
-
-
+	public void dialBackend(){
+		try {
+			creationBackend = Backend.create(getConfig().getString("db.host"), getConfig().getInt("db.port"), getConfig().getString("db.database"));
+		} catch (UnknownHostException e) {
+			log("Could not create MongoDB connection: "+e.getMessage());
+		}
+	}
+	public Backend getBackend(){
+		if(creationBackend == null){
+			dialBackend();
+		}
+		return creationBackend;
+	}
+	
 }

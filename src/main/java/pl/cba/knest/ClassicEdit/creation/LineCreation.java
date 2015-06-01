@@ -2,6 +2,8 @@ package pl.cba.knest.ClassicEdit.creation;
 
 import org.bukkit.ChatColor;
 
+import com.mongodb.BasicDBObject;
+
 public class LineCreation extends PlaceableCreation {
 
 	
@@ -9,8 +11,8 @@ public class LineCreation extends PlaceableCreation {
 	double dy;
 	double dz;
 	
-	double dist;
-	int i = 0;
+	double distance;
+	int linei = 0;
 	
 	
 	double sx;
@@ -27,25 +29,24 @@ public class LineCreation extends PlaceableCreation {
 		int vy = l2.getBlockY()-l1.getBlockY();
 		int vz = l2.getBlockZ()-l1.getBlockZ();
 		
-		dist = Math.max(width, height);
-		dist = Math.max(dist, length);
-		msgPlayer(dist+"");
-		if((dropmode && dist>2000) || (!dropmode && dist>200000)){
+		distance = Math.max(width, height);
+		distance = Math.max(distance, length);
+		if((dropmode && distance>2000) || (!dropmode && distance>200000)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
 			return false;
 		}
 		
-		sx = ((double)vx)/dist;
-		sy = ((double)vy)/dist;
-		sz = ((double)vz)/dist;
+		sx = ((double)vx)/distance;
+		sy = ((double)vy)/distance;
+		sz = ((double)vz)/distance;
 		return true;
 	}
 	
 	@Override
 	public boolean next(){
 		
-		if(i++ > dist) return false;
+		if(linei++ > distance) return false;
 		currentx = (int) dx;
 		currenty = (int) dy;
 		currentz = (int) dz;
@@ -63,6 +64,21 @@ public class LineCreation extends PlaceableCreation {
 	public void run() {
 		super.run();
 		
+	}
+	
+	public BasicDBObject serialize() {
+		BasicDBObject o = super.serialize();
+		o.append("dx", dx);
+		o.append("dy", dy);
+		o.append("dz", dz);
+		
+		o.append("dist", distance);
+		o.append("linei", linei);
+		
+		o.append("sx", sx);
+		o.append("sy", sy);
+		o.append("sz", sz);
+		return o;
 	}
 
 

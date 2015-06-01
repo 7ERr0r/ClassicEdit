@@ -1,6 +1,8 @@
 package pl.cba.knest.ClassicEdit;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.bukkit.Material;
 
@@ -26,6 +28,17 @@ public class Mask {
 			}
 		}
 		return mask;
+	}
+	@Override
+	public String toString(){
+		String s = "";
+		Iterator<Entry<Material, Byte>> i = e.entrySet().iterator();
+		while(i.hasNext()){
+			Entry<Material, Byte> e = i.next();
+			s += e.getKey()+":"+e.getValue();
+			if(i.hasNext()) s += ",";
+		}
+		return s;
 	}
 	public boolean contains(Material m){
 		return e.containsKey(m);

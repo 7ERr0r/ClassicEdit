@@ -3,7 +3,9 @@ package pl.cba.knest.ClassicEdit.creation;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -159,9 +161,30 @@ public abstract class Creation implements ICreation, Runnable {
 		BasicDBObject o = new BasicDBObject();
 		Class<?> clazz = this.getClass();
 		o.append("type", clazz.getName());
+		o.append("initialised", initialised);
+		o.append("started", started);
 		return o;
 	}
 	public static BasicDBObject serializeCreation(Creation creation){
 		return creation.serialize();
+	}
+	public static BasicDBObject serializeLocation(Location l) {
+		BasicDBObject o = new BasicDBObject();
+		o.append("x", l.getX());
+		o.append("y", l.getY());
+		o.append("z", l.getZ());
+		o.append("yaw", l.getYaw());
+		o.append("pitch", l.getPitch());
+		o.append("world", l.getWorld().getName());
+		return o;
+	}
+	public static Location deserializeLocation(BasicDBObject o) {
+		double x = o.getDouble("x");
+		double y = o.getDouble("y");
+		double z = o.getDouble("z");
+		double yaw = o.getDouble("yaw");
+		double pitch = o.getDouble("pitch");
+		String world = o.getString("world");
+		return new Location(Bukkit.getWorld(world), x, y, z, (float) yaw, (float) pitch);
 	}
 }

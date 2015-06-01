@@ -14,10 +14,8 @@ public class PauseExecutor extends PlayerCmdExecutor {
 
 		if(s!=null){
 			if(s.isPaused()){
-				//msgPlayer(ChatColor.YELLOW+"Unpaused "+c.getName());
 				s.unpause();
 			}else{
-				//msgPlayer(ChatColor.YELLOW+"Paused "+c.getName());
 				s.pause();
 			}
 				

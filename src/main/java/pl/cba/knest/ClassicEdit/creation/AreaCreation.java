@@ -10,6 +10,8 @@ import org.bukkit.event.block.BlockEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import com.mongodb.BasicDBObject;
+
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Mask;
 import pl.cba.knest.ClassicEdit.Session;
@@ -17,10 +19,6 @@ import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 
 public abstract class AreaCreation extends Creation {
 	
-	public AreaCreation(){
-		super();
-	}
-
 	boolean dropmode = false;	
 	boolean loop = false;
 	boolean goup = true;
@@ -276,6 +274,42 @@ public abstract class AreaCreation extends Creation {
 		super.attach(s);
 	}
 	
+	public BasicDBObject serialize() {
+		BasicDBObject o = super.serialize();
+		o.append("dropmode", dropmode);
+		o.append("loop", loop);
+		o.append("goup", goup);
+		o.append("forcebreak", forcebreak);
+		o.append("nophysics", nophysics);
+		o.append("l1", serializeLocation(l1));
+		o.append("l2", serializeLocation(l2));
+		o.append("world", w.getName());
+		o.append("maxx", maxx);
+		o.append("maxy", maxy);
+		o.append("maxz", maxz);
+		
+		o.append("minx", minx);
+		o.append("miny", miny);
+		o.append("minz", minz);
+		
+		o.append("currentx", currentx);
+		o.append("currenty", currenty);
+		o.append("currentz", currentz);
+		
+		o.append("width", width);
+		o.append("length", length);
+		o.append("height", height);
+		
+		o.append("pertick", pertick);
+		
+		o.append("ticksDone", ticksDone);
+		o.append("placed", placed);
+		o.append("sum", sum);
+		o.append("mask", mask==null?null:mask.toString());
+		
+		return o;
+	}
+
 
 
 

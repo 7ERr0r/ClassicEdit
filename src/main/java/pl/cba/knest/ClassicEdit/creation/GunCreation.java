@@ -183,7 +183,7 @@ public class GunCreation extends DirectionalCreation implements IFilledCreation 
 	}
 	@Override
 	public void msgEnd(){
-		msgPlayer(ChatColor.YELLOW+"Stopping gun");
+		msgPlayer(ChatColor.YELLOW+"Stopping "+getFullName());
 	}
 	@Override
 	public boolean isUseless(){

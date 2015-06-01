@@ -12,7 +12,7 @@ public class SpheroidCreation extends CuboidCreation {
 		double dx = (((double)(rx+0.5d)/((double)width))-0.5d)*2;
 		double dy = (((double)(ry+0.5d)/((double)height))-0.5d)*2;
 		double dz = (((double)(rz+0.5d)/((double)length))-0.5d)*2;
-		double d = Math.sqrt(Math.pow(Math.abs(dx), 2)+Math.pow(Math.abs(dy), 2)+Math.pow(Math.abs(dz), 2));
+		double d = Math.pow(Math.abs(dx), 2)+Math.pow(Math.abs(dy), 2)+Math.pow(Math.abs(dz), 2);
 		return d<=1;
 	}
 	@Override

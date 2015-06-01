@@ -18,14 +18,10 @@ import org.bukkit.event.block.BlockEvent;
 import org.bukkit.util.Vector;
 
 import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.selector.DirectionSelector;
 
 
 public class GunCreation extends DirectionalCreation implements IFilledCreation {
 	
-	public GunCreation(DirectionSelector ds) {
-		super(ds);
-	}
 	private class Bolt{
 		private final Location l;
 		private final Vector v;

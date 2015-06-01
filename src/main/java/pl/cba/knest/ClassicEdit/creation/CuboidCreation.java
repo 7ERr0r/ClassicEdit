@@ -5,14 +5,10 @@ package pl.cba.knest.ClassicEdit.creation;
 import org.bukkit.ChatColor;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
-import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 
 
 public class CuboidCreation extends PlaceableCreation {
 	
-	public CuboidCreation(AreaSelector as) {
-		super(as);
-	}
 	public boolean dashed = false;
 
 	

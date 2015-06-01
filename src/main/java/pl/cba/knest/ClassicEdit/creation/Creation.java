@@ -12,6 +12,8 @@ import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Session;
 import pl.cba.knest.ClassicEdit.selector.Selector;
 
+import com.mongodb.BasicDBObject;
+
 public abstract class Creation implements ICreation, Runnable {
 	protected Session session;
 	protected boolean started;
@@ -21,6 +23,7 @@ public abstract class Creation implements ICreation, Runnable {
 	public Creation(){
 		selectors = new LinkedList<Selector>();
 	}
+
 	public abstract String getName();
 	public abstract void onBlockPhysics(BlockEvent e);
 	public abstract boolean init();
@@ -137,5 +140,28 @@ public abstract class Creation implements ICreation, Runnable {
 		return getName();
 	}
 
-
+	public static Creation deserializeCreation(BasicDBObject o) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		Creation creation = null;
+		String type = o.getString("type");
+		Class<?> clazz = Class.forName(type);
+		
+		if(clazz.isAssignableFrom(Creation.class)){
+			creation = (Creation) clazz.newInstance();
+			creation.deserialize(o);
+			
+		}
+		return creation;
+	}
+	public void deserialize(BasicDBObject o) {
+		
+	}
+	public BasicDBObject serialize() {
+		BasicDBObject o = new BasicDBObject();
+		Class<?> clazz = this.getClass();
+		o.append("type", clazz.getName());
+		return o;
+	}
+	public static BasicDBObject serializeCreation(Creation creation){
+		return creation.serialize();
+	}
 }

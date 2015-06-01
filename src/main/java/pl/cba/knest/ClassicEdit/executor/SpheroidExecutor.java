@@ -26,7 +26,9 @@ public class SpheroidExecutor extends AreaExecutor {
 	public void execute() throws ExecutorException{
 		super.execute();
 		
-		CuboidCreation c = new SpheroidCreation(worldedit?new WEAreaSelector():new HandAreaSelector());
+		CuboidCreation c = new SpheroidCreation();
+		c.setAreaSelector(worldedit?new WEAreaSelector():new HandAreaSelector());
+		
 		c.setFilling(f);
 		c.setDashed(dashed);
 		c.setLoop(loop);

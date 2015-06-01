@@ -22,7 +22,8 @@ public class CuboidExecutor extends AreaExecutor {
 	boolean nophysics = false;
 	public void execute() throws ExecutorException{
 		super.execute();
-		CuboidCreation c = new CuboidCreation(worldedit?new WEAreaSelector():new HandAreaSelector());
+		CuboidCreation c = new CuboidCreation();
+		c.setAreaSelector(worldedit?new WEAreaSelector():new HandAreaSelector());
 		c.setFilling(f);
 		c.setDashed(dashed);
 		c.setLoop(loop);

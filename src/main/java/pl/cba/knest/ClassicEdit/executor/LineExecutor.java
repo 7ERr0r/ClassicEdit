@@ -16,7 +16,9 @@ public class LineExecutor extends AreaExecutor{
 	public void execute() throws ExecutorException{
 		super.execute();
 		
-		LineCreation c = new LineCreation(new HandAreaSelector());
+		LineCreation c = new LineCreation();
+		c.setAreaSelector(new HandAreaSelector());
+		
 		c.setFilling(f);
 		c.setLoop(loop);
 		c.setForceBreak(br);

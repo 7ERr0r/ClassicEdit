@@ -14,13 +14,7 @@ import pl.cba.knest.ClassicEdit.selector.DirectionSelector;
 
 
 public class PerspectiveCreation extends CuboidCreation implements IClickableCreation {
-	public PerspectiveCreation(AreaSelector as, AreaSelector ss, DirectionSelector ps) {
-		super(as);
-		sourceSelector = ss;
-		perspectiveSelector = ps;
-		selectors.add(sourceSelector);
-		selectors.add(perspectiveSelector);
-	}
+
 	public static final Filling AIR = new Filling(Material.AIR, (byte) 0);
 	protected Location per;
 	protected double scale = 1;
@@ -47,6 +41,18 @@ public class PerspectiveCreation extends CuboidCreation implements IClickableCre
 	protected double antialiasstart = 0;
 	protected boolean antialias;
 
+	
+	
+	public void setSourceSelector(AreaSelector ss){
+		sourceSelector = ss;
+		selectors.add(sourceSelector);
+	}
+	
+	public void setPerspectiveSelector(DirectionSelector ps){
+		perspectiveSelector = ps;
+		selectors.add(perspectiveSelector);
+	}
+	
 	
 	@SuppressWarnings("deprecation")
 	private Filling getExpectedAt(int x, int y){

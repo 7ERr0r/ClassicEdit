@@ -17,10 +17,8 @@ import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 
 public abstract class AreaCreation extends Creation {
 	
-	public AreaCreation(AreaSelector as){
+	public AreaCreation(){
 		super();
-		selectors.add(as); 
-		areaSelector = as;
 	}
 
 	boolean dropmode = false;	
@@ -55,7 +53,11 @@ public abstract class AreaCreation extends Creation {
 
 	Mask mask;
 	private AreaSelector areaSelector;
-
+	
+	public void setAreaSelector(AreaSelector as){
+		selectors.add(as); 
+		areaSelector = as;
+	}
 	
 	public boolean canPlace(int x, int y, int z){
 		if(mask!=null){

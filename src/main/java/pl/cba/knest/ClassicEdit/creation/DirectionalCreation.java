@@ -8,7 +8,7 @@ public abstract class DirectionalCreation extends Creation implements IClickable
 
 	DirectionSelector directionSelector;
 	
-	public DirectionalCreation(DirectionSelector ds){
+	public void setDirectionSelector(DirectionSelector ds){
 		this.directionSelector = ds;
 		selectors.add(ds);
 	}

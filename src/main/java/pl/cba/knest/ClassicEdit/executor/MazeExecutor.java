@@ -16,7 +16,9 @@ public class MazeExecutor extends AreaExecutor{
 	
 	public void execute() throws ExecutorException{
 		super.execute();
-		MazeCreation c = new MazeCreation(worldedit?new WEAreaSelector():new HandAreaSelector());
+		MazeCreation c = new MazeCreation();
+		c.setAreaSelector(worldedit?new WEAreaSelector():new HandAreaSelector());
+		
 		c.setFilling(f);
 		c.setDropmode(dropmode);
 		c.setLoop(loop);

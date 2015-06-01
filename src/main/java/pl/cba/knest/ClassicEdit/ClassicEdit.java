@@ -20,6 +20,8 @@ import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
+import com.mongodb.MongoTimeoutException;
+
 import pl.cba.knest.ClassicEdit.executor.BlockExecutor;
 import pl.cba.knest.ClassicEdit.executor.ClassicEditExecutor;
 import pl.cba.knest.ClassicEdit.executor.CuboidExecutor;
@@ -211,9 +213,11 @@ public class ClassicEdit extends JavaPlugin{
 	}
 	public void dialBackend(){
 		try {
-			creationBackend = Backend.create(getConfig().getString("db.host"), getConfig().getInt("db.port"), getConfig().getString("db.database"));
+			creationBackend = Backend.create(getConfig().getString("db.host", "localhost"), getConfig().getInt("db.port", 27017), getConfig().getString("db.database", "classicedit"));
 		} catch (UnknownHostException e) {
 			log("Could not create MongoDB connection: "+e.getMessage());
+		} catch (MongoTimeoutException e) {
+			log("MongoDB connection timed out: "+e.getMessage());
 		}
 	}
 	public Backend getBackend(){

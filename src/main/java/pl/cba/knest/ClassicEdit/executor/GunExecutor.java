@@ -26,7 +26,9 @@ public class GunExecutor extends CreationExecutor {
 			msgPlayer(ChatColor.RED+"You have an active "+sess.getActive()+" running");
 			return;
 		}
-		GunCreation c = new GunCreation(new InfiniteDirectionSelector());
+		GunCreation c = new GunCreation();
+		c.setDirectionSelector(new InfiniteDirectionSelector());
+		
 		c.setExplode(explode);
 		c.setLaser(laser);
 		c.setGravity(gravity);

@@ -2,12 +2,8 @@ package pl.cba.knest.ClassicEdit.creation;
 
 import org.bukkit.ChatColor;
 
-import pl.cba.knest.ClassicEdit.selector.AreaSelector;
-
 public class LineCreation extends PlaceableCreation {
-	public LineCreation(AreaSelector as) {
-		super(as);
-	}
+
 	
 	double dx;
 	double dy;

@@ -16,13 +16,10 @@ import org.bukkit.inventory.ItemStack;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 import pl.cba.knest.ClassicEdit.Filling;
-import pl.cba.knest.ClassicEdit.selector.AreaSelector;
 
 public abstract class PlaceableCreation extends AreaCreation implements IFilledCreation {
 	
-	public PlaceableCreation(AreaSelector as) {
-		super(as);
-	}
+
 	Filling f = new Filling(Material.AIR, (byte) 0);
 	AtomicInteger amount;
 

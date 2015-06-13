@@ -3,7 +3,6 @@ package pl.cba.knest.ClassicEdit.selector;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -11,21 +10,11 @@ import pl.cba.knest.ClassicEdit.creation.ICreation;
 
 public class HandAreaSelector extends AreaSelector {
 	
-	private ICreation creation;
+
 	private int stage = 0;
-	private Location l1;
-	private Location l2;
-
-
-	public Player getPlayer(){
-		return creation.getPlayer();
-	}
 
 
 
-	public ICreation getCreation(){
-		return creation;
-	}
 
 
 

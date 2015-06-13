@@ -1,6 +1,7 @@
 package pl.cba.knest.ClassicEdit;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -12,9 +13,12 @@ import pl.cba.knest.ClassicEdit.creation.CuboidCreation;
 
 
 public class Manager extends BukkitRunnable {
+	
 	private HashMap<UUID, Session> sessions;
+	private HashMap<String, Session> globals;
 	public Manager(){
 		this.sessions = new HashMap<UUID, Session>();
+		this.globals = new HashMap<String, Session>();
 	}
 	
 	public Session getSession(Player p){
@@ -32,13 +36,18 @@ public class Manager extends BukkitRunnable {
 	public boolean hasSession(Player p){
 		return hasSession(p.getUniqueId());		
 	}
-	
-	
-
 
 	@Override
 	public void run() {
-		for(Session s : sessions.values()){
+		Iterator<Session> i = sessions.values().iterator();
+		while(i.hasNext()){
+			Session s = i.next();
+			/*if((s.getPlayer() == null && !s.isPaused()) || !s.getPlayer().isOnline()){
+				if(s.getCreations().isEmpty()){
+					i.remove();
+					continue;
+				}
+			}*/
 			s.run();
 		}
 	}
@@ -55,6 +64,20 @@ public class Manager extends BukkitRunnable {
 
 	public void append(CuboidCreation c) {
 		c.getSession();
-		
 	}
+	
+	public Session getGlobal(String name){
+		if(!globals.containsKey(name)){
+			Session s = new Session(UUID.randomUUID());
+			globals.put(name, s);
+			sessions.put(s.getUUID(), s);
+			return s;
+		}
+		return globals.get(name);
+	}
+
+	public HashMap<UUID, Session> getSessions() {
+		return sessions;
+	}
+	
 }

@@ -4,8 +4,6 @@ package pl.cba.knest.ClassicEdit.selector;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
 
 import pl.cba.knest.ClassicEdit.creation.ICreation;
 
@@ -18,30 +16,10 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.regions.Region;
 
 public class WEAreaSelector extends AreaSelector {
-	Location l1;
-	Location l2;
-	ICreation creation;
-	@Override
-	public Location getLocationA() {
-		return l1;
-	}
-
-	@Override
-	public Location getLocationB() {
-		return l2;
-	}
 
 
-	
-	@Override
-	public Player getPlayer() {
-		return creation.getPlayer();
-	}
 
-	@Override
-	public boolean handleInteract(PlayerInteractEvent e) {
-		return false;
-	}
+
 
 	@Override
 	public boolean start(ICreation c) {
@@ -76,10 +54,6 @@ public class WEAreaSelector extends AreaSelector {
 		
 	}
 
-	@Override
-	public ICreation getCreation() {
-		return creation;
-	}
 
 
 

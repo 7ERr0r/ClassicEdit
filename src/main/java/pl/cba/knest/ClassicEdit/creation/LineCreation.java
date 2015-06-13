@@ -2,8 +2,6 @@ package pl.cba.knest.ClassicEdit.creation;
 
 import org.bukkit.ChatColor;
 
-import com.mongodb.BasicDBObject;
-
 public class LineCreation extends PlaceableCreation {
 
 	
@@ -66,20 +64,7 @@ public class LineCreation extends PlaceableCreation {
 		
 	}
 	
-	public BasicDBObject serialize() {
-		BasicDBObject o = super.serialize();
-		o.append("dx", dx);
-		o.append("dy", dy);
-		o.append("dz", dz);
-		
-		o.append("dist", distance);
-		o.append("linei", linei);
-		
-		o.append("sx", sx);
-		o.append("sy", sy);
-		o.append("sz", sz);
-		return o;
-	}
+
 
 
 }

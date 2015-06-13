@@ -5,12 +5,16 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonArray;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonElement;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonObject;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -22,6 +26,7 @@ import org.mcstats.Metrics;
 
 import com.mongodb.MongoTimeoutException;
 
+import pl.cba.knest.ClassicEdit.creation.Creation;
 import pl.cba.knest.ClassicEdit.executor.BlockExecutor;
 import pl.cba.knest.ClassicEdit.executor.ClassicEditExecutor;
 import pl.cba.knest.ClassicEdit.executor.CuboidExecutor;
@@ -31,6 +36,7 @@ import pl.cba.knest.ClassicEdit.executor.LineExecutor;
 import pl.cba.knest.ClassicEdit.executor.MazeExecutor;
 import pl.cba.knest.ClassicEdit.executor.PauseExecutor;
 import pl.cba.knest.ClassicEdit.executor.PerspectiveExecutor;
+import pl.cba.knest.ClassicEdit.executor.SleeperExecutor;
 import pl.cba.knest.ClassicEdit.executor.SpheroidExecutor;
 import pl.cba.knest.ClassicEdit.listener.PhysicsListener;
 import pl.cba.knest.ClassicEdit.listener.PlayerListener;
@@ -50,7 +56,7 @@ public class ClassicEdit extends JavaPlugin{
 	}
 	
 	public void onEnable(){
-		pertick = 6666;
+		pertick = 1024;
 		droppertick = 1;
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PhysicsListener(), this);
@@ -68,12 +74,14 @@ public class ClassicEdit extends JavaPlugin{
 		
 	}
 	public void onDisable(){
-		
+		if(creationBackend != null){
+			creationBackend.close();
+		}
 	}
 	
 	
 	public static long getLimit(Player p, boolean dropmode){
-		if(p.hasPermission("ClassicEdit.more")){
+		if(p == null || p.hasPermission("ClassicEdit.more")){
 			return dropmode?256:8192;
 		}else{
 			return dropmode?128:1024;
@@ -118,6 +126,9 @@ public class ClassicEdit extends JavaPlugin{
 		}else if(name.equals("line")){
 			perms("ClassicEdit.create.line", s);
 			e = new LineExecutor();
+		}else if(name.equals("sleep")){
+			perms("ClassicEdit.create.sleep", s);
+			e = new SleeperExecutor();
 		}else if(name.equals("maze")){
 			perms("ClassicEdit.create.maze", s);
 			e = new MazeExecutor();
@@ -211,20 +222,54 @@ public class ClassicEdit extends JavaPlugin{
 			return false;
 		}
 	}
-	public void dialBackend(){
+	public void dialMongoBackend(){
 		try {
-			creationBackend = Backend.create(getConfig().getString("db.host", "localhost"), getConfig().getInt("db.port", 27017), getConfig().getString("db.database", "classicedit"));
+			creationBackend = MongoBackend.create(getConfig().getString("db.host", "localhost"), getConfig().getInt("db.port", 27017), getConfig().getString("db.database", "classicedit"));
 		} catch (UnknownHostException e) {
 			log("Could not create MongoDB connection: "+e.getMessage());
 		} catch (MongoTimeoutException e) {
 			log("MongoDB connection timed out: "+e.getMessage());
 		}
 	}
+	public void dialFileBackend(){
+		creationBackend = FileBackend.create(getDataFolder());
+	}
+	
+	public void createBackend(){
+		if(getConfig().getBoolean("usemongo", false)){
+			dialMongoBackend();
+		}else{
+			dialFileBackend();
+		}
+	}
 	public Backend getBackend(){
 		if(creationBackend == null){
-			dialBackend();
+			createBackend();
+			creationBackend.load();
 		}
 		return creationBackend;
 	}
 	
+	
+	public void loadGlobals(){
+		
+		JsonObject root = creationBackend.getCreations();
+		for(Entry<String, JsonElement> entry : root.entrySet()){
+			String name = entry.getKey();
+			JsonArray jsess = entry.getValue().getAsJsonArray();
+			
+			Session gs = getManager().getGlobal(name);			
+			for(JsonElement e : jsess){
+				JsonObject o = e.getAsJsonObject();
+				try {
+					Creation c = Creation.deserializeCreation(o);
+					c.setSession(gs);
+					gs.addCreation(c);
+					c.startSelector();
+				}catch(ClassNotFoundException ex){
+					ex.printStackTrace();
+				}
+			}
+		}
+	}
 }

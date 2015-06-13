@@ -30,6 +30,10 @@ commands:
     description: Creates line.
     usage: /line <block>
     aliases: [li, /li]
+  sleep:
+    description: Sleeps.
+    usage: /sleep <ticks>
+    aliases: [sleeper]
   gun:
     description: Activates gun.
     usage: /gun <block>

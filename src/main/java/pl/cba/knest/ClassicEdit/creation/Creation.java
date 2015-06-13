@@ -1,22 +1,141 @@
 package pl.cba.knest.ClassicEdit.creation;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.libs.com.google.gson.ExclusionStrategy;
+import org.bukkit.craftbukkit.libs.com.google.gson.FieldAttributes;
+import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
+import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonElement;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonObject;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonPrimitive;
+import org.bukkit.craftbukkit.libs.com.google.gson.TypeAdapter;
+import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonReader;
+import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonWriter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import pl.cba.knest.ClassicEdit.ClassicEdit;
+import pl.cba.knest.ClassicEdit.Filling;
+import pl.cba.knest.ClassicEdit.Mask;
 import pl.cba.knest.ClassicEdit.Session;
 import pl.cba.knest.ClassicEdit.selector.Selector;
 
-import com.mongodb.BasicDBObject;
-
 public abstract class Creation implements ICreation, Runnable {
+	
+	public static Gson gson;
+	static {
+		GsonBuilder gsonb = new GsonBuilder();
+		gsonb.addSerializationExclusionStrategy(new ExclusionStrategy() {
+	        @Override
+	        public boolean shouldSkipField(FieldAttributes f) {
+	            return  f.getDeclaredType() != Boolean.TYPE &&
+	            		f.getDeclaredType() != Integer.TYPE && 
+	            		f.getDeclaredType() != Double.TYPE &&
+	            		f.getDeclaredType() != Float.TYPE &&
+	            		f.getDeclaredType() != Location.class &&
+	            		f.getDeclaredType() != World.class &&
+	            		f.getDeclaredType() != Filling.class &&
+	            		!Selector.class.isAssignableFrom(f.getDeclaredClass()) &&
+	            		f.getDeclaredType() != Material.class &&
+	            		f.getDeclaredType() != Mask.class &&
+					    f.getDeclaredType() != Byte.TYPE;
+	        }
+	
+	        @Override
+	        public boolean shouldSkipClass(Class<?> type) {
+	            return false;
+	        }
+	    });
+		gsonb.registerTypeAdapter(Location.class, new TypeAdapter<Location>() {
+	
+			@Override
+			public Location read(JsonReader r) throws IOException {
+				double x = 0,y = 0,z = 0,yaw = 0,pitch = 0;
+				String world = null;
+				r.beginObject();
+				while(r.hasNext()){
+					String name = r.nextName();
+	
+					if(name.equals("x")){
+						x = r.nextDouble();
+					}else if(name.equals("y")){
+						y = r.nextDouble();
+					}else if(name.equals("z")){
+						z = r.nextDouble();
+					}else if(name.equals("yaw")){
+						yaw = r.nextDouble();
+					}else if(name.equals("pitch")){
+						pitch = r.nextDouble();
+					}else if(name.equals("world")){
+						world = r.nextString();
+					}else{
+						r.skipValue();
+					}
+				}
+				r.endObject();
+				return new Location(Bukkit.getWorld(world), x, y, z, (float)yaw, (float)pitch);
+			}
+	
+			@Override
+			public void write(JsonWriter w, Location l) throws IOException {
+				w.beginObject();
+				w.name("x").value(l.getX());
+				w.name("y").value(l.getY());
+				w.name("z").value(l.getZ());
+				w.name("yaw").value(l.getYaw());
+				w.name("pitch").value(l.getPitch());
+				w.name("world").value(l.getWorld().getName());
+				w.endObject();
+			}
+		});
+		
+		gsonb.registerTypeHierarchyAdapter(World.class, new TypeAdapter<World>() {
+			
+			@Override
+			public World read(JsonReader r) throws IOException {
+				String world = r.nextString();
+				return Bukkit.getWorld(world);
+			}
+	
+			@Override
+			public void write(JsonWriter w, World world) throws IOException {
+				w.value(world.getName());
+			}
+		});
+		
+		
+		gsonb.registerTypeHierarchyAdapter(Mask.class, new TypeAdapter<Mask>() {
+			
+			@Override
+			public Mask read(JsonReader r) throws IOException {
+				String m = r.nextString();
+				return m==null?null:Mask.parseMask(m);
+			}
+	
+			@Override
+			public void write(JsonWriter w, Mask m) throws IOException {
+				w.value(m==null?null:m.toString());
+			}
+		});
+		
+		gson = gsonb.create();
+		
+	
+	}
+	
+	
+	
+	
+	
 	protected Session session;
 	protected boolean started;
 	protected boolean initialised;
@@ -128,11 +247,17 @@ public abstract class Creation implements ICreation, Runnable {
 			}
 		}
 	}
-	
+	public void setSession(Session session){
+		this.session = session;
+	}
 	public void attach(Session session){
 		this.session = session;
 		session.setPending(this);
 		startSelector();
+	}
+	public void transfer(Session session){
+		this.session = session;
+		session.addCreation(this);
 	}
 	public boolean isUseless(){
 		return false;
@@ -142,49 +267,17 @@ public abstract class Creation implements ICreation, Runnable {
 		return getName();
 	}
 
-	public static Creation deserializeCreation(BasicDBObject o) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		Creation creation = null;
-		String type = o.getString("type");
-		Class<?> clazz = Class.forName(type);
-		
-		if(clazz.isAssignableFrom(Creation.class)){
-			creation = (Creation) clazz.newInstance();
-			creation.deserialize(o);
-			
-		}
-		return creation;
+	public static Creation deserializeCreation(JsonObject json) throws ClassNotFoundException{
+		Class<?> clazz = Class.forName(json.get("type").getAsString());
+		json.remove("type");
+		return (Creation) gson.fromJson(json, clazz);
 	}
-	public void deserialize(BasicDBObject o) {
-		
-	}
-	public BasicDBObject serialize() {
-		BasicDBObject o = new BasicDBObject();
-		Class<?> clazz = this.getClass();
-		o.append("type", clazz.getName());
-		o.append("initialised", initialised);
-		o.append("started", started);
+
+	public static JsonObject serializeCreation(Creation creation){
+		JsonElement e = gson.toJsonTree(creation);
+		JsonObject o = e.getAsJsonObject();
+		o.add("type", new JsonPrimitive(creation.getClass().getName()));
 		return o;
 	}
-	public static BasicDBObject serializeCreation(Creation creation){
-		return creation.serialize();
-	}
-	public static BasicDBObject serializeLocation(Location l) {
-		BasicDBObject o = new BasicDBObject();
-		o.append("x", l.getX());
-		o.append("y", l.getY());
-		o.append("z", l.getZ());
-		o.append("yaw", l.getYaw());
-		o.append("pitch", l.getPitch());
-		o.append("world", l.getWorld().getName());
-		return o;
-	}
-	public static Location deserializeLocation(BasicDBObject o) {
-		double x = o.getDouble("x");
-		double y = o.getDouble("y");
-		double z = o.getDouble("z");
-		double yaw = o.getDouble("yaw");
-		double pitch = o.getDouble("pitch");
-		String world = o.getString("world");
-		return new Location(Bukkit.getWorld(world), x, y, z, (float) yaw, (float) pitch);
-	}
+
 }

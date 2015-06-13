@@ -4,8 +4,6 @@ package pl.cba.knest.ClassicEdit.creation;
 
 import org.bukkit.ChatColor;
 
-import com.mongodb.BasicDBObject;
-
 import pl.cba.knest.ClassicEdit.ClassicEdit;
 
 
@@ -47,11 +45,7 @@ public class CuboidCreation extends PlaceableCreation {
 	}
 
 	
-	public BasicDBObject serialize() {
-		BasicDBObject o = super.serialize();
-		o.append("dashed", dashed);
-		return o;
-	}
+
 
 
 

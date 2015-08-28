@@ -133,11 +133,13 @@ public class ClassicEdit extends JavaPlugin{
 			perms("ClassicEdit.create.maze", s);
 			e = new MazeExecutor();
 		}else if(name.equals("pause")){
+			perms("ClassicEdit.pause", s);
 			e = new PauseExecutor();
 		}else if(name.equals("gun")){
 			perms("ClassicEdit.fun.gun", s);
 			e = new GunExecutor();
 		}else if(name.equals("block")){
+			perms("ClassicEdit.block", s);
 			e = new BlockExecutor();
 		}
 		if(e == null) throw new ExecutorException(ChatColor.RED+"Bad command");

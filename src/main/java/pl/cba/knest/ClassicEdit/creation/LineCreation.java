@@ -9,7 +9,7 @@ public class LineCreation extends PlaceableCreation {
 	double dy;
 	double dz;
 	
-	double distance;
+	int distance;
 	int linei = 0;
 	
 	
@@ -19,16 +19,16 @@ public class LineCreation extends PlaceableCreation {
 	
 	public boolean init(){
 		if(!super.init()) return false;
-		dx = l1.getBlockX()+0.5;
-		dy = l1.getBlockY()+0.5;
-		dz = l1.getBlockZ()+0.5;
+		dx = l1.getBlockX();
+		dy = l1.getBlockY();
+		dz = l1.getBlockZ();
 		
 		int vx = l2.getBlockX()-l1.getBlockX();
 		int vy = l2.getBlockY()-l1.getBlockY();
 		int vz = l2.getBlockZ()-l1.getBlockZ();
 		
-		distance = Math.max(width, height);
-		distance = Math.max(distance, length);
+		distance = Math.max(width-1, height-1);
+		distance = Math.max(distance, length-1);
 		if((dropmode && distance>2000) || (!dropmode && distance>200000)){
 			msgPlayer(ChatColor.RED+"Too many blocks to place");
 			stop();
@@ -45,9 +45,9 @@ public class LineCreation extends PlaceableCreation {
 	public boolean next(){
 		
 		if(linei++ > distance) return false;
-		currentx = (int) dx;
-		currenty = (int) dy;
-		currentz = (int) dz;
+		currentx = (int) Math.round(dx);
+		currenty = (int) Math.round(dy);
+		currentz = (int) Math.round(dz);
 		dx+=sx;
 		dy+=sy;
 		dz+=sz;

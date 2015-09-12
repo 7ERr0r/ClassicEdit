@@ -1,7 +1,6 @@
 package pl.cba.knest.ClassicEdit;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +23,6 @@ import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
-import com.mongodb.MongoTimeoutException;
 
 import pl.cba.knest.ClassicEdit.creation.Creation;
 import pl.cba.knest.ClassicEdit.executor.BlockExecutor;
@@ -224,22 +222,13 @@ public class ClassicEdit extends JavaPlugin{
 			return false;
 		}
 	}
-	public void dialMongoBackend(){
-		try {
-			creationBackend = MongoBackend.create(getConfig().getString("db.host", "localhost"), getConfig().getInt("db.port", 27017), getConfig().getString("db.database", "classicedit"));
-		} catch (UnknownHostException e) {
-			log("Could not create MongoDB connection: "+e.getMessage());
-		} catch (MongoTimeoutException e) {
-			log("MongoDB connection timed out: "+e.getMessage());
-		}
-	}
 	public void dialFileBackend(){
 		creationBackend = FileBackend.create(getDataFolder());
 	}
 	
 	public void createBackend(){
 		if(getConfig().getBoolean("usemongo", false)){
-			dialMongoBackend();
+			//dialMongoBackend();
 		}else{
 			dialFileBackend();
 		}

@@ -13,4 +13,3 @@ It requires to add some dependencies manually:
 - WorldEdit
 - NoCheatPlus
 
-MongoDB driver is downloaded automatically.

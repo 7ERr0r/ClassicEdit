@@ -7,13 +7,8 @@ import org.bukkit.Location;
 
 import pl.cba.knest.ClassicEdit.creation.ICreation;
 
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.LocalPlayer;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.bukkit.selections.Selection;
 
 public class WEAreaSelector extends AreaSelector {
 
@@ -30,18 +25,14 @@ public class WEAreaSelector extends AreaSelector {
 			creation.stop();
 			return false;
 		}
-		LocalPlayer lp = wep.wrapPlayer(getPlayer());
-		LocalSession s = WorldEdit.getInstance().getSession(lp);
-		Region r;
-		try{
-			r = s.getSelection(lp.getWorld());
-		}catch(IncompleteRegionException e){
+		Selection s = wep.getSelection(getPlayer());
+		if(s == null){
 			msgPlayer(ChatColor.RED+"Select a region first");
 			creation.stop();
 			return false;
 		}
-		Vector min = r.getMinimumPoint();
-		Vector max = r.getMaximumPoint();
+		Location min = s.getMinimumPoint();
+		Location max = s.getMaximumPoint();
 		l1 = new Location(getPlayer().getWorld(), min.getBlockX(), min.getBlockY(), min.getBlockZ());
 		l2 = new Location(getPlayer().getWorld(), max.getBlockX(), max.getBlockY(), max.getBlockZ());
 		setFillingAuto();
